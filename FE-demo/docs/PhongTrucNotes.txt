@@ -1,0 +1,11 @@
+* Đây là File lưu trữ các ghi chú note quan trọng / cần thiết cho project SWP *
+
++) npm là gì
+
++) React Router Dom là bộ thư viện định tuyến (routing). Thuộc thư viện React-Router
+
+=> Giúp điều hướng (navigation) giữa các trang (component) khác nhau 
+mà không cần reload lại trang như các trang web truyền thống
+
+=> Install để dùng:  npm i react-router-dom
+=> 
