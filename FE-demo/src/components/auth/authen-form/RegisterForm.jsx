@@ -1,52 +1,115 @@
 import React from "react";
-import { Button, Checkbox, Form, Input } from "antd"; 
-import "./RegisterForm.css";
+import { Button, Form, Input, DatePicker } from "antd";
+import { Link } from "react-router-dom";
+import { BsFillPersonFill } from "react-icons/bs";
+import { FaLock, FaEnvelope } from "react-icons/fa";
+import "./RegisterForm.css"; // tạo file này nếu bạn muốn CSS riêng
 
 function RegisterForm() {
+  const [form] = Form.useForm();
+
   const onFinish = (values) => {
-    console.log("Success:", values);
+    console.log("Register Success:", values);
+    // TODO: Gọi API register ở đây
   };
+
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log("Register Failed:", errorInfo);
   };
+
   return (
     <div className="register-form">
-      <h1>Register Form</h1>
+      <div className="register-form-header">
+        <img
+          src="/public/images/Image2.png"
+          alt="Logo"
+          className="login-logo"
+        />
+        <h1>Register</h1>
+      </div>
+
       <Form
-        name="basic"
-        layout="vertical" /* các label(nhãn) sẽ nằm phía trên các thẻ input */
-        labelCol={{ span: 24 }} /* độ rộng của label */
+        form={form}
+        name="register"
+        layout="vertical"
+        labelCol={{ span: 24 }}
         style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="on"
       >
         <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            { required: true, message: "Please input your email!" },
+            { type: "email", message: "Invalid email format!" },
+          ]}
+        >
+          <Input placeholder="Enter email" prefix={<FaEnvelope />} />
+        </Form.Item>
+
+        <Form.Item
           label="Username"
-          name="username" // khi submit form, giá trị của key "username" sẽ được gửi lên server
+          name="username"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
-          <Input />
+          <Input placeholder="Enter username" prefix={<BsFillPersonFill />} />
         </Form.Item>
 
         <Form.Item
           label="Password"
           name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          rules={[
+            { required: true, message: "Please input your password!" },
+            { min: 6, message: "Password must be at least 6 characters." },
+          ]}
         >
-          <Input.Password />
+          <Input.Password placeholder="Enter password" prefix={<FaLock />} />
         </Form.Item>
 
-        <Form.Item name="remember" valuePropName="checked" label={null}>
-          <Checkbox>Remember me</Checkbox>
+        <Form.Item
+          label="Confirm Password"
+          name="confirm"
+          dependencies={["password"]}
+          hasFeedback
+          rules={[
+            { required: true, message: "Please confirm your password!" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject("Passwords do not match!");
+              },
+            }),
+          ]}
+        >
+          <Input.Password placeholder="Confirm password" prefix={<FaLock />} />
         </Form.Item>
 
-        <Form.Item label={null}>
-          <Button type="primary" htmlType="submit">
+        <Form.Item
+          label="Date of Birth"
+          name="dob"
+          rules={[
+            { required: true, message: "Please select your date of birth!" },
+          ]}
+        >
+          <DatePicker style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="login-button">
             Register
           </Button>
         </Form.Item>
+
+        <div className="signup-link">
+          <p>Already have an account?</p>
+          <Link to="/login" className="sign-up">
+            (Login here)
+          </Link>
+        </div>
       </Form>
     </div>
   );

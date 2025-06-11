@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import "./LoginForm.css";
-import { Link } from "react-router-dom";
+import { Await, Link } from "react-router-dom";
 import FormItem from "antd/es/form/FormItem";
 import { FaFacebookSquare, FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
@@ -10,7 +10,8 @@ import { FaLock } from "react-icons/fa";
 import { BiUnderline } from "react-icons/bi";
 
 function LoginForm() {
-  const onFinish = (values) => {
+  /* onFinish được gọi khi người dùng nhấn nút Login */
+  const onFinish = async (values) => {
     console.log("Success:", values);
   };
   const onFinishFailed = (errorInfo) => {
@@ -18,7 +19,14 @@ function LoginForm() {
   };
   return (
     <div className="login-form">
-      <h1>Login Form</h1>
+      <div className="login-form-header">
+        <img
+          src="/public/images/Image2.png"
+          alt="Logo"
+          className="login-logo"
+        />
+        <h1>Login Form</h1>
+      </div>
       <Form
         name="basic"
         layout="vertical" /* các label(nhãn) sẽ nằm phía trên các thẻ input */

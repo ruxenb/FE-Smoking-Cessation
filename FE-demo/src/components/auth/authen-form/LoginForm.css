@@ -1,22 +1,72 @@
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: green;
+.login-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  border-radius: 12px; /* bo nhẹ góc */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* đổ bóng nhẹ */
+  transition: transform 0.3s ease;
 }
 
+.login-logo:hover {
+  transform: scale(1.15); /* phóng to nhẹ khi hover */
+}
+
+h1 {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+  color: #2e7d32; /* xanh lá đậm */
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  animation: fadeInDown 0.6s ease;
+}
+
+h1:hover {
+  color: #66bb6a;
+  transform: scale(1.2);
+  transition: all 0.3s ease;
+}
+/* animation */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   width: 100%;
+  height: 100%; /* hoặc chiều cao cố định nếu bạn muốn */
   padding: 0px 40px;
   text-align: center;
+  position: relative;
+  animation: fadeInDown 2s ease-out; /* animation drop down  */
+}
+
+.login-form form {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* để form chiếm phần lớn chiều cao */
 }
 
 .remember-me-row {
-  width: 100%;
   display: flex;
   justify-content: space-between; /* trái và phải  */
   align-items: center;
   margin-top: -15px;
-  gap: 200px;
   font-weight: normal;
 }
 
@@ -27,8 +77,6 @@ h1 {
 }
 
 .forgot-link {
-  display: inline-block;
-  width: 100%;
   font-size: 14px;
   color: brown;
   text-decoration: underline;
@@ -95,17 +143,18 @@ h1 {
 }
 
 .signup-link {
+  margin-top: auto;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
   font-size: 16px;
+  gap: 8px;
   color: #333;
-  gap: 10px;
 }
 
-.sign-up {
-  font-size: 14px;
-  font-weight: bold;
-  text-decoration: underline;
+.ant-input-affix-wrapper-focused {
+  border-color: #66bb6a !important;
+  box-shadow: 0 0 0 2px rgba(102, 187, 106, 0.3) !important;
+  transition: all 0.3s ease-in-out;
 }
