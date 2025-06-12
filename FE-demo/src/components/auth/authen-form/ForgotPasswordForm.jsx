@@ -4,7 +4,7 @@ import "./ForgotPasswordForm.css"; // We'll create this CSS file next
 import { Link } from "react-router-dom";
 import { BsFillPersonFill } from "react-icons/bs"; // Using person icon for email/username
 
-function ForgotPasswordPage() {
+function ForgotPasswordForm() {
   /* onFinish will be called when the user clicks the "Send Reset Link" button */
   const onFinish = async (values) => {
     console.log("Password reset requested for:", values);
@@ -68,4 +68,4 @@ function ForgotPasswordPage() {
   );
 }
 
-export default ForgotPasswordPage;
+export default ForgotPasswordForm;
