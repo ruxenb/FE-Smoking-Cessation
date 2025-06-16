@@ -60,7 +60,7 @@ function LoginForm() {
             <Checkbox name="remember" className="remember-me">
               Remember me
             </Checkbox>
-            <Link to="/forgot_password" className="forgot-link">
+            <Link to="/forgot" className="forgot-link">
               Forgot Password?
             </Link>
           </div>

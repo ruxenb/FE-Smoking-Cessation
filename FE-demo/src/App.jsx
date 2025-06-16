@@ -4,7 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import MembershipPage from "./pages/MembershipPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+
 function App() {
   // Tạo một router với createBrowserRouter, định nghĩa các route của ứng dụng
   // Data router api
@@ -28,8 +30,12 @@ function App() {
       element: <RegisterPage />,
     },
     {
-      path: "/forgot_password",
+      path: "/forgot",
       element: <ForgotPasswordPage />,
+    },
+    {
+      path: "/membership",
+      element: <MembershipPage />,
     },
   ]);
   // Sử dụng RouterProvider để cung cấp router cho toàn bộ ứng dụng
