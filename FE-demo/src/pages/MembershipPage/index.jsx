@@ -1,5 +1,5 @@
 import React from "react";
-import Membership from "../../components/MemberCards/membership";
+import Membership from "../../components/membership/membership";
 function MembershipPage() {
   return (
     <div>

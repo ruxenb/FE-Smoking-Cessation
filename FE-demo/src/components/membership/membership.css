@@ -15,7 +15,7 @@
 .membership-cards-wrapper {
   display: flex; /* This is the key! */
   justify-content: center; /* Centers the cards horizontally */
-  align-items: flex-start; /* Aligns cards to the top, useful if heights vary slightly */
+  align-items: stretch; /* Aligns cards to the top, useful if heights vary slightly */
   gap: 40px; /* Space between cards */
   margin-top: 50px;
   margin-bottom: 100px; /* Added margin for spacing below cards */
@@ -32,6 +32,8 @@
   display: flex; /* Makes content inside card flex (e.g., pushes button to bottom) */
   flex-direction: column;
   justify-content: space-between;
+  position: relative; /* For ribbon positioning */
+
 }
 
 .membership-card h2 {
@@ -54,12 +56,27 @@
   min-height: 50px; /* Ensures consistent height */
 }
 
+.card-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* This makes this wrapper take all available vertical space */
+    justify-content: flex-start; /* Ensures content inside this wrapper starts from the top */
+     margin-bottom: 0; /*Add some space between this content block and the button/cancellation info */
+  
+  }
+
 .features-list {
   list-style: none;
   padding: 0;
-  margin-bottom: 30px;
+  margin-bottom: 0; 
   text-align: left;
-  flex-grow: 1; /* Allows list to take up available space */
+  
+  display: flex; /* Make the list itself a flex container */
+  flex-direction: column; /* Stack list items vertically */
+  justify-content: flex-start; /* Align list items to the start (top) */
+  /* You might want to add a min-height here if you want to force more blank space in basic features */
+  min-height: 250px; /* Example: Adjust this value to control the minimum height of the list area */
+                     /* This will create "blanks" if the content is shorter. */
 }
 
 .features-list li {
@@ -79,6 +96,10 @@
   top: 0;
 }
 
+.padding-ig{
+  padding-top: 20px;
+}
+
 .cta-button {
   background-color: #0A100A;
   color: #fff;
@@ -90,11 +111,42 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   width: 100%;
+  margin-bottom: 0; /* Ensure no extra margin below the button itself */
+}
+
+.card-bottom-cta {
+    display: flex;
+    flex-direction: column; /* Stacks the button and cancellation info */
+    align-items: center; /* Centers them horizontally within this new wrapper */
+    margin-top: 25px; /* Adds consistent space above this entire bottom block */
+}
+
+.basic-cta{
+  margin-bottom: 14px;
+}
+
+.cta-button.current-usage-button {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  border: 1px solid #bbbbbb;
+}
+
+.cta-button.current-usage-button:hover {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
 .cta-button:hover {
   background-color: #333;
 }
+
+.br-ig{
+  margin-top: 1000px;
+  height: 20px;
+
+}
+
 .advanced-plan {
   background-color: #cfe2cf; /* Slightly different background for Advanced */
   border: 2px solid #28a745; /* Green border to make it stand out */
@@ -114,6 +166,11 @@
   color: #777;
   margin-top: 15px;
 }
+.cancellation-infoc {
+  font-size: 14px;
+  color: #77777700;
+  margin-top: 15px;
+}
 
 .highlight-feature {
   font-weight: bold; /* Make advanced features stand out more */
@@ -123,6 +180,7 @@
 /* Ribbon for "Most Popular" or "Best Value" */
 .promoted-card {
   overflow: hidden; /* For the ribbon positioning */
+  position: relative;
 }
 
 .ribbon {
@@ -137,6 +195,8 @@
   transform: rotate(45deg);
   transform-origin: 50% 50%;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 10; /* Ensure ribbon is above card content */
+
 }
 
 .compare-table-section {
