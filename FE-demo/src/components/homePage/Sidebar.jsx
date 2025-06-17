@@ -11,11 +11,16 @@ function Sidebar({ isCollapsed, onToggle }) {
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          // This onClick event is crucial!
           onClick={onToggle}
+          style={{ cursor: 'pointer', padding: '8px' }} // Added padding to make it look less cramped
         >
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="white"/>
-          <path d="M15.07 7.07L13.66 8.48l1.41 1.41-1.41 1.41-1.42-1.42L10.83 11.3l-1.41-1.41 1.41-1.41-1.41-1.41-1.42 1.41L6.58 7.07l1.41 1.41 1.42-1.41 1.41 1.41 1.42-1.41 1.41 1.41zM9 14h6v2H9v-2z" fill="white"/>
+          <path 
+            d="M4 6H20M4 12H20M4 18H20" 
+            stroke="currentColor" // This will inherit the white color from the sidebar's CSS
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          />
         </svg>
         <span>QuitSmoke</span>
       </div>
