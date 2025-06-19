@@ -1,9 +1,34 @@
-.register-form {
-  width: 100%;
-  padding: 0px 40px;
-}
-h1 {
+.register-form-header h1 {
   text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+  color: #2e7d32; /* xanh lá đậm */
   margin-bottom: 20px;
-  color: green;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  animation: fadeInDown 0.6s ease;
+}
+.register-form-header h1:hover {
+  color: #66bb6a;
+  transition: all 0.2s ease;
+}
+.register-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%; /* hoặc chiều cao cố định nếu bạn muốn */
+  padding: 0px 40px;
+  text-align: center;
+  position: relative;
+  animation: fadeInDown 2s ease-out; /* animation drop down  */
+}
+.register-form form {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* để form chiếm phần lớn chiều cao */
 }

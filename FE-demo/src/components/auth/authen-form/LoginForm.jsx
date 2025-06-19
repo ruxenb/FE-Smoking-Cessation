@@ -8,6 +8,7 @@ import { FaGithub } from "react-icons/fa6";
 import { BsFillPersonFill } from "react-icons/bs";
 import { FaLock } from "react-icons/fa";
 import { BiUnderline } from "react-icons/bi";
+import { UserAddOutlined } from "@ant-design/icons";
 
 function LoginForm() {
   /* onFinish được gọi khi người dùng nhấn nút Login */
@@ -20,11 +21,13 @@ function LoginForm() {
   return (
     <div className="login-form">
       <div className="login-form-header">
-        <img
-          src="/public/images/Image2.png"
-          alt="Logo"
-          className="login-logo"
-        />
+        <Link to="/home">
+          <img
+            src="/public/images/Image2.png"
+            alt="App-Logo"
+            className="app-logo"
+          />
+        </Link>
         <h1>Login Form</h1>
       </div>
       <Form
@@ -37,22 +40,37 @@ function LoginForm() {
         onFinishFailed={onFinishFailed}
         autoComplete="on"
       >
+        {/* username */}
         <Form.Item
-          label="Username"
+          label={
+            <span style={{ fontWeight: "bold", fontSize: "14px" }}>
+              Username
+            </span>
+          }
           name="username" // khi submit form, giá trị của key "username" sẽ được gửi lên server
           rules={[{ required: true, message: "Please input your username!" }]}
         >
           <Input
             placeholder="Enter username or email"
             prefix={<BsFillPersonFill />}
+            className="username-input"
           />
         </Form.Item>
+        {/* password */}
         <Form.Item
-          label="Password"
+          label={
+            <span style={{ fontWeight: "bold", fontSize: "14px" }}>
+              Password
+            </span>
+          }
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input.Password placeholder="Enter password" prefix={<FaLock />} />
+          <Input.Password
+            placeholder="Enter password"
+            prefix={<FaLock />}
+            className="password-input"
+          />
         </Form.Item>
         {/* Remember và Forgot Password */}
         <Form.Item label={null}>
@@ -71,6 +89,7 @@ function LoginForm() {
             Login
           </Button>
         </Form.Item>
+        {/* Github,gg,fb login */}
         {/* Cài install react-icons trc khi dùng */}
         <div className="alt-login">
           <p className="alt-login-title">Or Login With</p>
@@ -86,13 +105,19 @@ function LoginForm() {
             </Button>
           </div>
         </div>
-        <div className="signup-link">
-          <p>Don't have account?</p>
-          <Link to="/register" className="sign-up">
-            (Sign up here)
+        <div className="register">
+          <UserAddOutlined style={{ fontSize: 18, color: "#2e7d32" }} />
+          <span>Don't have an account?</span>
+          <Link to="/register" className="register-link">
+            Sign up here
           </Link>
         </div>
       </Form>
+      {/* About Us link */}
+      <div className="aboutus-link">
+        <p>Want to know more about us?</p>
+        <Link to="/about">About Us</Link>
+      </div>
     </div>
   );
 }

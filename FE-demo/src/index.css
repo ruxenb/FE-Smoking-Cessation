@@ -7,3 +7,17 @@
   padding: 0;
   box-sizing: border-box;
 }
+/* Style cho App Logo - hiện đang được dùng trong 2 trang login,register  */
+.app-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  border-radius: 25px; /* bo nhẹ góc */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* đổ bóng nhẹ */
+  transition: transform 0.3s ease;
+}
+.app-logo:hover {
+  transform: scale(1.15); /* phóng to nhẹ khi hover */
+}

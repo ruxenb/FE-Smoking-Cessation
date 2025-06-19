@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import MembershipPage from "./pages/MembershipPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import AboutUsPage from "./pages/AboutUsPage";
 
 function App() {
   // Tạo một router với createBrowserRouter, định nghĩa các route của ứng dụng
@@ -22,10 +23,6 @@ function App() {
       element: <LoginPage />,
     },
     {
-      path: "/home",
-      element: <HomePage />,
-    },
-    {
       path: "/register",
       element: <RegisterPage />,
     },
@@ -34,8 +31,16 @@ function App() {
       element: <ForgotPasswordPage />,
     },
     {
+      path: "/home",
+      element: <HomePage />,
+    },
+    {
       path: "/membership",
       element: <MembershipPage />,
+    },
+    {
+      path: "/about",
+      element: <AboutUsPage />,
     },
   ]);
   // Sử dụng RouterProvider để cung cấp router cho toàn bộ ứng dụng

@@ -7,7 +7,9 @@ import { BsFillPersonFill } from "react-icons/bs"; // Using person icon for emai
 function ForgotPasswordForm() {
   const onFinish = async (values) => {
     console.log("Password reset requested for:", values);
-    alert("If an account with that email exists, a password reset link has been sent!");
+    alert(
+      "If an account with that email exists, a password reset link has been sent!"
+    );
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -17,15 +19,19 @@ function ForgotPasswordForm() {
   return (
     <div className="forgot-password-container">
       <div className="forgot-password-header">
-        <img
-          src="/public/images/Image2.png"
-          alt="Logo"
-          className="forgot-password-logo"
-        />
+        <Link to="/home">
+          <img
+            src="/public/images/Image2.png"
+            alt="Logo"
+            className="forgot-password-logo"
+          />
+        </Link>
         <h1>Forgot Password</h1>
       </div>
       {/* Add a div here and apply your new class name */}
-      <div className="my-custom-form"> {/* Added wrapper div with new class */}
+      <div className="my-custom-form">
+        {" "}
+        {/* Added wrapper div with new class */}
         <Form
           name="forgot_password"
           layout="vertical"
@@ -36,10 +42,14 @@ function ForgotPasswordForm() {
           autoComplete="on"
         >
           <Form.Item
-            label="Email or Username"
+            /* Style trực tiếp label thay vì dùng classname */
+            label={<span style={{ fontWeight: "bold" }}>Email or Password</span>}
             name="emailOrUsername"
             rules={[
-              { required: true, message: "Please enter your email or username!" },
+              {
+                required: true,
+                message: "Please enter your email or username!",
+              },
             ]}
           >
             <Input
@@ -48,7 +58,7 @@ function ForgotPasswordForm() {
             />
           </Form.Item>
 
-          <Form.Item label={null}>
+          <Form.Item>
             <Button type="primary" htmlType="submit" className="reset-button">
               Send Reset Link
             </Button>
@@ -61,7 +71,8 @@ function ForgotPasswordForm() {
             </Link>
           </div>
         </Form>
-      </div> {/* Close the wrapper div */}
+      </div>{" "}
+      {/* Close the wrapper div */}
     </div>
   );
 }

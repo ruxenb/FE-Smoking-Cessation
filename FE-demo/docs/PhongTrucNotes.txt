@@ -9,3 +9,21 @@ mà không cần reload lại trang như các trang web truyền thống
 
 => Install để dùng:  npm i react-router-dom
 => 
+
+
+
++) Redux
+
+
++) Thư viện dayjs: npm install dayjs
+
+=> Import: import dayjs from "dayjs";
+
++) 17/6/2025: Làm ơn ai có thay đổi j trên những phần ng khác đã làm thì nhớ bảo nhau biết nha, chứ đổi lại vừa ý nhìn khó chịu cực :)))
+
+19/6/2025
++) Framer Motion: thư viện animation (được dùng để thêm hiệu ứng chuyển động khi chuyển đổi giữa Login và Register)
+
+=> Install: npm i framer-motion (đã install)
+=> Import trong một file cụ thể: import { motion, AnimatePresence } from "framer-motion";
+=> bên trong index.jsx tổng

@@ -1,34 +1,17 @@
-.login-logo {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  margin-bottom: 15px;
-  margin-top: 10px;
-  border-radius: 12px; /* bo nhẹ góc */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* đổ bóng nhẹ */
-  transition: transform 0.3s ease;
-}
-
-.login-logo:hover {
-  transform: scale(1.15); /* phóng to nhẹ khi hover */
-}
-
-h1 {
+.login-form-header h1 {
   text-align: center;
   font-size: 32px;
   font-weight: 600;
   color: #2e7d32; /* xanh lá đậm */
-  margin-bottom: 20px;
-  letter-spacing: 1px;
+  margin-bottom: 50px;
+  /* letter-spacing: 100px; */
   text-transform: uppercase;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  animation: fadeInDown 0.6s ease;
+  animation: fadeInDown 10s ease;
 }
-
-h1:hover {
+.login-form-header h1:hover {
   color: #66bb6a;
-  transform: scale(1.2);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 /* animation */
 @keyframes fadeInDown {
@@ -62,6 +45,28 @@ h1:hover {
   flex-grow: 1; /* để form chiếm phần lớn chiều cao */
 }
 
+.username-label .ant-form-item-label > label {
+  font-size: 15px;
+  font-weight: bold;
+  color: black;
+}
+.username-input {
+  width: 100%;
+  height: 40px;
+  font-size: 15px;
+  font-weight: bold;
+}
+.password-label .ant-form-item-label > label {
+  font-size: 15px;
+  font-weight: bold;
+  color: black;
+}
+.password-input {
+  width: 100%;
+  height: 40px;
+  font-size: 15px;
+  font-weight: bold;
+}
 .remember-me-row {
   display: flex;
   justify-content: space-between; /* trái và phải  */
@@ -71,21 +76,23 @@ h1:hover {
 }
 
 .remember-me {
-  font-size: 14px;
-  color: blue;
+  font-size: 16px;
+  font-style: bold;
+  color: #173b87;
   white-space: nowrap;
 }
 
 .forgot-link {
-  font-size: 14px;
-  color: brown;
+  font-size: 16px;
+  font-style: bold;
+  color: red;
   text-decoration: underline;
   white-space: nowrap;
 }
 
 .login-button {
   width: 100%;
-  height: 30px;
+  height: 40px;
   font-size: 15px;
   font-weight: bold;
   background-color: yellowgreen;
@@ -117,14 +124,15 @@ h1:hover {
 .alt-login-buttons {
   display: flex;
   justify-content: center;
-  gap: 25px; /* khoảng cách giữa các buttons */
+  gap: 35px; /* khoảng cách giữa các buttons */
 }
 .alt-login-buttons button {
-  width: 130px;
+  width: 170px;
+  height: 35px;
   border-radius: 4px;
   border: none;
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -142,17 +150,54 @@ h1:hover {
   background-color: #db4437;
 }
 
-.signup-link {
-  margin-top: auto;
-  margin-bottom: 20px;
+.register {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 16px;
-  gap: 8px;
-  color: #333;
+  height: 35px;
+  gap: 10px;
+  margin-top: 60px;
+  font-size: 18px;
+  font-weight: 500;
+  border: 1px solid #2e7d32;
+  color: #555; /* màu chữ */
+  background-color: lightgrey;
+  animation: fadeInUp 1s ease-in-out;
+}
+.register-link {
+  color: #2e7d32;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.2s ease;
 }
 
+.register-link:hover {
+  color: #66bb6a;
+  transform: translateY(-2px);
+  text-decoration: underline;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.aboutus-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-style: inherit;
+  gap: 8px;
+  margin-top: 80px;
+  margin-bottom: 10px;
+}
 .ant-input-affix-wrapper-focused {
   border-color: #66bb6a !important;
   box-shadow: 0 0 0 2px rgba(102, 187, 106, 0.3) !important;
