@@ -1,7 +1,21 @@
 import React from 'react';
 
 // No changes needed here, this is already well-structured.
-function Sidebar({ isCollapsed, onToggle }) {
+function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage  }) {
+  // Helper to create navigation links
+  const NavLink = ({ page, icon, label }) => (
+    <a 
+      href="#"
+      className={currentPage === page ? 'active' : ''}
+      onClick={(e) => {
+        e.preventDefault(); // Prevent page reload
+        setCurrentPage(page);
+      }}
+    >
+      <span className="icon">{icon}</span> <span>{label}</span>
+    </a>
+  );
+
   return (
     <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="logo">
@@ -24,7 +38,7 @@ function Sidebar({ isCollapsed, onToggle }) {
         </svg>
         <span>QuitSmoke</span>
       </div>
-      <nav className="navigation">
+      {/* <nav className="navigation">
         <a href="#" className="active">
           <span className="icon">🏠</span> <span>Dashboard</span>
         </a>
@@ -32,6 +46,14 @@ function Sidebar({ isCollapsed, onToggle }) {
         <a href="#"><span className="icon">💬</span> <span>Community</span></a>
         <a href="#"><span className="icon">📚</span> <span>Resources</span></a>
         <a href="#"><span className="icon">⚙️</span> <span>Settings</span></a>
+      </nav> */}
+      {/* --- CHANGED: Use the NavLink component for each navigation item --- */}
+      <nav className="navigation">
+        <NavLink page="dashboard" icon="🏠" label="Dashboard" />
+        <NavLink page="achievements" icon="🏆" label="Achievements" />
+        <NavLink page="community" icon="💬" label="Community" />
+        <NavLink page="resources" icon="📚" label="Resources" />
+        <NavLink page="settings" icon="⚙️" label="Settings" />
       </nav>
     </aside>
   );

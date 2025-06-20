@@ -8,6 +8,9 @@
     --text-secondary: #555;
     --border-color: #e0e0e0;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --card-bg: #ffffff;
+    --sidebar-bg:#0A100A;
+    --statcard-border:;
 
     --sidebar-width-expanded: 260px;
     --sidebar-width-collapsed: 80px;
@@ -15,10 +18,27 @@
     --content-area-padding: 3rem; 
 }
 
+/* --- DARK THEME OVERRIDES --- */
+[data-theme="dark"] {
+    --bg-dark: #eef0eb; /* Swapped */
+    --bg-light: #121812; /* Swapped */
+    --primary-green: #599959;
+    --text-dark: #f0f0f0; /* Swapped */
+    --text-light: #1a1a1a; /* Swapped */
+    --text-secondary: #888;
+    --border-color: #333;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    --card-bg: #1f261f;
+    --sidebar-bg:#000000;
+    --statcard-border:#687468;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Add a smooth transition to color and background changes */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -50,11 +70,12 @@ body {
 /* --- Sidebar --- */
 /* The sidebar no longer needs its own width or transition. The parent grid handles it. */
 .sidebar {
-    background-color: var(--bg-dark);
-    color: var(--text-light);
+    background-color: var(--sidebar-bg)/*var(--bg-dark)*/;
+    color: #f0f0f0;
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
+    border-left: #63cb63;
 }
 
 .sidebar.collapsed {
@@ -86,7 +107,7 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: var(--text-light);
+    color: #f0f0f0;
     text-decoration: none;
     padding: 1rem;
     border-radius: 8px;
@@ -134,9 +155,9 @@ body {
     margin-bottom: 3rem; 
 }
 .stat-card { 
-    background-color: #ffffff;
+    background-color: var(--bg-light);
     /* Refinement: A lighter border looks cleaner, closer to the image. */
-    border: 1px solid #f0f2f5; 
+    border: 2px solid var(--statcard-border); 
     border-radius: 20px;
     padding: 1.5rem;
     display: flex;
@@ -164,6 +185,7 @@ body {
 .card-icon--health { background-color: #ffe0e0; }
 .card-icon--streak { background-color: #fff0d4; }
 .card-icon--avoided { background-color: #E0F7FF; }
+[data-theme="dark"] .card-icon { color: #333; /* Make emoji colors pop on dark backgrounds */}
 .card-content { display: flex; flex-direction: column; }
 .stat-value {
     font-size: 1.6rem;
@@ -181,16 +203,72 @@ body {
 .section-header h2 { font-size: 1.75rem; }
 .view-all { color: var(--primary-green); text-decoration: none; font-weight: 500; }
 .achievements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
-.achievement-card { background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem 1rem; text-align: center; box-shadow: var(--shadow); }
+.achievement-card { background: var(--bg-light); border: 2px solid var(--border-color); border-radius: 12px; padding: 1.5rem 1rem; text-align: center; box-shadow: var(--shadow); }
 .achievement-card .ach-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
 .achievement-card p { font-weight: 500; font-size: 0.9rem; }
-.achievement-card.locked { background-color: #f9f9f9; color: #aaa; border-style: dashed; }
+.achievement-card.locked { background-color: var(--bg-light); color: #aaa; border-style: dashed; }
 .achievement-card.locked .ach-icon { filter: grayscale(100%); }
 .cta-section { background-color: var(--primary-green); color: var(--text-light); border-radius: 20px; padding: 2.5rem; text-align: center; }
 .cta-section h2 { font-size: 1.75rem; margin-bottom: 0.5rem; }
 .cta-section p { color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem; }
 .cta-button { background-color: var(--text-light); color: var(--primary-green); border: none; padding: 1rem 2.5rem; font-size: 1rem; font-weight: 700; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease; }
 .cta-button:hover { transform: scale(1.05); background-color: #f0f0f0; }
+
+
+
+/* --- NEW: Settings Page Styles --- */
+.settings-section {
+    margin-bottom: 3rem;
+}
+.settings-section-title {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.settings-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+}
+.setting-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+.setting-description {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+.theme-switcher {
+    display: flex;
+    gap: 1rem;
+    background-color: var(--bg-light);
+    border-radius: 10px;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+.theme-option {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-color: transparent;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+.theme-option.active {
+    color: var(--text-dark);
+    background-color: var(--card-bg);
+    border-color: var(--primary-green);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
 /* --- Overlay & Form Styles --- */
 

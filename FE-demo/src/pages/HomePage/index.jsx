@@ -3,12 +3,23 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/home/sidebar";
 import MainContent from "../../components/home/homePage";
 import SmokeSetupOverlay from "../../components/home/Overlay/SmokeSetup.jsx"
+import AchievementsPage from '../../components/home/sidebarPages/AchievementsPage';
+import SettingsPage from '../../components/home/sidebarPages/SettingsPage';
 
 function App() {
   // State to manage whether the sidebar is collapsed or not
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showOverlay, setShowOverlay] = useState(true);
+  const [currentPage, setCurrentPage] = useState('dashboard');
 
+   // State for theme management
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+  // Effect to apply the theme to the body
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   // Function to toggle the state
   const handleToggleSidebar = () => {
@@ -53,9 +64,23 @@ function App() {
     setHasSmokingProfile(true);
   };
 
+   // Render the correct page based on state
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return <MainContent />;
+      case 'achievements':
+        return <AchievementsPage />;
+      case 'settings':
+        return <SettingsPage currentTheme={theme} onThemeChange={setTheme} />;
+      default:
+        return <MainContent />;
+    }
+  };
+
 
   return (
-    <div className={containerClass}>
+    <div className={containerClass }>
 
       {/* 
         CONDITIONAL RENDERING:
@@ -69,11 +94,16 @@ function App() {
         />
       )}
 
-      <Sidebar isCollapsed={isCollapsed} onToggle={handleToggleSidebar} />
+      <Sidebar 
+        isCollapsed={isCollapsed} 
+        onToggle={handleToggleSidebar}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
 
       {/* This is the new main grid cell that contains your content */}
       <div className="main-content-area">
-        <MainContent />
+        {renderCurrentPage()}
       </div>
     </div>
   );
