@@ -48,7 +48,7 @@ function ProfileSetupOverlay({ onSaveProfile, onClose  }) {
     <div className="overlay-backdrop" onClick={onClose}>
       <div className="overlay-content"onClick={(e) => e.stopPropagation()}> {/* Optional: Prevent click inside content from bubbling up */}
         {/* Close Button */}
-        <button className="close-button" onClick={onClose}>&times;</button>
+        <button className="close-button" onClick={onClose}>&times;</button>
         <div className="overlay-icon">📝</div>
         <h2>Create Your Smoking Profile</h2>
         <p>This data is essential to personalize your quit journey.</p>
