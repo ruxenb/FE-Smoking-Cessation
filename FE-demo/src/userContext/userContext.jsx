@@ -1,5 +1,5 @@
-// File này giúp bạn quản lý và chia sẻ thông tin người dùng (user) trong toàn bộ ứng dụng React một cách tiện lợi, đồng thời tự động lấy thông tin user từ localStorage khi app khởi động.
-
+// File này giúp bạn quản lý và chia sẻ thông tin người dùng (user) trong toàn bộ ứng dụng  một cách tiện lợi
+//  đồng thời tự động lấy thông tin user từ localStorage khi app khởi động.
 
 /* 
 createContext: Tạo một Context mới.
@@ -15,26 +15,37 @@ const UserContext = createContext(null); // Tạo một Context tên là UserCon
 // Nó sẽ lưu trữ thông tin người dùng và cung cấp hàm setUser để cập nhật thông tin người dùng
 // Các component con có thể sử dụng useUser để truy cập thông tin người dùng và hàm setUser
 // UserContext.Provider truyền xuống giá trị { user, setUser } cho các component con
-export function UserProvider({ children }) {  
-    // Khởi tạo state user với giá trị mặc định là null     
-    // sử dụng React Hook useState để tạo state mới tên là user và một hàm để cập nhật nó là setUser
-    // Khi muốn thay đổi giá trị của user, bạn sẽ gọi setUser(newValue) với giá trị mới
-    const [user, setUser] = useState(null);
+export function UserProvider({ children }) {
+  // Khởi tạo state user với giá trị mặc định là null
+  // sử dụng React Hook useState để tạo state mới tên là user và một hàm để cập nhật nó là setUser
+  // Khi muốn thay đổi giá trị của user, bạn sẽ gọi setUser(newValue) với giá trị mới
+  const [user, setUser] = useState(null); // user là giá trị state hiện tại, setUser là hàm để cập nhật giá trị của user
 
-    // Load user từ localStorage khi app khởi động
-    useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        // Nếu storedUser không phải null, dùng JSON.parse(storedUser) để chuyển chuỗi JSON(string) thành object JavaScript
-        if (storedUser) {
-        setUser(JSON.parse(storedUser));
-        }
-    }, []);
+  // Load user từ localStorage khi app khởi động
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    // Nếu storedUser không phải null, dùng JSON.parse(storedUser) để chuyển chuỗi JSON(string) thành object JavaScript
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
-    return (
-        <UserContext.Provider value={{ user, setUser }}>
-        {children}
-        </UserContext.Provider>
-    );
+  const logout = () => {
+    //localStorage.clear(); // Xóa toàn bộ thông tin người dùng khỏi localStorage
+    // nên xóa từng mục cụ thể để tránh xóa nhầm dữ liệu khác
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("tokenType");
+    localStorage.removeItem("user");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    setUser(null); // Cập nhật state user về null
+  };
+
+  return (
+    <UserContext.Provider value={{ user, setUser, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 // Custom hook để sử dụng Context

@@ -5,8 +5,8 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { FaLock, FaEnvelope } from "react-icons/fa";
 import "./RegisterForm.css"; // tạo file này nếu bạn muốn CSS riêng
 import dayjs from "dayjs";
-import { registerUser } from "/src/services/authService"; // import hàm registerUser từ file authService.js
 import { toast } from "react-toastify";
+import { register } from "../../../services/authService";
 
 function RegisterForm() {
   const [form] = Form.useForm();
@@ -16,22 +16,24 @@ function RegisterForm() {
   // values là một object chứa các giá trị từ form
   // onFinish được gọi khi người dùng nhấn nút Register
   const onFinish = async (values) => {
-    // TODO: Gọi API register ở đây
     try {
       setLoading(true); // Bật loading khi bắt đầu gửi form
       // Format lại ngày sinh trước khi gửi data về backend
       // payload là một object chứa các giá trị từ form, bao gồm cả ngày sinh đã được định dạng
-      const payload = {
+      const submitData = {
         ...values, // ...values có nghĩa là lấy tất cả các trường từ form
         dob: dayjs(values.dob).format(
           "YYYY-MM-DD"
-        ), /* dùng thư viện dayjs để định dạng lại ngày tháng datepicker của antd */
+        ) /* dùng thư viện dayjs để định dạng lại ngày tháng datepicker của antd */,
       };
-      delete payload.confirm_password; // Xoá confirm_password khỏi payload trước khi gửi về Backend  
+      // Xoá confirm_password khỏi payload trước khi gửi về Backendf
+      delete submitData.confirm_password;
 
-      console.log("Payload gửi lên:", payload);
+      console.log("Data được gửi về BE:", submitData);
 
-      const response = await registerUser(payload);
+      // gọi API register từ registerUser trong authService.js
+      const response = await register(submitData);
+
       if (response.status == 200 || response.status == 201) {
         toast.success("Đăng ký tài khoản thành công ^3^");
         console.log("Register success:", response.data);
@@ -41,11 +43,13 @@ function RegisterForm() {
         }, 3000);
       }
     } catch (error) {
-      console.error(error);
-      if (error.response?.data?.message) {
-        toast.error(error.response.data.message, {
-          theme: "dark",
-        });
+      console.error("Register thất bại", error);
+      // đây là biến lưu đoạn text được trả về từ backend khi register fail
+      const responseData = error.response?.data; // kiểm tra xem error.response có tồn tại không (ko bị null hoặc undefined)
+      if (typeof responseData === "string") {
+        // kiểm tra xem responseData được trả về từ BE có phải là chuỗi string
+        toast.error(responseData, { theme: "dark" });
+        console.log(responseData);
       } else {
         toast.error("Đăng ký tài khoản thất bại, vui lòng thử lại!", {
           theme: "dark",
