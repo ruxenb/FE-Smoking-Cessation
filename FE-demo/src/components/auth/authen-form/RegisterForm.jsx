@@ -1,32 +1,58 @@
-import React from "react";
-import { Button, Form, Input, DatePicker, Select, message } from "antd";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Form, Input, DatePicker, Select } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import { BsFillPersonFill } from "react-icons/bs";
 import { FaLock, FaEnvelope } from "react-icons/fa";
 import "./RegisterForm.css"; // tạo file này nếu bạn muốn CSS riêng
 import dayjs from "dayjs";
-import { registerUser } from "../../../services/authService";
+import { registerUser } from "/src/services/authService"; // import hàm registerUser từ file authService.js
+import { toast } from "react-toastify";
 
 function RegisterForm() {
   const [form] = Form.useForm();
+  const navigate = useNavigate(); // dùng để chuyển hướng trang
+  const [loading, setLoading] = useState(false); // loading khi gửi form
 
+  // values là một object chứa các giá trị từ form
+  // onFinish được gọi khi người dùng nhấn nút Register
   const onFinish = async (values) => {
-    //console.log("Register Successfully:", values);
     // TODO: Gọi API register ở đây
     try {
+      setLoading(true); // Bật loading khi bắt đầu gửi form
       // Format lại ngày sinh trước khi gửi data về backend
+      // payload là một object chứa các giá trị từ form, bao gồm cả ngày sinh đã được định dạng
       const payload = {
-        ...values,
+        ...values, // ...values có nghĩa là lấy tất cả các trường từ form
         dob: dayjs(values.dob).format(
-          "DD/MM/YYYY"
-        ) /* dùng thư viện dayjs để định dạng ngày tháng datepicker của antd */,
+          "YYYY-MM-DD"
+        ), /* dùng thư viện dayjs để định dạng lại ngày tháng datepicker của antd */
       };
+      delete payload.confirm_password; // Xoá confirm_password khỏi payload trước khi gửi về Backend  
+
+      console.log("Payload gửi lên:", payload);
 
       const response = await registerUser(payload);
-      console.log("Register success:", response.data);
+      if (response.status == 200 || response.status == 201) {
+        toast.success("Đăng ký tài khoản thành công ^3^");
+        console.log("Register success:", response.data);
+        // Sau 3 giây chuyển trang
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
     } catch (error) {
       console.error(error);
-      message.error("Register Failed. Please try again");
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message, {
+          theme: "dark",
+        });
+      } else {
+        toast.error("Đăng ký tài khoản thất bại, vui lòng thử lại!", {
+          theme: "dark",
+        });
+      }
+    } finally {
+      setLoading(false); // Tắt loading sau khi gửi form
     }
   };
 
@@ -87,7 +113,7 @@ function RegisterForm() {
         {/* fullname */}
         <Form.Item
           label="FullName"
-          name="fullname"
+          name="fullName"
           rules={[{ required: true, message: "Please input your fullname" }]}
         >
           <Input
@@ -193,20 +219,29 @@ function RegisterForm() {
             <Select.Option value="OTHER">Other</Select.Option>
           </Select>
         </Form.Item>
+        {/* Register button */}
         <Form.Item>
           <Button
             size="large"
             type="primary"
             htmlType="submit"
             className="login-button"
+            loading={loading} // thêm dòng này
           >
             Register
           </Button>
         </Form.Item>
-        <div className="signup-link">
-          <p>Already have an account?</p>
-          <Link to="/login" className="sign-up">
+        {/* login link */}
+        <div className="login">
+          <span>Already have an account?</span>
+          <Link to="/login" className="login-link">
             (Login here)
+          </Link>
+        </div>
+        {/* Guest selection */}
+        <div className="guest">
+          <Link to="/home" className="guest-link">
+            <span>Continue as a guest</span>
           </Link>
         </div>
       </Form>

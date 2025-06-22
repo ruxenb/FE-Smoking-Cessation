@@ -1,10 +1,10 @@
-import React from 'react';
-import StatCard from './StatCard';
-import AchievementCard from './AchievementCard';
-import CTASection from './CTASection';
-import './homePage.css'
+import React from "react";
+import StatCard from "./StatCard";
+import AchievementCard from "./AchievementCard";
+import CTASection from "./CTASection";
+import "./homePage.css";
 
-function MainContent() {
+function MainContent({ username }) {
   const moneySaved = "1,244.50";
   const lifeReclaimed = "28";
   const streakCount = "92";
@@ -22,11 +22,16 @@ function MainContent() {
     <main className="main-content">
       <header className="main-header">
         <div className="welcome-message">
-          <h1>Welcome back, <span className="username">Alex</span>!</h1>
+          <h1>
+            Welcome back, <span className="username">{username}</span>!
+          </h1>
           <p>You're doing great. Keep up the amazing work.</p>
         </div>
         <div className="user-profile">
-          <img src="https://i.pravatar.cc/60" alt="User Avatar" />
+          <img
+            src={`https://api.dicebear.com/7.x/initials/svg?seed=${username}`}
+            alt="User Avatar"
+          />
         </div>
       </header>
 
@@ -34,16 +39,38 @@ function MainContent() {
         {/*
           UPDATED: We now pass the 'iconClass' prop with our new CSS class names.
         */}
-        <StatCard icon="💰" iconClass="card-icon--money" value={`$${moneySaved}`} label="Money Saved" />
-        <StatCard icon="❤️" iconClass="card-icon--health" value={`${lifeReclaimed} Days`} label="Life Reclaimed" />
-        <StatCard icon="🔥" iconClass="card-icon--streak" value={`${streakCount} Days`} label="Current Streak" />
-        <StatCard icon="🚭" iconClass="card-icon--avoided" value={cigsAvoided} label="Cigarettes Avoided" />
+        <StatCard
+          icon="💰"
+          iconClass="card-icon--money"
+          value={`$${moneySaved}`}
+          label="Money Saved"
+        />
+        <StatCard
+          icon="❤️"
+          iconClass="card-icon--health"
+          value={`${lifeReclaimed} Days`}
+          label="Life Reclaimed"
+        />
+        <StatCard
+          icon="🔥"
+          iconClass="card-icon--streak"
+          value={`${streakCount} Days`}
+          label="Current Streak"
+        />
+        <StatCard
+          icon="🚭"
+          iconClass="card-icon--avoided"
+          value={cigsAvoided}
+          label="Cigarettes Avoided"
+        />
       </section>
 
       <section className="achievements-section">
         <div className="section-header">
           <h2>Recent Achievements</h2>
-          <a href="#" className="view-all">View All</a>
+          <a href="#" className="view-all">
+            View All
+          </a>
         </div>
         <div className="achievements-grid">
           {achievements.map((achievement, index) => (

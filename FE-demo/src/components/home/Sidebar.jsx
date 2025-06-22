@@ -1,12 +1,15 @@
-import React from 'react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 // No changes needed here, this is already well-structured.
-function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage  }) {
+function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
+  const navigate = useNavigate();
+
   // Helper to create navigation links
   const NavLink = ({ page, icon, label }) => (
-    <a 
+    <a
       href="#"
-      className={currentPage === page ? 'active' : ''}
+      className={currentPage === page ? "active" : ""}
       onClick={(e) => {
         e.preventDefault(); // Prevent page reload
         setCurrentPage(page);
@@ -15,15 +18,9 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage  }) {
       <span className="icon">{icon}</span> <span>{label}</span>
     </a>
   );
-  const handleLogout = () => {
-    // backend sẽ clear user tokens, gọi logout API,
-    // rồi redirect login page.
-    console.log("User is logging out...");
-    alert("You have been logged out. (Functionality to redirect would go here)");
-  };
 
   return (
-    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+    <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="logo">
         <svg
           width="40"
@@ -32,42 +29,54 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage  }) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           onClick={onToggle}
-          style={{ cursor: 'pointer', padding: '8px' }} // Added padding to make it look less cramped
+          style={{ cursor: "pointer", padding: "8px" }}
         >
-          <path 
-            d="M4 6H20M4 12H20M4 18H20" 
-            stroke="currentColor" // This will inherit the white color from the sidebar's CSS
-            strokeWidth="2" 
-            strokeLinecap="round" 
+          <path
+            d="M4 6H20M4 12H20M4 18H20"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
             strokeLinejoin="round"
           />
         </svg>
         <span>QuitSmoke</span>
       </div>
-      {/* <nav className="navigation">
-        <a href="#" className="active">
-          <span className="icon">🏠</span> <span>Dashboard</span>
-        </a>
-        <a href="#"><span className="icon">🏆</span> <span>Achievements</span></a>
-        <a href="#"><span className="icon">💬</span> <span>Community</span></a>
-        <a href="#"><span className="icon">📚</span> <span>Resources</span></a>
-        <a href="#"><span className="icon">⚙️</span> <span>Settings</span></a>
-      </nav> */}
-      {/* --- CHANGED: Use the NavLink component for each navigation item --- */}
-      <nav className="navigation">
-        <NavLink page="dashboard" icon="🏠" label="Dashboard" />
-        <NavLink page="achievements" icon="🏆" label="Achievements" />
-        <NavLink page="community" icon="💬" label="Community" />
-        <NavLink page="resources" icon="📚" label="Resources" />
-        <NavLink page="settings" icon="⚙️" label="Settings" />
-      </nav>
 
-      {/* --- Footer chứa logout --- */}
+      {/* Nội dung sidebar chia làm 2 phần: nav và logout */}
+      <div
+        className="sidebar-content"
+        style={{ display: "flex", flexDirection: "column", height: "100%" }}
+      >
+        {/* Navigation links */}
+        <nav className="navigation" style={{ flexGrow: 1 }}>
+          <NavLink page="dashboard" icon="🏠" label="Dashboard" />
+          <NavLink page="achievements" icon="🏆" label="Achievements" />
+          <NavLink page="community" icon="💬" label="Community" />
+          <NavLink page="resources" icon="📚" label="Resources" />
+          <NavLink page="settings" icon="⚙️" label="Settings" />
+          <NavLink
+            page="logout" // không cần dùng trong setCurrentPage
+            icon="🚪"
+            label="Logout"
+            onClick={() => {
+              localStorage.clear();
+              navigate("/login");
+            }}
+          />
+        </nav>
 
-      <div className="sidebar-footer">
-        <a href="#" className="logout-button" onClick={handleLogout}>
-          <span className="icon">⏏️</span> <span>Logout</span>
-        </a>
+        {/* Logout button styled like nav item */}
+        <div style={{ padding: "16px" }}>
+          <NavLink
+            page="logout" // không cần dùng trong setCurrentPage
+            icon="🚪"
+            label="Logout"
+            onClick={() => {
+              localStorage.clear();
+              navigate("/login");
+            }}
+          />
+        </div>
       </div>
     </aside>
   );

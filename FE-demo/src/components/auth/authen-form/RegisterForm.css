@@ -13,6 +13,7 @@
   color: #66bb6a;
   transition: all 0.2s ease;
 }
+
 .register-form {
   display: flex;
   flex-direction: column;
@@ -25,10 +26,45 @@
   position: relative;
   animation: fadeInDown 2s ease-out; /* animation drop down  */
 }
+
 .register-form form {
   width: 100%;
   max-width: 600px;
   display: flex;
   flex-direction: column;
   flex-grow: 1; /* để form chiếm phần lớn chiều cao */
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #555; /* màu chữ */
+  animation: fadeInUp 1s ease-in-out;
+}
+
+.login-link {
+  color: #2e7d32;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+.login-link:hover {
+  color: #66bb6a;
+  transform: translateY(-2px);
+  text-decoration: underline;
+}
+
+.guest {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #555; /* màu chữ */
 }

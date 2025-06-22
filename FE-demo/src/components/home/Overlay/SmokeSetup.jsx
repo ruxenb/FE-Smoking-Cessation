@@ -46,7 +46,7 @@ function ProfileSetupOverlay({ onSaveProfile, onClose  }) {
 
   return (
     <div className="overlay-backdrop" onClick={onClose}>
-      <div className="overlay-content"onClick={(e) => e.stopPropagation()}> {/* Optional: Prevent click inside content from bubbling up */}
+      <div className="overlay-content" onClick={(e) => e.stopPropagation()}> {/* Optional: Prevent click inside content from bubbling up */}
         {/* Close Button */}
         <button className="close-button" onClick={onClose}>&times;</button>
         <div className="overlay-icon">📝</div>

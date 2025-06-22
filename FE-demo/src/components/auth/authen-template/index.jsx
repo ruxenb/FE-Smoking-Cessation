@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 // isLogin là một biến prop(thuộc tính) được truyền vào AuthenTemplate(component)
 function AuthenTemplate({ isLogin }) {
   return (
-    <div className="authen-template"> 
+    <div className="authen-template">
       <div className="authen-template-form">
         {/* Sử dụng framer-motion để render login/register form có hiệu ứng đẹp */}
         <AnimatePresence mode="wait">

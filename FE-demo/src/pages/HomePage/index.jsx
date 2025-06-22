@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
 
-import Sidebar from "../../components/home/Sidebar";
+import Sidebar from "../../components/home/sidebar";
 import MainContent from "../../components/home/homePage";
-import SmokeSetupOverlay from "../../components/home/Overlay/SmokeSetup.jsx"
-import AchievementsPage from '../../components/home/sidebarPages/AchievementsPage';
-import SettingsPage from '../../components/home/sidebarPages/SettingsPage';
+import SmokeSetupOverlay from "../../components/home/Overlay/SmokeSetup.jsx";
+import AchievementsPage from "../../components/home/sidebarPages/AchievementsPage";
+import SettingsPage from "../../components/home/sidebarPages/SettingsPage";
 
-function App() {
+function HomePage() {
   // State to manage whether the sidebar is collapsed or not
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showOverlay, setShowOverlay] = useState(true);
-  const [currentPage, setCurrentPage] = useState('dashboard');
+  const [currentPage, setCurrentPage] = useState("dashboard");
+  const [username, setUsername] = useState("");
 
-   // State for theme management
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  // State for theme management
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   // Effect to apply the theme to the body
   useEffect(() => {
-    document.body.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+    document.body.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   // Function to toggle the state
@@ -31,8 +36,9 @@ function App() {
   };
 
   // Dynamically create the class string for the main container
-  const containerClass = `app-container ${isCollapsed ? "sidebar-collapsed" : ""
-    }`;
+  const containerClass = `app-container ${
+    isCollapsed ? "sidebar-collapsed" : ""
+  }`;
 
   // State to track if the smoking profile exists.
   // In a real app, you would check this on page load.
@@ -64,24 +70,22 @@ function App() {
     setHasSmokingProfile(true);
   };
 
-   // Render the correct page based on state
+  // Render the correct page based on state
   const renderCurrentPage = () => {
     switch (currentPage) {
-      case 'dashboard':
-        return <MainContent />;
-      case 'achievements':
+      case "dashboard" /* truy cập tới dashboard khi đăng nhập thành công, truyền data */:
+        return <MainContent username={username} />;
+      case "achievements":
         return <AchievementsPage />;
-      case 'settings':
+      case "settings":
         return <SettingsPage currentTheme={theme} onThemeChange={setTheme} />;
       default:
         return <MainContent />;
     }
   };
 
-
   return (
-    <div className={containerClass }>
-
+    <div className={containerClass}>
       {/* 
         CONDITIONAL RENDERING:
         If the user does NOT have a smoking profile, show the overlay.
@@ -94,19 +98,17 @@ function App() {
         />
       )}
 
-      <Sidebar 
-        isCollapsed={isCollapsed} 
+      <Sidebar
+        isCollapsed={isCollapsed}
         onToggle={handleToggleSidebar}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
 
       {/* This is the new main grid cell that contains your content */}
-      <div className="main-content-area">
-        {renderCurrentPage()}
-      </div>
+      <div className="main-content-area">{renderCurrentPage()}</div>
     </div>
   );
 }
 
-export default App;
+export default HomePage;

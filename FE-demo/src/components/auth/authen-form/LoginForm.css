@@ -188,7 +188,7 @@
   }
 }
 
-.aboutus-link {
+.about-us {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -202,4 +202,13 @@
   border-color: #66bb6a !important;
   box-shadow: 0 0 0 2px rgba(102, 187, 106, 0.3) !important;
   transition: all 0.3s ease-in-out;
+}
+
+.success-toast {
+  font-size: 14px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #1e1e2f;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }

@@ -7,7 +7,7 @@
 .authen-template-form {
   width: 40%;
   height: 100%;
-  background-color: gainsboro;
+  background-color: lightgray;
   display: flex;
   justify-content: center; /* căn chỉnh phần tử theo chiều chính */
   align-items: center; /* căn chỉnh phần tử theo chiều phụ */
