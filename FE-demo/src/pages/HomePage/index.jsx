@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Sidebar from "../../components/home/sidebar";
+import Sidebar from "../../components/home/Sidebar";
 import MainContent from "../../components/home/homePage";
 import SmokeSetupOverlay from "../../components/home/Overlay/SmokeSetup.jsx";
 import AchievementsPage from "../../components/home/sidebarPages/AchievementsPage";
