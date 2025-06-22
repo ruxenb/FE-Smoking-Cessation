@@ -15,6 +15,12 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage  }) {
       <span className="icon">{icon}</span> <span>{label}</span>
     </a>
   );
+  const handleLogout = () => {
+    // backend sẽ clear user tokens, gọi logout API,
+    // rồi redirect login page.
+    console.log("User is logging out...");
+    alert("You have been logged out. (Functionality to redirect would go here)");
+  };
 
   return (
     <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
@@ -55,6 +61,14 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage  }) {
         <NavLink page="resources" icon="📚" label="Resources" />
         <NavLink page="settings" icon="⚙️" label="Settings" />
       </nav>
+
+      {/* --- Footer chứa logout --- */}
+
+      <div className="sidebar-footer">
+        <a href="#" className="logout-button" onClick={handleLogout}>
+          <span className="icon">⏏️</span> <span>Logout</span>
+        </a>
+      </div>
     </aside>
   );
 }

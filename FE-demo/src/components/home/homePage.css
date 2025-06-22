@@ -35,6 +35,7 @@
     --statcard-border:#687468;
     --input-bg: #1f261f;
     --input-text-color: #f0f0f0; 
+    --border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -79,7 +80,13 @@ body {
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
-    border-left: #63cb63;
+}
+
+.sidebar-footer {
+  /* Add đường line để tách nút logout*/
+    margin-top: auto; 
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar.collapsed {
@@ -127,22 +134,34 @@ body {
 .navigation a.active { background-color: var(--primary-green); font-weight: 500; }
 .navigation .icon { font-size: 1.2rem; }
 
+.sidebar.collapsed .sidebar-footer {
+  /* Xóa border và padding để nhìn clean */
+  border-top: none;
+  padding-top: 0;
+  margin-top: 1rem; 
+}
+
+.sidebar.collapsed .logout-button {
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.sidebar.collapsed .logout-button span:not(.icon) {
+  display: none;
+}
+
 /* --- Main Content Area (The Grid Cell) --- */
-/* This replaces the old .main-content-wrapper */
 .main-content-area {
-    overflow-y: auto; /* Allows this area to scroll if content is long */
+    overflow-y: auto; /* Cho phép scroll nếu quá dài */
 }
 
 /* --- Main Content (The Static Block) --- */
-/* This is your inner block that will NOT shrink */
 .main-content {
-    /* KEY: Center the block within its grid cell */
+    /* Center the block within its grid cell */
     margin-left: auto;
     margin-right: auto;
-    
-    width: 100%; /* Use the full width of the available space */
-    max-width: var(--main-content-max-width); /* But never get wider than this */
-
+    width: 100%; 
+    max-width: var(--main-content-max-width); /* ko rộng hơn cái này */
     /* Add your desired padding here */
     padding: 2rem var(--content-area-padding);
 }
@@ -407,6 +426,25 @@ body {
 .close-button:hover {
     color: var(--primary-green);
     transform: rotate(90deg);
+}
+
+.logout-button {
+  
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #f0f0f0; /**/
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  width: 100%;
+}
+
+.logout-button:hover {
+
+  background-color: rgba(255, 82, 82, 0.1); 
+  color: #ffc2c2; 
 }
 
 /* --- Responsive Design --- */
