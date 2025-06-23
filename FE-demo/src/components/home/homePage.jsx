@@ -33,7 +33,6 @@ const HomePage = () => {
       {/* --- Hero Section --- */}
        <header className="hero-section">
         <div className="hero-layout">
-          {/* Left Column with all the text and buttons */}
           <div className="hero-left-column">
             <h1>Quit Strong. Live Long.</h1>
             <p className="subtitle">
@@ -45,9 +44,9 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* Right Column (currently empty, perfect for an image later) */}
+          {/* Right Column đang trống*/}
           <div className="hero-right-column">
-            {/* You can add an image here in the future */}
+            {/* Add hình trong tương lai */}
           </div>
         </div>
       </header>
@@ -101,7 +100,6 @@ const HomePage = () => {
         <div className="about-content">
           <h2>About Our Mission</h2>
           <p>
-            {/* You can replace this placeholder text with your actual "About Us" content. */}
             We believe that everyone deserves the chance to live a healthier, smoke-free life. Our mission is to empower individuals to overcome addiction by providing an accessible, supportive, and motivating digital environment. This platform combines evidence-based strategies with the power of community to create lasting change.
           </p>
         </div>
