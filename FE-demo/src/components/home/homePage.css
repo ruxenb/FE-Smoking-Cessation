@@ -79,12 +79,42 @@
     line-height: 1.6;
 }
 
+.homepage-section {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.homepage-section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 4rem;
+    color: var(--text-dark);
+}
+
 /* --- Hero Section --- */
 .hero-section {
     background: var(--bg-light);
-    padding: 120px 20px; /* More vertical padding */
-    text-align: center;
+    padding: 4rem 20px;
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - 80px);
 }
+
+.hero-layout {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    /* Two columns: left is slightly bigger. Adjust '1.2fr' as needed. */
+    grid-template-columns: 1.2fr 0.8fr; 
+    align-items: center;
+    gap: 3rem;
+}
+
+.hero-left-column {
+    text-align: left; /* Align tất cả sang bên trái */
+}
+
 
 .hero-content {
     max-width: 800px;
@@ -92,7 +122,7 @@
 }
 
 .hero-section h1 {
-    font-size: 3.8rem; /* Larger font size */
+    font-size: 3.8rem;
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 1rem;
@@ -107,28 +137,26 @@
 
 .hero-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Align nút sang trái */
     align-items: center;
-    gap: 1rem; /* Space between the buttons */
-    flex-wrap: wrap; /* Allows buttons to stack on small screens */
+    gap: 1rem;
 }
 
 /* --- Generic Section Styling --- */
-section {
-    padding: 80px 20px;
+/* section {
+
     text-align: center;
 }
 
 .how-it-works-section {
-    background-color: var(--card-bg); /* White background for contrast */
+    background-color: var(--card-bg); 
 }
 
 section h2 {
     font-size: 2.5rem;
     font-weight: 700;
-    margin-bottom: 4rem;
     color: var(--text-dark);
-}
+} */
 
 /* --- Call to Action Buttons --- */
 .cta-button {
@@ -306,14 +334,6 @@ section h2 {
         font-size: 1.1rem;
     }
 
-    section h2 {
-        font-size: 2rem;
-        margin-bottom: 3rem;
-    }
-
-    section {
-        padding: 60px 20px;
-    }
 
     .steps-container {
       flex-direction: column;
@@ -329,5 +349,27 @@ section h2 {
     }
     .cta-button {
         width: 100%;
+    }
+}
+@media (max-width: 900px) {
+    .hero-layout {
+        grid-template-columns: 1fr; /* Chuyển sang 1 cột */
+    }
+
+    .hero-left-column {
+        text-align: center; /* Căn giữa cho view dt */
+    }
+
+    .hero-right-column {
+        display: none; /* Ẩn cột trống bên phải cho đt */
+    }
+
+    .hero-buttons {
+        justify-content: center; /* Căn giữa nút khi stack */
+    }
+
+    .hero-section {
+        min-height: auto; 
+        padding: 6rem 20px;
     }
 }

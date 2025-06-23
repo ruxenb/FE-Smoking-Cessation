@@ -18,6 +18,7 @@ const Navbar = () => {
           <a href="membership">Membership</a>
           <a href="#blog">Blog</a>
           <a href="register" className="navbar-button">Get Started</a>
+          <a href="login">Login</a>
         </div>
       </nav>
     </div>
@@ -27,24 +28,32 @@ const Navbar = () => {
 const HomePage = () => {
   return (
     <div className="homepage-container">
-      {/* Add the new Navbar component here */}
+
       <Navbar /> 
       {/* --- Hero Section --- */}
-      <header className="hero-section">
-        <div className="hero-content">
-          <h1>Quit Strong. Live Long.</h1>
-          <p className="subtitle">
-            Guiding you towards a healthier, happier, smoke-free future.
-          </p>
-          <div className="hero-buttons">
-            <button className="cta-button primary">Get Started For Free</button>
-            <button className="cta-button outline">Membership</button>
+       <header className="hero-section">
+        <div className="hero-layout">
+          {/* Left Column with all the text and buttons */}
+          <div className="hero-left-column">
+            <h1>Quit Strong. Live Long.</h1>
+            <p className="subtitle">
+              Guiding you towards a healthier, happier, smoke-free future.
+            </p>
+            <div className="hero-buttons">
+              <button className="cta-button primary">Get Started For Free</button>
+              <button className="cta-button outline">Membership</button>
+            </div>
+          </div>
+
+          {/* Right Column (currently empty, perfect for an image later) */}
+          <div className="hero-right-column">
+            {/* You can add an image here in the future */}
           </div>
         </div>
       </header>
 
       {/* --- Features Section --- */}
-      <section id="features" className="features-section">
+      <section id="features" className="homepage-section features-section">
         <h2>Everything You Need to Quit for Good</h2>
         <div className="features-grid">
           <div className="feature-card">
@@ -66,7 +75,7 @@ const HomePage = () => {
       </section>
       
       {/* --- How It Works Section --- */}
-      <section id="how-it-works" className="how-it-works-section">
+      <section id="how-it-works" className="homepage-section how-it-works-section">
         <h2>Get Started in Three Simple Steps</h2>
         <div className="steps-container">
             <div className="step">
@@ -88,7 +97,7 @@ const HomePage = () => {
       </section>
 
       {/* --- About Us Section --- */}
-      <section id="about" className="about-section">
+      <section id="about" className="homepage-section about-section">
         <div className="about-content">
           <h2>About Our Mission</h2>
           <p>
