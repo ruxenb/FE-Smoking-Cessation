@@ -10,6 +10,7 @@ import AboutUsPage from "./pages/AboutUsPage";
 import { ToastContainer } from "react-toastify"; /* 20/6/2025 */
 import "react-toastify/dist/ReactToastify.css"; /* 20/6/2025 */
 import { UserProvider } from "./userContext/userContext";
+import SettingsPage from "./components/home/sidebarPages/SettingsPage";
 function App() {
   // Tạo một router với createBrowserRouter, định nghĩa các route của ứng dụng
   // Data router api
@@ -24,6 +25,8 @@ function App() {
     { path: "/home", element: <HomePage /> },
     { path: "/membership", element: <MembershipPage /> },
     { path: "/about", element: <AboutUsPage /> },
+    { path: "/setting", element: <SettingsPage />},
+    
   ]);
   // Sử dụng RouterProvider để cung cấp <Router> cho toàn bộ ứng dụng
   return (

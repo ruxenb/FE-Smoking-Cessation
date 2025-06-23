@@ -32,6 +32,7 @@ function SettingsPage({ currentTheme, onThemeChange }) {
   // ✅ Hàm xử lý đổi mật khẩu
   const handleNewPasswordSubmit = async (values) => {
     try {
+      console.log(user.createdAt, "DD/MM/YYYY");
       console.log(values);
       const tokenType = localStorage.getItem("tokenType");
       const accessToken = localStorage.getItem("accessToken");
@@ -95,7 +96,7 @@ function SettingsPage({ currentTheme, onThemeChange }) {
             email: user.email,
             fullname: user.fullName,
             dob: dayjs(user.dob),
-            createdAt: dayjs(user.createdAt),
+            createdAt: dayjs(user.createdAt, "DD/MM/YYYY"), // format lại date trước khi đưa vào datepicker hiển thị
             gender: user.gender,
             role: user.role,
           }}
