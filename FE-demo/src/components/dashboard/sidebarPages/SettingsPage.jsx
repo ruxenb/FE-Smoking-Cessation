@@ -45,8 +45,22 @@ function SettingsPage({ currentTheme, onThemeChange }) {
   // ✅ Hàm xử lý đổi mật khẩu
   const handleNewPasswordSubmit = async (values) => {
     try {
+<<<<<<< HEAD:FE-demo/src/components/dashboard/sidebarPages/SettingsPage.jsx
       const response = await fetch(
         "http://localhost:8080/api/auth/change-password",
+=======
+      console.log(user.createdAt, "DD/MM/YYYY");
+      console.log(values);
+      const tokenType = localStorage.getItem("tokenType");
+      const accessToken = localStorage.getItem("accessToken");
+
+      const token = `${tokenType} ${accessToken}`;
+      console.log("Full token:", token);
+
+      // gọi changePassword trong userService.js
+      const response = await changePassword(
+        user.userId,
+>>>>>>> main:FE-demo/src/components/home/sidebarPages/SettingsPage.jsx
         {
           method: "POST",
           headers: {
@@ -109,7 +123,11 @@ function SettingsPage({ currentTheme, onThemeChange }) {
             email: user.email,
             fullname: user.fullName,
             dob: dayjs(user.dob),
+<<<<<<< HEAD:FE-demo/src/components/dashboard/sidebarPages/SettingsPage.jsx
             createdAt: dayjs(userData.createdAt),
+=======
+            createdAt: dayjs(user.createdAt, "DD/MM/YYYY"), // format lại date trước khi đưa vào datepicker hiển thị
+>>>>>>> main:FE-demo/src/components/home/sidebarPages/SettingsPage.jsx
             gender: user.gender,
             role: user.role,
           }}
