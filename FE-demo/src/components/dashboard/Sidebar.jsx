@@ -1,19 +1,12 @@
-import React from "react";
-import { CgLogOut } from "react-icons/cg";
-import { useUser } from "../../userContext/userContext";
-import { useNavigate } from "react-router-dom";
-import { Modal } from "antd";
+import React from 'react';
 
 // No changes needed here, this is already well-structured.
-function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
-  const { logout } = useUser(); // gọi hàm logout từ đối tượng UserContext trả về của useUser
-  const navigate = useNavigate();
-
+function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage  }) {
   // Helper to create navigation links
   const NavLink = ({ page, icon, label }) => (
-    <a
+    <a 
       href="#"
-      className={currentPage === page ? "active" : ""}
+      className={currentPage === page ? 'active' : ''}
       onClick={(e) => {
         e.preventDefault(); // Prevent page reload
         setCurrentPage(page);
@@ -23,14 +16,14 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
     </a>
   );
   const handleLogout = () => {
-    if (window.confirm("Do you really want to logout?")) {
-      logout();
-      navigate("/login");
-    }
+    // backend sẽ clear user tokens, gọi logout API,
+    // rồi redirect login page.
+    console.log("User is logging out...");
+    alert("You have been logged out. (Functionality to redirect would go here)");
   };
 
   return (
-    <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="logo">
         <svg
           width="40"
@@ -39,13 +32,13 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           onClick={onToggle}
-          style={{ cursor: "pointer", padding: "8px" }} // Added padding to make it look less cramped
+          style={{ cursor: 'pointer', padding: '8px' }} // Added padding to make it look less cramped
         >
-          <path
-            d="M4 6H20M4 12H20M4 18H20"
+          <path 
+            d="M4 6H20M4 12H20M4 18H20" 
             stroke="currentColor" // This will inherit the white color from the sidebar's CSS
-            strokeWidth="2"
-            strokeLinecap="round"
+            strokeWidth="2" 
+            strokeLinecap="round" 
             strokeLinejoin="round"
           />
         </svg>
@@ -68,14 +61,13 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
         <NavLink page="resources" icon="📚" label="Resources" />
         <NavLink page="settings" icon="⚙️" label="Settings" />
         <div className="sidebar-footer">
-          <a href="#" className="logout-button" onClick={handleLogout}>
-            <span className="icon">
-              <CgLogOut />
-            </span>{" "}
-            <span>Logout</span>
-          </a>
-        </div>
+        <a href="#" className="logout-button" onClick={handleLogout}>
+          <span className="icon">⏏️</span> <span>Logout</span>
+        </a>
+      </div>
       </nav>
+
+  
     </aside>
   );
 }

@@ -1,4 +1,4 @@
-/* --- Global Styles & Variables --- */
+/* Using variables from your main app for a consistent theme */
 :root {
     --bg-dark: #0A100A;
     --bg-light: #F4F7F6;
@@ -6,482 +6,328 @@
     --text-dark: #1a1a1a;
     --text-light: #ffffff;
     --text-secondary: #555;
-    --border-color: #e0e0e0;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     --card-bg: #ffffff;
-    --sidebar-bg:#0A100A;
-    --input-bg: #fff; 
-    --input-text-color: #1a1a1a;
-
-
-    --sidebar-width-expanded: 260px;
-    --sidebar-width-collapsed: 80px;
-    --main-content-max-width: 1200px;
-    --content-area-padding: 3rem; 
+    --navbar-bg: #101812; 
+    --navbar-button-bg: #305030; 
+    --hero-button-green: #355E3B;
 }
 
-/* --- DARK THEME OVERRIDES --- */
-[data-theme="dark"] {
-    --bg-dark: #eef0eb; /* Swapped */
-    --bg-light: #121812; /* Swapped */
-    --primary-green: #599959;
-    --text-dark: #f0f0f0; /* Swapped */
-    --text-light: #1a1a1a; /* Swapped */
-    --text-secondary: #888;
-    --border-color: #333;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    --card-bg: #1f261f;
-    --sidebar-bg:#000000;
-    --statcard-border:#687468;
-    --input-bg: #1f261f;
-    --input-text-color: #f0f0f0; 
-    --border-top-color: rgba(255, 255, 255, 0.1);
+.navbar-container {
+    background-color: var(--navbar-bg);
+    padding: 0 20px; /* Horizontal padding for smaller screens */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    /* Add a smooth transition to color and background changes */
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-light);
-    color: var(--text-dark);
-    overflow-x: hidden; /* Important: Prevents scrollbar during animation */
-}
-
-/* --- KEY LAYOUT FIX: USING CSS GRID --- */
-
-/* 1. The App Container is now a Grid */
-.app-container {
-    display: grid;
-    min-height: 100vh;
-    
-    /* Columns: One for sidebar, one for main content. 1fr = "fill remaining space" */
-    grid-template-columns: var(--sidebar-width-expanded) 1fr;
-    
-    /* KEY: Animate the change in column size for the smooth transition */
-    transition: grid-template-columns 0.3s ease-in-out;
-}
-
-/* 2. When sidebar is collapsed, change the grid layout */
-.app-container.sidebar-collapsed {
-    grid-template-columns: var(--sidebar-width-collapsed) 1fr;
-}
-
-/* --- Sidebar --- */
-/* The sidebar no longer needs its own width or transition. The parent grid handles it. */
-.sidebar {
-    background-color: var(--sidebar-bg)/*var(--bg-dark)*/;
-    color: #f0f0f0;
-    padding: 2rem 1.5rem;
+.navbar {
+    max-width: 1200px; /* Or match your main content max-width */
+    margin: 0 auto;
     display: flex;
-    flex-direction: column;
-}
-
-.sidebar-footer {
-  /* Add đường line để tách nút logout*/
-    margin-top: auto; 
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sidebar.collapsed {
+    justify-content: space-between;
     align-items: center;
-    padding: 2rem 0.5rem;
+    height: 80px;
 }
 
-/* Sidebar inner elements (logo, navigation) */
-.logo {
+.navbar-left, .navbar-right {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 3rem;
-    white-space: nowrap;
-    overflow: hidden;
-}
-.logo svg { cursor: pointer; transition: transform 0.3s ease; }
-.logo svg:hover { transform: scale(1.05); }
-
-.sidebar.collapsed .logo {
-    margin-bottom: 2rem;
-    justify-content: center;
-}
-.sidebar.collapsed .logo span { display: none; }
-.navigation { width: 100%; }
-.navigation a {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    color: #f0f0f0;
-    text-decoration: none;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-.sidebar.collapsed .navigation a {
-    justify-content: center;
-    padding: 1rem 0;
-}
-.sidebar.collapsed .navigation a span:not(.icon) { display: none; }
-.navigation a:hover { background-color: rgba(255, 255, 255, 0.1); }
-.navigation a.active { background-color: var(--primary-green); font-weight: 500; }
-.navigation .icon { font-size: 1.2rem; }
-
-/* .sidebar.collapsed .sidebar-footer {
-  Xóa border và padding để nhìn clean 
-  border-top: none;
-  padding-top: 0;
-  margin-top: 1rem; 
-} */
-
-.sidebar.collapsed .logout-button {
-
-  padding: 1rem 0;
+    gap: 1.5rem; /* Space between items */
 }
 
-.sidebar.collapsed .logout-button span:not(.icon) {
-  display: none;
+.logo-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-/* --- Main Content Area (The Grid Cell) --- */
-.main-content-area {
-    overflow-y: auto; /* Cho phép scroll nếu quá dài */
-}
-
-/* --- Main Content (The Static Block) --- */
-.main-content {
-    /* Center the block within its grid cell */
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%; 
-    max-width: var(--main-content-max-width); /* ko rộng hơn cái này */
-    /* Add your desired padding here */
-    padding: 2rem var(--content-area-padding);
-}
-
-/* --- ALL OTHER STYLES (headers, cards, etc.) REMAIN THE SAME --- */
-.main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.welcome-message h1 { font-size: 2.25rem; font-weight: 700; }
-.welcome-message .username { color: var(--primary-green); }
-.welcome-message p { font-size: 1rem; color: var(--text-secondary); margin-top: 0.25rem; }
-.user-profile img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-green); }
-.stats-grid { 
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 0.5rem;
-    margin-bottom: 3rem; 
-}
-.stat-card { 
-    background-color: var(--bg-light);
-    /* Refinement: A lighter border looks cleaner, closer to the image. */
-    border: 2px solid var(--statcard-border); 
-    border-radius: 20px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    /* Refinement: Slightly larger gap between icon and text. */
-    gap: 1.25rem; 
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
- }
-.stat-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); }
-.card-icon {
-    font-size: 2.5rem;
-    padding: 1rem;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Background color will now be set by modifier classes below. */
-}
-.card-icon.money { background-color: #fff4e0; }
-.card-icon.health { background-color: #ffe0e0; }
-.card-icon.streak { background-color: #fff0d4; }
-.card-icon.avoided { background-color: #E0F7FF; }
-.card-icon--money { background-color: #fff4e0; }
-.card-icon--health { background-color: #ffe0e0; }
-.card-icon--streak { background-color: #fff0d4; }
-.card-icon--avoided { background-color: #E0F7FF; }
-[data-theme="dark"] .card-icon { color: #333; /* Make emoji colors pop on dark backgrounds */}
-.card-content { display: flex; flex-direction: column; }
-.stat-value {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    line-height: 1.2; /* Added for consistent spacing */
-}
-.stat-label {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.4; /* Added for better readability if it wraps */
-}
-.achievements-section { margin-bottom: 3rem; }
-.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-.section-header h2 { font-size: 1.75rem; }
-.view-all { color: var(--primary-green); text-decoration: none; font-weight: 500; }
-.achievements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
-.achievement-card { background: var(--bg-light); border: 2px solid var(--border-color); border-radius: 12px; padding: 1.5rem 1rem; text-align: center; box-shadow: var(--shadow); }
-.achievement-card .ach-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-.achievement-card p { font-weight: 500; font-size: 0.9rem; }
-.achievement-card.locked { background-color: var(--bg-light); color: #aaa; border-style: dashed; }
-.achievement-card.locked .ach-icon { filter: grayscale(100%); }
-.cta-section { background-color: var(--primary-green); color: var(--text-light); border-radius: 20px; padding: 2.5rem; text-align: center; }
-.cta-section h2 { font-size: 1.75rem; margin-bottom: 0.5rem; }
-.cta-section p { color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem; }
-.cta-button { background-color: var(--text-light); color: var(--primary-green); border: none; padding: 1rem 2.5rem; font-size: 1rem; font-weight: 700; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease; }
-.cta-button:hover { transform: scale(1.05); background-color: #f0f0f0; }
-
-
-
-/* --- NEW: Settings Page Styles --- */
-.settings-section {
-    margin-bottom: 3rem;
-}
-.settings-section-title {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
-}
-.settings-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: var(--shadow);
-}
-.setting-label {
-    font-size: 1.2rem;
+.site-name {
+    color: #dde9dd;
     font-weight: 600;
-    margin-bottom: 0.25rem;
+    font-size: 1.1rem;
 }
-.setting-description {
+
+.navbar-right a {
+    color: #dde9dd; /* A slightly greyed-out white for links */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar-right a:hover {
+    color: var(--text-light); /* Brighten on hover */
+}
+
+/* 'Get Started' button in the navbar */
+.navbar-button {
+    background-color: var(--navbar-button-bg);
+    color: var(--text-light) !important; /* Use !important to override the link color */
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar-button:hover {
+    background-color: #5a8a64; /* Lighter green on hover */
+    transform: translateY(-1px);
+}
+
+.homepage-container {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    background: var(--bg-light);
+    padding: 120px 20px; /* More vertical padding */
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-section h1 {
+    font-size: 3.8rem; /* Larger font size */
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.hero-section .subtitle {
+    font-size: 1.25rem;
     color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem; /* Space between the buttons */
+    flex-wrap: wrap; /* Allows buttons to stack on small screens */
+}
+
+/* --- Generic Section Styling --- */
+section {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.how-it-works-section {
+    background-color: var(--card-bg); /* White background for contrast */
+}
+
+section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 4rem;
+    color: var(--text-dark);
+}
+
+/* --- Call to Action Buttons --- */
+.cta-button {
+    padding: 0.8rem 2rem;
+    border-radius: 8px; /* Less rounded corners to match image */
+    border: 2px solid transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    line-height: 1.5;
+}
+
+.cta-button.primary {
+    background-color: var(--primary-green);
+    color: var(--text-light);
+}
+
+.cta-button.primary:hover {
+    background-color: #406040; /* Slightly lighter green on hover */
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(48, 80, 48, 0.2);
+}
+
+.cta-button.secondary {
+    background-color: var(--text-light);
+    color: var(--primary-green);
+}
+
+.cta-button.secondary:hover {
+    background-color: var(--bg-light);
+    transform: scale(1.05);
+}
+/* Outline Button: "Membership" (This is the new style) */
+.cta-button.outline {
+    background-color: transparent;
+    color: var(--hero-button-green);
+    border-color: var(--text-dark);
+}
+
+.cta-button.outline:hover {
+    background-color: var(--hero-button-green);
+    color: black;
+    border-color: var(--hero-button-green);
+}
+
+/* --- Features Section --- */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background-color: var(--card-bg);
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.icon-placeholder {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+    color: var(--text-secondary);
+}
+
+/* --- How It Works Section --- */
+.steps-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.step {
+    flex-basis: 30%;
+    min-width: 280px;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-green);
+    color: var(--primary-green);
+    font-size: 1.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 1.5rem;
 }
-.theme-switcher {
-    display: flex;
-    gap: 1rem;
-    background-color: var(--bg-light);
-    border-radius: 10px;
-    padding: 0.5rem;
-    border: 1px solid var(--border-color);
+
+.step h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
 }
-.theme-option {
-    flex: 1;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 2px solid transparent;
-    background-color: transparent;
+
+.step p {
     color: var(--text-secondary);
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* --- About Us Section --- */
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+
+/* --- Footer --- */
+.footer {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    padding: 60px 20px;
     text-align: center;
-    transition: all 0.2s ease;
-}
-.theme-option.active {
-    color: var(--text-dark);
-    background-color: var(--card-bg);
-    border-color: var(--primary-green);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* --- Overlay & Form Styles --- */
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.footer-content {
+    max-width: 700px;
+    margin: 0 auto;
 }
 
-@keyframes slideUp {
-  from { transform: translateY(20px) scale(0.98); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.overlay-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(10, 16, 10, 0.7);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
-}
-
-.overlay-content {
-    position: relative;
-  background-color: var(--bg-light);
-  padding: 2.5rem;
-  border-radius: 20px;
-  max-width: 500px;
-  width: 90%;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  animation: slideUp 0.4s ease-out;
-}
-
-.overlay-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.overlay-content h2 {
-  font-size: 1.75rem;
-  margin-bottom: 0.75rem;
-}
-
-.overlay-content p {
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-.overlay-form {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  text-align: left;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.form-group input,
-.form-group textarea {
-  background-color: var(--input-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  font-family: 'Inter', sans-serif;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  color: var(--input-text-color);
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(48, 80, 48, 0.2);
-}
-
-.form-actions {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.overlay-button {
-  background-color: var(--primary-green);
-  color: var(--text-light);
-  border: none;
-  padding: 1rem 2.5rem;
-  font-size: 1rem;
-  font-weight: 700;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.overlay-button:hover {
-  transform: scale(1.05);
-  background-color: #406040;
-}
-.close-button {
-    /* position: absolute; */
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
+.footer .footer-title {
     font-size: 2rem;
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 5px;
-    line-height: 1;
-    transition: color 0.2s ease, transform 0.2s ease;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-light);
 }
 
-.close-button:hover {
-    color: var(--primary-green);
-    transform: rotate(90deg);
-}
-
-.logout-button {
-  
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: #f0f0f0; /**/
-  text-decoration: none;
-  padding: 1rem;
-  border-radius: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  width: 100%;
-}
-
-.logout-button:hover {
-
-  background-color: rgba(255, 82, 82, 0.1); 
-  color: #ffc2c2; 
+.footer .footer-bottom {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 /* --- Responsive Design --- */
-@media (max-width: 992px) {
-    /* On smaller desktops, collapse the sidebar automatically */
-    .app-container {
-        grid-template-columns: var(--sidebar-width-collapsed) 1fr;
-    }
-    .sidebar {
-        align-items: center;
-        padding: 2rem 0.5rem;
-    }
-    .sidebar .logo span,
-    .sidebar .navigation a span:not(.icon) {
-        display: none;
-    }
-    .sidebar .navigation a {
-        justify-content: center;
-        padding: 1rem 0;
-    }
-}
-
 @media (max-width: 768px) {
-    /* On mobile, use a single column layout and hide the sidebar */
-    .app-container {
-        grid-template-columns: 1fr; /* Main content takes full width */
+    .hero-section h1 {
+        font-size: 2.8rem;
     }
-    .sidebar {
-        display: none; /* Or use position:absolute & transform for an overlay menu */
+
+    .hero-section .subtitle {
+        font-size: 1.1rem;
     }
-    .main-content {
-        /* Adjust padding for smaller screens */
-        padding: 1rem 1.5rem;
+
+    section h2 {
+        font-size: 2rem;
+        margin-bottom: 3rem;
     }
-    .main-header {
+
+    section {
+        padding: 60px 20px;
+    }
+
+    .steps-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+    }
+
+    .hero-buttons {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    .cta-button {
+        width: 100%;
     }
 }

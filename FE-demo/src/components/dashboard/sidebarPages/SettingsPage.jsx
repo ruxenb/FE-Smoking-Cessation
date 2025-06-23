@@ -12,16 +12,29 @@ import {
 import dayjs from "dayjs";
 import { useUser } from "/src/userContext/UserContext";
 import { toast } from "react-toastify";
-import { changePassword } from "../../../services/userService";
 
 const { Option } = Select;
 
 function SettingsPage({ currentTheme, onThemeChange }) {
   const [form] = Form.useForm();
+
   const [modalForm] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const showModal = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
+
+  // Giả sử bạn có sẵn dữ liệu user (sau này bạn sẽ fetch từ API)
+  const userData = {
+    username: "Alex",
+    email: "alex@example.com",
+    fullname: "Alex Johnson",
+    password: "password123", // trong thực tế không nên show thế này
+    createdAt: "2025-06-20",
+    dob: "2000-01-01",
+    gender: "male",
+    role: "user",
+  };
+
   // Lấy thông tin người dùng từ context
   const { user } = useUser();
 
@@ -32,35 +45,36 @@ function SettingsPage({ currentTheme, onThemeChange }) {
   // ✅ Hàm xử lý đổi mật khẩu
   const handleNewPasswordSubmit = async (values) => {
     try {
-      console.log(values);
-      const tokenType = localStorage.getItem("tokenType");
-      const accessToken = localStorage.getItem("accessToken");
-
-      const token = `${tokenType} ${accessToken}`;
-      console.log("Full token:", token);
-
-      // gọi changePassword trong userService.js
-      const response = await changePassword(
-        user.userId,
+      const response = await fetch(
+        "http://localhost:8080/api/auth/change-password",
         {
-          currentPassword: values.currentPassword,
-          newPassword: values.newPassword,
-        },
-        token
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${localStorage.getItem(
+              "tokenType"
+            )} ${localStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify({
+            userId: user.userId,
+            currentPassword: form.getFieldValue("currentPassword"),
+            newPassword: values.newPassword,
+          }),
+        }
       );
-      console.log("response from BE: ", response);
-      toast.success("Password changed successfully ^3^");
-      setIsModalOpen(false);
-      modalForm.resetFields();
-      form.resetFields();
-    } catch (error) {
-      const msg = error.response?.data || "Failed to change password";
-      if (typeof msg === "string") {
-        toast.error(msg);
+
+      const result = await response.json();
+      if (response.ok) {
+        toast.success("Password changed successfully!");
+        setIsModalOpen(false);
+        modalForm.resetFields();
+        form.resetFields(); // clear current password too
+      } else {
+        toast.error(result.message || "Failed to change password.");
       }
+    } catch (error) {
+      toast.error("Error occurred!");
       console.error(error);
-      console.warn("Response from BE: ", error.response);
-      console.log(error.response.data);
     }
   };
   return (
@@ -95,23 +109,24 @@ function SettingsPage({ currentTheme, onThemeChange }) {
             email: user.email,
             fullname: user.fullName,
             dob: dayjs(user.dob),
-            createdAt: dayjs(user.createdAt),
+            createdAt: dayjs(userData.createdAt),
             gender: user.gender,
             role: user.role,
           }}
           onFinish={onFinish}
         >
           <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true }]}
-          >
-            <Input disabled />
-          </Form.Item>
-          <Form.Item
             label="Email Address"
             name="email"
             rules={[{ required: true, type: "email" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Username"
+            name="username"
+            rules={[{ required: true }]}
           >
             <Input />
           </Form.Item>
@@ -155,11 +170,7 @@ function SettingsPage({ currentTheme, onThemeChange }) {
             }
             name="createdAt"
           >
-            <DatePicker
-              style={{ width: "100%" }}
-              format="DD/MM/YYYY"
-              disabled
-            />
+            <Input disabled />
           </Form.Item>
 
           <Form.Item>
@@ -171,11 +182,13 @@ function SettingsPage({ currentTheme, onThemeChange }) {
       </Card>
       {/* Change password section */}
       <Card title="Change Password" style={{ marginTop: 24 }}>
-        <Form.Item>
-          <Button type="primary" onClick={showModal}>
-            Click here to change password
-          </Button>
-        </Form.Item>
+        <Form layout="vertical" form={form}>
+          <Form.Item>
+            <Button type="primary" onClick={showModal}>
+              Click here to change password
+            </Button>
+          </Form.Item>
+        </Form>
 
         <Modal
           title="Set New Password"
@@ -243,3 +256,51 @@ function SettingsPage({ currentTheme, onThemeChange }) {
 }
 
 export default SettingsPage;
+
+/* 
+
+import React from "react";
+import { Card, Form, Input, Button, Switch } from "antd";
+
+function SettingsPage({ currentTheme, onThemeChange }) {
+  const [form] = Form.useForm();
+
+  return (
+    <div className="main-content" style={{ padding: 32 }}>
+      <h1 style={{ fontSize: 28, marginBottom: 24 }}>Settings</h1>
+
+      <Card title="Theme" style={{ marginBottom: 24 }}>
+        <p style={{ fontSize: 16 }}>Select theme</p>
+        <Switch
+          checked={currentTheme === "dark"}
+          checkedChildren="Dark"
+          unCheckedChildren="Light"
+          onChange={(checked) => onThemeChange(checked ? "dark" : "light")}
+        />
+      </Card>
+
+      <Card title="Profile">
+        <Form layout="vertical" form={form}>
+          <Form.Item label="Username" name="username" initialValue="Alex">
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Email Address"
+            name="email"
+            initialValue="alex@example.com"
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary">Save Changes</Button>
+          </Form.Item>
+        </Form>
+      </Card>
+    </div>
+  );
+}
+
+export default SettingsPage;
+
+
+ */

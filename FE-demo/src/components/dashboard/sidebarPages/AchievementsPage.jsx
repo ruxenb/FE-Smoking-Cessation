@@ -1,8 +1,8 @@
 // --- START OF NEW FILE AchievementsPage.jsx ---
 
 import React from 'react';
-import AchievementCard from '../../home/AchievementCard';
-import '../../home/homePage.css'; // Using the same CSS file for consistency
+import AchievementCard from '../../dashboard/AchievementCard';
+import '../../dashboard/dashboard.css'; // Using the same CSS file for consistency
 
 function AchievementsPage() {
   const timeBasedAchievements = [

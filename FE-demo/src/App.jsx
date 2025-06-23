@@ -1,12 +1,13 @@
 /* File cấu hình Routes */
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePage from "./pages/HomePage";
+import Dashboard from "./pages/DashboardPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import MembershipPage from "./pages/MembershipPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import AboutUsPage from "./pages/AboutUsPage";
+import HomePage from "./pages/HomePage"
 import { ToastContainer } from "react-toastify"; /* 20/6/2025 */
 import "react-toastify/dist/ReactToastify.css"; /* 20/6/2025 */
 import { UserProvider } from "./userContext/userContext";
@@ -17,11 +18,11 @@ function App() {
   // path: Đường dẫn url của ứng dụng
   // element: Component sẽ được hiển thị khi truy cập vao path
   const router = createBrowserRouter([
-    { path: "/", element: <LoginPage /> },
+    { path: "/", element: <HomePage /> },
     { path: "/login", element: <LoginPage /> },
     { path: "/register", element: <RegisterPage /> },
     { path: "/forgot", element: <ForgotPasswordPage /> },
-    { path: "/home", element: <HomePage /> },
+    { path: "/dashboard", element: <Dashboard /> },
     { path: "/membership", element: <MembershipPage /> },
     { path: "/about", element: <AboutUsPage /> },
   ]);
