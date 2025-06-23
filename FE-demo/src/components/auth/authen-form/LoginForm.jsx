@@ -74,7 +74,7 @@ function LoginForm() {
         // log lại thông tin đã được dùng để đăng nhập thành công
         console.log("Login Successfully:", values);
         // Chuyển trang qua trang chính sau khi đăng nhập thành công
-        navigate("/home");
+        navigate("/dashboard");
       } else {
         // Đăng nhập sai thông tin
         console.warn("Login failed:", result.message);
