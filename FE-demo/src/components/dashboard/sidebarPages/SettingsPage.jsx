@@ -25,11 +25,12 @@ function SettingsPage({ currentTheme, onThemeChange }) {
   // Lấy thông tin người dùng từ context
   const { user } = useUser();
 
+  /* được gọi khi ấn nút save changes */
   const onFinish = (values) => {
     console.log("Form values:", values);
     // Gửi API cập nhật hồ sơ người dùng tại đây
   };
-  // ✅ Hàm xử lý đổi mật khẩu
+  // Hàm xử lý đổi mật khẩu, được gọi khi ấn nút Confirm Password Change
   const handleNewPasswordSubmit = async (values) => {
     try {
       console.log(user.createdAt, "DD/MM/YYYY");

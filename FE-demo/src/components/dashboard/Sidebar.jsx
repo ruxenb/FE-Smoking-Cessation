@@ -10,18 +10,23 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
   const navigate = useNavigate();
 
   // Helper to create navigation links
+  // NavLink là một component được định nghĩa bên trong component SideBar
+
   const NavLink = ({ page, icon, label }) => (
     <a
       href="#"
       className={currentPage === page ? "active" : ""}
+      /*  */
       onClick={(e) => {
-        e.preventDefault(); // Prevent page reload
-        setCurrentPage(page);
+        e.preventDefault(); // ngăn không cho thẻ <a> reload khi click
+        setCurrentPage(page); // cập nhật lại currentPage trong Sidebar, để biết người dùng đang ở trang nào
       }}
     >
       <span className="icon">{icon}</span> <span>{label}</span>
     </a>
   );
+
+  /* Hàm xử lý khi nhấn logout từ sidebar */
   const handleLogout = () => {
     if (window.confirm("Do you really want to logout?")) {
       logout();
@@ -62,11 +67,13 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
       </nav> */}
       {/* --- CHANGED: Use the NavLink component for each navigation item --- */}
       <nav className="navigation">
-        <NavLink page="dashboard" icon="🏠" label="Dashboard" />
+        <NavLink page="home" icon="🏠" label="Home" />
+        <NavLink page="dashboard" icon="📊" label="Dashboard" />
         <NavLink page="achievements" icon="🏆" label="Achievements" />
         <NavLink page="community" icon="💬" label="Community" />
         <NavLink page="resources" icon="📚" label="Resources" />
         <NavLink page="settings" icon="⚙️" label="Settings" />
+
         <div className="sidebar-footer">
           <a href="#" className="logout-button" onClick={handleLogout}>
             <span className="icon">
