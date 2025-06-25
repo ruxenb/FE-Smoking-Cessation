@@ -12,7 +12,10 @@ import {
 import dayjs from "dayjs";
 import { useUser } from "/src/userContext/UserContext";
 import { toast } from "react-toastify";
-import { changePassword } from "../../../services/userService";
+import {
+  changePassword,
+  updateUserProfile,
+} from "../../../services/userService";
 
 const { Option } = Select;
 
@@ -26,30 +29,66 @@ function SettingsPage({ currentTheme, onThemeChange }) {
   const { user } = useUser();
 
   /* được gọi khi ấn nút save changes */
-  const onFinish = (values) => {
-    console.log("Form values:", values);
-    // Gửi API cập nhật hồ sơ người dùng tại đây
+  const onFinish = async (values) => {
+    try {
+      // log ra data được submit trong form - thứ được gửi về api của BE
+      console.log("Submit Form values:", values);
+
+      const tokenType = localStorage.getItem("tokenType");
+      const accessToken = localStorage.getItem("accessToken");
+      const fullToken = `${tokenType} ${accessToken}`;
+
+      console.log("Full Token: ", fullToken);
+
+      // gom các data của form vào biến submitData và format lại dob trước khi submit data
+      const submitData = {
+        email: values.email,
+        fullName: values.fullName,
+        dob: values.dob.format("YYYY-MM-DD"),
+        gender: values.gender,
+      };
+
+      /* khai báo hàm cha onFinish là async nếu muốn dùng await */
+      const response = await updateUserProfile(
+        user.userId,
+        submitData,
+        fullToken
+      );
+      console.log("Response: ", response);
+      if (response) {
+        toast.success("Cập nhật thông tin người dùng thành công ^3^");
+      }
+    } catch (error) {
+      console.log("Response from BE:", error.response);
+      // log ra response lỗi cụ thể trả về từ BE
+      const responseData = error.response.data;
+      console.log("Response data from BE:", responseData);
+      if (responseData) {
+        toast.error(responseData);
+      }
+      const msg = error.response.message;
+      if (msg) {
+        toast.error("Cập nhật thất bại !!!");
+      }
+    }
   };
   // Hàm xử lý đổi mật khẩu, được gọi khi ấn nút Confirm Password Change
   const handleNewPasswordSubmit = async (values) => {
     try {
-      console.log(user.createdAt, "DD/MM/YYYY");
       console.log(values);
       const tokenType = localStorage.getItem("tokenType");
       const accessToken = localStorage.getItem("accessToken");
 
-      const token = `${tokenType} ${accessToken}`;
-      console.log("Full token:", token);
+      const fullToken = `${tokenType} ${accessToken}`;
+      console.log("Full token:", fullToken);
 
+      const submitData = {
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
+      };
       // gọi changePassword trong userService.js
-      const response = await changePassword(
-        user.userId,
-        {
-          currentPassword: values.currentPassword,
-          newPassword: values.newPassword,
-        },
-        token
-      );
+      const response = await changePassword(user.userId, submitData, fullToken);
+
       console.log("response from BE: ", response);
       toast.success("Password changed successfully ^3^");
       setIsModalOpen(false);
@@ -95,7 +134,7 @@ function SettingsPage({ currentTheme, onThemeChange }) {
           initialValues={{
             username: user.username,
             email: user.email,
-            fullname: user.fullName,
+            fullName: user.fullName,
             dob: dayjs(user.dob),
             createdAt: dayjs(user.createdAt, "DD/MM/YYYY"), // format lại date trước khi đưa vào datepicker hiển thị
             gender: user.gender,
@@ -103,13 +142,15 @@ function SettingsPage({ currentTheme, onThemeChange }) {
           }}
           onFinish={onFinish}
         >
+          {/* username */}
           <Form.Item
             label="Username"
             name="username"
             rules={[{ required: true }]}
           >
-            <Input disabled />
+            <Input disabled={user.role !== "ADMIN"} />
           </Form.Item>
+          {/* email */}
           <Form.Item
             label="Email Address"
             name="email"
@@ -117,15 +158,15 @@ function SettingsPage({ currentTheme, onThemeChange }) {
           >
             <Input />
           </Form.Item>
-
+          {/* fullname */}
           <Form.Item
             label="Full Name"
-            name="fullname"
+            name="fullName"
             rules={[{ required: true }]}
           >
             <Input />
           </Form.Item>
-
+          {/* dob */}
           <Form.Item
             label="Date of Birth"
             name="dob"
@@ -133,19 +174,20 @@ function SettingsPage({ currentTheme, onThemeChange }) {
           >
             <DatePicker style={{ width: "100%" }} />
           </Form.Item>
-
+          {/* gender */}
           <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
             <Select>
-              <Option value="male">Male</Option>
-              <Option value="female">Female</Option>
-              <Option value="other">Other</Option>
+              <Option value="male">MALE</Option>
+              <Option value="female">FEMALE</Option>
+              <Option value="other">OTHER</Option>
             </Select>
           </Form.Item>
+          {/* role */}
           <Form.Item
             label={<Tooltip title="This field is not editable">Role</Tooltip>}
             name="role"
           >
-            <Select disabled>
+            <Select disabled={user.role !== "ADMIN"}>
               <Option value="user">User</Option>
               <Option value="admin">Admin</Option>
             </Select>
@@ -160,7 +202,7 @@ function SettingsPage({ currentTheme, onThemeChange }) {
             <DatePicker
               style={{ width: "100%" }}
               format="DD/MM/YYYY"
-              disabled
+              disabled = {user.role !== "ADMIN"} 
             />
           </Form.Item>
 
