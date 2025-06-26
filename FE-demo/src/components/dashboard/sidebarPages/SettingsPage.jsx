@@ -26,7 +26,7 @@ function SettingsPage({ currentTheme, onThemeChange }) {
   const showModal = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
   // Lấy thông tin người dùng từ context
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   /* được gọi khi ấn nút save changes */
   const onFinish = async (values) => {
@@ -47,7 +47,6 @@ function SettingsPage({ currentTheme, onThemeChange }) {
         dob: values.dob.format("YYYY-MM-DD"),
         gender: values.gender,
       };
-
       /* khai báo hàm cha onFinish là async nếu muốn dùng await */
       const response = await updateUserProfile(
         user.userId,
@@ -55,8 +54,23 @@ function SettingsPage({ currentTheme, onThemeChange }) {
         fullToken
       );
       console.log("Response: ", response);
-      if (response) {
+      if (
+        response &&
+        response.status === 200 &&
+        response.data?.status === "success"
+      ) {
         toast.success("Cập nhật thông tin người dùng thành công ^3^");
+
+        const updatedUser = response.data.data;
+        // dùng setUser để update lại thông tin của user trong userContext
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      console.log("Response data: ", response.data);
+      console.log("Updated User data: ", response.data.data);
+      }
+      else{
+        toast.error("Đã có lỗi xảy ra khi update user");
       }
     } catch (error) {
       console.log("Response from BE:", error.response);
@@ -177,9 +191,9 @@ function SettingsPage({ currentTheme, onThemeChange }) {
           {/* gender */}
           <Form.Item label="Gender" name="gender" rules={[{ required: true }]}>
             <Select>
-              <Option value="male">MALE</Option>
-              <Option value="female">FEMALE</Option>
-              <Option value="other">OTHER</Option>
+              <Option value="MALE">MALE</Option>
+              <Option value="FEMALE">FEMALE</Option>
+              <Option value="OTHER">OTHER</Option>
             </Select>
           </Form.Item>
           {/* role */}
@@ -202,7 +216,7 @@ function SettingsPage({ currentTheme, onThemeChange }) {
             <DatePicker
               style={{ width: "100%" }}
               format="DD/MM/YYYY"
-              disabled = {user.role !== "ADMIN"} 
+              disabled={user.role !== "ADMIN"}
             />
           </Form.Item>
 
