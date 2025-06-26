@@ -13,10 +13,13 @@ function Dashboard() {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [username, setUsername] = useState("");
 
-  // State for theme management
+  
+  const [isProfileOverlayVisible, setIsProfileOverlayVisible] = useState(false);
+
+  //dùng để đổi theme
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  // Effect to apply the theme to the body
+  // Effect để apply theme
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
@@ -26,7 +29,6 @@ function Dashboard() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Function to toggle the state
   const handleToggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -35,7 +37,6 @@ function Dashboard() {
     setShowOverlay(false);
   };
 
-  // Dynamically create the class string for the main container
   const containerClass = `app-container ${
     isCollapsed ? "sidebar-collapsed" : ""
   }`;
@@ -49,8 +50,17 @@ function Dashboard() {
     // Example: fetch('/api/user/me/smoking-profile-status')
     //   .then(res => res.json())
     //   .then(data => setHasSmokingProfile(data.hasProfile));
-    // For now, we'll keep it false to show the demo.
+    // Tạm thời để false để demo
+   
   }, []);
+
+  const openProfileOverlay = () => {
+    setIsProfileOverlayVisible(true);
+  };
+  
+  const closeProfileOverlay = () => {
+    setIsProfileOverlayVisible(false);
+  };
 
   const handleSaveProfile = (profileData) => {
     console.log("Data ready to be sent to backend:", profileData);
@@ -68,33 +78,32 @@ function Dashboard() {
 
     // For demonstration, we'll just simulate a successful save.
     setHasSmokingProfile(true);
+    closeProfileOverlay();
   };
 
   // Render the correct page based on state
   const renderCurrentPage = () => {
     switch (currentPage) {
       case "dashboard" /* truy cập tới dashboard khi đăng nhập thành công, truyền data */:
-        return <MainContent username={username} />;
+        return <MainContent 
+            hasProfile={hasSmokingProfile} 
+            onCreateProfileClick={openProfileOverlay} onEditProfileClick={openProfileOverlay} />;
       case "achievements":
         return <AchievementsPage />;
       case "settings":
         return <SettingsPage currentTheme={theme} onThemeChange={setTheme} />;
       default:
-        return <MainContent />;
+        return <MainContent onEditProfileClick={openProfileOverlay} />;
     }
   };
 
   return (
-    <div className={containerClass}>
-      {/* 
-        CONDITIONAL RENDERING:
-        If the user does NOT have a smoking profile, show the overlay.
-        We pass the 'handleSaveProfile' function to the component as a prop.
-      */}
-      {!hasSmokingProfile && showOverlay && (
+    <div className={`app-container ${isCollapsed ? "sidebar-collapsed" : ""}`}>
+      {/* --- SIMPLIFIED OVERLAY RENDERING --- */}
+      {isProfileOverlayVisible && (
         <SmokeSetupOverlay
           onSaveProfile={handleSaveProfile}
-          onClose={handleCloseOverlay}
+          onClose={closeProfileOverlay}
         />
       )}
       <Sidebar
@@ -104,8 +113,12 @@ function Dashboard() {
         setCurrentPage={setCurrentPage}
       />
 
+
       {/* Định nghĩa khu vực chính hiển thị nội dung (giao diện chính), render nội dung giao diện dựa trên hàm renderCurrentPage() */}
       <div className="main-content-area">{renderCurrentPage()}</div>
+
+
+
     </div>
   );
 }

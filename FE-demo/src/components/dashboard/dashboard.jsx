@@ -4,7 +4,7 @@ import AchievementCard from "./AchievementCard";
 import CTASection from "./CTASection";
 import "./dashboard.css";
 
-function MainContent({ username }) {
+function MainContent({ username, onCreateProfileClick, hasProfile  }) {
   const moneySaved = "1,244.50";
   const lifeReclaimed = "28";
   const streakCount = "92";
@@ -34,6 +34,17 @@ function MainContent({ username }) {
           />
         </div>
       </header>
+
+      {/* Nút để tạo smoke profile nếu user chưa có */}
+      {!hasProfile && (
+        <section className="profile-prompt-section">
+          <p>Start your journey by creating a personalized profile.</p>
+          <button className="profile-prompt-button" onClick={onCreateProfileClick}>
+            Create Your Smoking Profile
+          </button>
+        </section>
+      )}
+
 
       <section className="stats-grid">
         {/*
