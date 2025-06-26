@@ -97,7 +97,6 @@ function Dashboard() {
           onClose={handleCloseOverlay}
         />
       )}
-
       <Sidebar
         isCollapsed={isCollapsed}
         onToggle={handleToggleSidebar}
@@ -105,7 +104,7 @@ function Dashboard() {
         setCurrentPage={setCurrentPage}
       />
 
-      {/* This is the new main grid cell that contains your content */}
+      {/* Định nghĩa khu vực chính hiển thị nội dung (giao diện chính), render nội dung giao diện dựa trên hàm renderCurrentPage() */}
       <div className="main-content-area">{renderCurrentPage()}</div>
     </div>
   );
