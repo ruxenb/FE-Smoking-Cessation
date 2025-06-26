@@ -9,8 +9,10 @@ import SettingsPage from "../../components/dashboard/sidebarPages/SettingsPage.j
 function Dashboard() {
   // State to manage whether the sidebar is collapsed or not
   const [isCollapsed, setIsCollapsed] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [showOverlay, setShowOverlay] = useState(true);
   const [currentPage, setCurrentPage] = useState("dashboard");
+  // eslint-disable-next-line no-unused-vars
   const [username, setUsername] = useState("");
 
   
@@ -33,10 +35,12 @@ function Dashboard() {
     setIsCollapsed(!isCollapsed);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleCloseOverlay = () => {
     setShowOverlay(false);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const containerClass = `app-container ${
     isCollapsed ? "sidebar-collapsed" : ""
   }`;

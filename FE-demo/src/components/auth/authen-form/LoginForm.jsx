@@ -86,13 +86,14 @@ function LoginForm() {
       console.error("Error Message: ", error.message);
       /* toast cảnh báo khi chưa chạy hệ thống phía backend */
       /* TypeError - xảy ra khi gọi fetch() mà không kết nối được tới server - BackEnd chưa đc chạy */
-
       if (error instanceof TypeError && error.message === "Failed to fetch") {
         toast.warning(
           "Lỗi Server chưa được khởi động, thử lại sau khi đã chạy hệ thống Back-End nhen 😏 ",
           { theme: "dark", position: "top-left" }
         );
-      } else {
+      } 
+      /* Nếu kphai lỗi do chưa khởi động Back-End */
+      else {
         toast.error(
           "Đã xảy ra lỗi trong quá trình đăng nhập, vui lòng thử lại sau!",
           { theme: "dark", position: "top-left" }
