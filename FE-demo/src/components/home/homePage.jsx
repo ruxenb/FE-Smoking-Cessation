@@ -1,5 +1,6 @@
 import React from 'react';
 import './HomePage.css';
+import { Link } from 'react-router-dom';
 
 // component đơn giản cho icon
 const Icon = ({ children }) => <div className="icon-placeholder">{children}</div>;
@@ -11,14 +12,15 @@ const Navbar = () => {
       <nav className="navbar">
         <div className="navbar-left">
           <img src={logoUrl} alt="Site Logo" className="logo-img" />
-          <span className="site-name">Site name</span>
+          <Link to="/" className="site-name">NicoClear</Link>
+     
         </div>
         <div className="navbar-right">
-          <a href="about">About us</a>
-          <a href="membership">Membership</a>
-          <a href="#blog">Blog</a>
-          <a href="register" className="navbar-button">Get Started</a>
-          <a href="login">Login</a>
+          <Link to="about">About us</Link>
+          <Link to="membership">Membership</Link>
+          <Link to="#blog">Blog</Link>
+          <Link to="register" className="navbar-button">Get Started</Link>
+          <Link to="login">Login</Link>
         </div>
       </nav>
     </div>
@@ -39,8 +41,8 @@ const HomePage = () => {
               Guiding you towards a healthier, happier, smoke-free future.
             </p>
             <div className="hero-buttons">
-              <button className="cta-button primary">Get Started For Free</button>
-              <button className="cta-button outline">Membership</button>
+              <Link to="/register" className="cta-button primary">Get Started For Free</Link>
+              <Link to="/membership"  className="cta-button outline">Membership</Link>
             </div>
           </div>
 

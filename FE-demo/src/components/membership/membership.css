@@ -1,6 +1,6 @@
 .page-header {
   text-align: center;
-  margin-top: 150px; /* Adjust as needed */
+  margin-top: 40px; /* Adjust as needed */
   margin-bottom: 50px;
 }
 .page-header h1 {
@@ -122,7 +122,7 @@
 }
 
 .basic-cta{
-  margin-bottom: 14px;
+  margin-bottom: 29px;
 }
 
 .cta-button.current-usage-button {

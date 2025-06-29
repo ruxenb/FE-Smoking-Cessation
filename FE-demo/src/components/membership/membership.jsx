@@ -3,8 +3,53 @@ import "./membership.css";
 import { Link } from "react-router-dom";
 import MemberCard from "./memberCards";
 
+
+const logoUrl = 'https://i.pravatar.cc/40?img=1'; // ảnh chờ cho logo project
+
+
+const Navbar = () => {
+  return (
+    <div className="navbar-container">
+      <nav className="navbar">
+        <a href="/">
+          <div className="navbar-left">
+        
+              <img src={logoUrl} alt="Site Logo" className="logo-img" />
+                  
+            <Link to="/" className="site-name">NicoClear</Link>
+          </div>
+        </a>
+        <div className="navbar-right">
+
+          <a href="login" className="navbar-button">Login</a>
+
+        </div>
+      </nav>
+    </div>
+  );
+};
+
+
 function Membership({ userSubscription }) {
   const renderCtaButton = (planType) => {
+  // Nếu user là GUEST  (not logged in, no subscription)
+  // Giả sử  'userSubscription' là null chỉ ra 1 guest
+  if (!userSubscription) {
+    if (planType === 'basic') {
+      return (
+        <Link to="/register" className={`cta-button ${planType}-cta`}>
+          Start now
+        </Link>
+      );
+    } else if (planType === 'advanced') {
+      // For guests, Advanced plan goes directly to checkout
+      return (
+        <Link to="/checkout/advanced" className={`cta-button ${planType}-cta`}>
+          Sign Up for Advanced
+        </Link>
+      );
+    }
+  }
     if (userSubscription === planType) {
       return (
         <button className="cta-button current-usage-button" disabled>
@@ -30,6 +75,8 @@ function Membership({ userSubscription }) {
 
   return (
     <>
+
+      <Navbar />
       {/* Header Section */}
       <div className="page-header">
         <h1>Succeed in quitting smoking with us</h1>

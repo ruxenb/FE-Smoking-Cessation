@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Input, DatePicker, Select } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation  } from "react-router-dom";
 import { BsFillPersonFill } from "react-icons/bs";
 import { FaLock, FaEnvelope } from "react-icons/fa";
 import "./RegisterForm.css"; // tạo file này nếu bạn muốn CSS riêng
@@ -12,6 +12,7 @@ function RegisterForm() {
   const [form] = Form.useForm();
   const navigate = useNavigate(); // dùng để chuyển hướng trang
   const [loading, setLoading] = useState(false); // loading khi gửi form
+  const location = useLocation(); // vị trí cần tới sau khi register
 
   // values là một object chứa các giá trị từ form
   // onFinish được gọi khi người dùng nhấn nút Register
@@ -39,7 +40,8 @@ function RegisterForm() {
         console.log("Register success:", response.data);
         // Sau 3 giây chuyển trang
         setTimeout(() => {
-          navigate("/login");
+          navigate("/login", { state: location.state });  
+          // { state: location.state } sau khi đăng ký sẽ đưa đến trang trước đó (trang mà cần phải đăng ký để truy cấp)
         }, 3000);
       }
     } catch (error) {

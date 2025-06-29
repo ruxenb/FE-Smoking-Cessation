@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify"; /* 20/6/2025 */
 import "react-toastify/dist/ReactToastify.css"; /* 20/6/2025 */
 import { UserProvider } from "./userContext/userContext";
+
 import Dashboard from "./pages/DashboardPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
@@ -13,6 +14,10 @@ import AboutUsPage from "./pages/AboutUsPage";
 import HomePage from "./pages/HomePage";
 import SettingsPage from "./components/dashboard/sidebarPages/SettingsPage";
 import CommunityPage from "./pages/CommunityPage";
+
+import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
+import ProtectedRoute from "./components/protectedRoute/protectedRoute";
+
 function App() {
   // Tạo một router với createBrowserRouter, định nghĩa các route của ứng dụng
   // Data router api
@@ -25,11 +30,62 @@ function App() {
     { path: "/login", element: <LoginPage /> },
     { path: "/register", element: <RegisterPage /> },
     { path: "/forgot", element: <ForgotPasswordPage /> },
-    { path: "/dashboard", element: <Dashboard /> },
     { path: "/membership", element: <MembershipPage /> },
     { path: "/about", element: <AboutUsPage /> },
-    { path: "/setting", element: <SettingsPage /> },
     { path: "/community", element: <CommunityPage /> },
+
+    // --- Protected Routes (yêu cầu người dùng login) ---
+    // bao các page bằng ProtectedRoute component.
+    {
+      path: "/dashboard",
+      element: (
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/setting",
+      element: (
+        <ProtectedRoute>
+          <SettingsPage />
+        </ProtectedRoute>
+      ),
+    },
+    //đang xem các phương án UX
+    // {
+    //   path: "/community",
+    //   element: (
+    //     <ProtectedRoute>
+    //       <CommunityPage />
+    //     </ProtectedRoute>
+    //   ),
+    // },
+
+
+    // {
+    //   path: "/checkout/:planType", // route thanh toán
+    //   element: (
+    //     <ProtectedRoute>
+    //       <CheckoutPage />
+    //     </ProtectedRoute>
+    //   )
+    // },
+    //đang xem các phương án UX
+    // {
+    //   path: "/thank-you", // The page after a successful payment
+    //   element: (
+    //     <ProtectedRoute>
+    //       <ThankYouPage />
+    //     </ProtectedRoute>
+    //   )
+    // },
+
+    // --- 404 Not Found Route ---
+    // Route này phải nằm cuối array.
+    // path '*'  đc xem như là wildcard, bắt những URL ko trùng bên trên above.
+    { path: "*", element: <NotFoundPage /> },
+
   ]);
   // Sử dụng RouterProvider để cung cấp <Router> cho toàn bộ ứng dụng
   return (

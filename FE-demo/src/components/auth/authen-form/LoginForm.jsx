@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import "./LoginForm.css";
-import { Await, Link, useNavigate } from "react-router-dom";
+import { Await, Link, useNavigate, useLocation  } from "react-router-dom";
 import FormItem from "antd/es/form/FormItem";
 import { FaFacebookSquare, FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
@@ -15,6 +15,8 @@ import { useUser } from "/src/userContext/UserContext";
 function LoginForm() {
   const navigate = useNavigate(); // dùng để chuyển hướng trang
   const { setUser } = useUser(); // setUser là một để cập nhật thông tin người dùng, lấy hàm setUser từ object mà useUser() trả về
+  const location = useLocation(); 
+
 
   /* onFinish được gọi khi người dùng nhấn nút Login */
   const onFinish = async (values) => {
@@ -72,9 +74,17 @@ function LoginForm() {
           toastClassName: "success-toast",
         });
         // log lại thông tin đã được dùng để đăng nhập thành công
-        console.log("Login Successfully:", values);
-        // Chuyển trang qua trang chính sau khi đăng nhập thành công
-        navigate("/dashboard");
+
+
+        // 1. check nếu trạng trái 'from' tồn tại ở redirect.
+        // 2. nếu nó tồn tại, dùng đường(path) đó.
+        // 3. nếu ko, dùng default '/dashboard'.
+        const from = location.state?.from?.pathname || "/dashboard";
+
+        console.log("Login successful, redirecting to:", from);
+        
+        // đưa tới nơi đến dự định (hoặc dashboard khi fall)
+        navigate(from, { replace: true });
       } else {
         // Đăng nhập sai thông tin
         console.warn("Login failed:", result.message);
