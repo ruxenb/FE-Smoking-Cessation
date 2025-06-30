@@ -4,7 +4,7 @@ import AchievementCard from "./AchievementCard";
 import CTASection from "./CTASection";
 import "./dashboard.css";
 
-function MainContent({ username, onCreateProfileClick, hasProfile  }) {
+function MainContent({ username, hasProfile, onCreateProfileClick, onEditProfileClick  }) {
   const moneySaved = "1,244.50";
   const lifeReclaimed = "28";
   const streakCount = "92";
@@ -35,12 +35,21 @@ function MainContent({ username, onCreateProfileClick, hasProfile  }) {
         </div>
       </header>
 
-      {/* Nút để tạo smoke profile nếu user chưa có */}
-      {!hasProfile && (
+       {/* --- HIỂN THỊ CÓ ĐIỀU KIỆN --- */}
+      {/* Nếu CHƯA có profile, hiển thị prompt tạo mới */}
+      {!hasProfile ? (
         <section className="profile-prompt-section">
-          <p>Start your journey by creating a personalized profile.</p>
+          <p>Bắt đầu hành trình của bạn bằng cách tạo một hồ sơ cá nhân.</p>
           <button className="profile-prompt-button" onClick={onCreateProfileClick}>
-            Create Your Smoking Profile
+            Tạo Hồ Sơ Hút Thuốc
+          </button>
+        </section>
+      ) : (
+        // Nếu ĐÃ có profile, hiển thị prompt cập nhật
+        <section className="profile-prompt-section">
+          <p>Hồ sơ của bạn đã sẵn sàng. Cập nhật nếu thói quen của bạn thay đổi.</p>
+          <button className="profile-prompt-button" onClick={onEditProfileClick}>
+            Cập Nhật Hồ Sơ
           </button>
         </section>
       )}

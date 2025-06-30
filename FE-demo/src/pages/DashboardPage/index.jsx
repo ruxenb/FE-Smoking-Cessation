@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 
+import { toast } from "react-toastify";
 import Sidebar from "../../components/dashboard/Sidebar.jsx";
 import MainContent from "../../components/dashboard/dashboard.jsx";
 import SmokeSetupOverlay from "../../components/dashboard/Overlay/SmokeSetup.jsx";
 import AchievementsPage from "../../components/dashboard/sidebarPages/AchievementsPage.jsx";
 import SettingsPage from "../../components/dashboard/sidebarPages/SettingsPage.jsx";
+import { useUser } from "../../userContext/userContext";
+import { createSmokingProfile, updateSmokingProfile } from "../../services/smokingProfileService"; // Import service mới
 
 function Dashboard() {
-  // State to manage whether the sidebar is collapsed or not
+  const { user, setUser  } = useUser(); // <-- Thêm dòng này
+
+  // Kiểm tra xem sidebar đóng hay ko
   const [isCollapsed, setIsCollapsed] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [showOverlay, setShowOverlay] = useState(true);
@@ -16,17 +21,31 @@ function Dashboard() {
   const [username, setUsername] = useState("");
 
   
+// State để quản lý việc hiển thị overlay và trạng thái profile
+  const [hasSmokingProfile, setHasSmokingProfile] = useState(false);
   const [isProfileOverlayVisible, setIsProfileOverlayVisible] = useState(false);
+
+   // --- LOGIC CHÍNH: Kiểm tra smoking profile khi component được load hoặc khi user thay đổi ---
+  useEffect(() => {
+    // Nếu có user và user.smokingProfile không phải null/undefined
+    if (user && user.smokingProfile) {
+      setHasSmokingProfile(true);
+    } else {
+      setHasSmokingProfile(false);
+    }
+  }, [user]); // Chạy lại effect này mỗi khi object `user` thay đổi
 
   //dùng để đổi theme
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
+
+  
   // Effect để apply theme
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
+    // const storedUsername = localStorage.getItem("username");
+    // if (storedUsername) {
+    //   setUsername(storedUsername);
+    // }
     document.body.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
@@ -45,10 +64,7 @@ function Dashboard() {
     isCollapsed ? "sidebar-collapsed" : ""
   }`;
 
-  // State to track if the smoking profile exists.
-  // In a real app, you would check this on page load.
-  const [hasSmokingProfile, setHasSmokingProfile] = useState(false);
-
+  
   // --- This is where you would check the user's status when the app loads ---
   useEffect(() => {
     // Example: fetch('/api/user/me/smoking-profile-status')
@@ -66,23 +82,41 @@ function Dashboard() {
     setIsProfileOverlayVisible(false);
   };
 
-  const handleSaveProfile = (profileData) => {
-    console.log("Data ready to be sent to backend:", profileData);
+// --- HÀM XỬ LÝ LƯU HOẶC CẬP NHẬT PROFILE ---
+  const handleSaveProfile = async (profileData) => {
+    try {
+      const tokenType = localStorage.getItem("tokenType");
+      const accessToken = localStorage.getItem("accessToken");
+      const fullToken = `${tokenType} ${accessToken}`;
 
-    // --- API CALL LOGIC GOES HERE ---
-    // Example:
-    // fetch('/api/smoking-profiles', { method: 'POST', body: JSON.stringify(profileData), ... })
-    //  .then(response => {
-    //    if (response.ok) {
-    //      console.log('Profile saved!');
-    //      setHasSmokingProfile(true); // Hide the overlay on success
-    //    }
-    //  })
-    //  .catch(error => console.error('Failed to save profile', error));
+      let response;
+      // Dữ liệu gửi đi cần có userId
+      const submitData = { ...profileData, userId: user.userId };
+      
+      if (hasSmokingProfile) {
+        // --- LOGIC CẬP NHẬT ---
+        const profileId = user.smokingProfile.smokingProfileId;
+        response = await updateSmokingProfile(profileId, submitData, fullToken);
+        toast.success("Cập nhật thông tin thành công!");
+      } else {
+        // --- LOGIC TẠO MỚI ---
+        response = await createSmokingProfile(submitData, fullToken);
+        toast.success("Tạo hồ sơ thành công! Bắt đầu hành trình của bạn nào!");
+      }
 
-    // For demonstration, we'll just simulate a successful save.
-    setHasSmokingProfile(true);
-    closeProfileOverlay();
+      if (response && response.data?.status === "success") {
+        // Cập nhật lại thông tin user trong Context và localStorage
+        const updatedUser = { ...user, smokingProfile: response.data.data };
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        
+        closeProfileOverlay(); // Đóng overlay sau khi thành công
+      }
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || "Đã có lỗi xảy ra. Vui lòng thử lại.";
+      toast.error(errorMsg);
+      console.error("Failed to save profile:", error);
+    }
   };
 
   // Render the correct page based on state
@@ -90,6 +124,7 @@ function Dashboard() {
     switch (currentPage) {
       case "dashboard" /* truy cập tới dashboard khi đăng nhập thành công, truyền data */:
         return <MainContent 
+            username={user?.username}
             hasProfile={hasSmokingProfile} 
             onCreateProfileClick={openProfileOverlay} onEditProfileClick={openProfileOverlay} />;
       case "achievements":
@@ -97,7 +132,9 @@ function Dashboard() {
       case "settings":
         return <SettingsPage currentTheme={theme} onThemeChange={setTheme} />;
       default:
-        return <MainContent onEditProfileClick={openProfileOverlay} />;
+        return <MainContent 
+        username={user?.username}
+        onEditProfileClick={openProfileOverlay} />;
     }
   };
 
@@ -108,6 +145,8 @@ function Dashboard() {
         <SmokeSetupOverlay
           onSaveProfile={handleSaveProfile}
           onClose={closeProfileOverlay}
+          // Truyền dữ liệu profile cũ vào để pre-fill form khi update
+          existingProfile={user?.smokingProfile} 
         />
       )}
       <Sidebar
