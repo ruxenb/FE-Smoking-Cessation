@@ -97,11 +97,11 @@ function Dashboard() {
         // --- LOGIC CẬP NHẬT ---
         const profileId = user.smokingProfile.smokingProfileId;
         response = await updateSmokingProfile(profileId, submitData, fullToken);
-        toast.success("Cập nhật thông tin thành công!");
+        toast.success("Information updated successfully!");
       } else {
         // --- LOGIC TẠO MỚI ---
         response = await createSmokingProfile(submitData, fullToken);
-        toast.success("Tạo hồ sơ thành công! Bắt đầu hành trình của bạn nào!");
+        toast.success("Profile created successfully! Let's start your journey!");
       }
 
       if (response && response.data?.status === "success") {
@@ -113,7 +113,7 @@ function Dashboard() {
         closeProfileOverlay(); // Đóng overlay sau khi thành công
       }
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "Đã có lỗi xảy ra. Vui lòng thử lại.";
+      const errorMsg = error.response?.data?.message || "An error occurred. Please try again.";
       toast.error(errorMsg);
       console.error("Failed to save profile:", error);
     }

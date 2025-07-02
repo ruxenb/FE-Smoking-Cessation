@@ -6,8 +6,13 @@ import { useLocation, Navigate } from "react-router-dom";
 import { useUser } from "/src/userContext/UserContext";
 
 const ProtectedRoute = ({ children }) => {
-  const { user } = useUser(); // lấy user từ context
+  const { user, loading } = useUser(); // lấy user từ context
   const location = useLocation(); // lấy vị trí hiện tại (trang web) của object
+
+  if (loading) {
+    // Có thể thay thế bằng một component Spinner đẹp hơn
+    return <div>Loading...</div>;
+  }
 
   // Check nếu user object tồn tại (nghĩa là đã log in)
   if (!user) {

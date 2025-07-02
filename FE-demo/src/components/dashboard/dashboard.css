@@ -12,7 +12,12 @@
     --sidebar-bg:#0A100A;
     --input-bg: #fff; 
     --input-text-color: #1a1a1a;
+    --stat-card-bg:#ffffff;
 
+    --money-background-fff4e0:#fff4e0;
+    --streak-background-fff0d4:#fff0d4;
+    --life-background-ffe0e0: #ffe0e0;
+    --cigarettes-background-e0f7ff: #e0f7ff;
 
     --sidebar-width-expanded: 260px;
     --sidebar-width-collapsed: 80px;
@@ -36,6 +41,14 @@
     --input-bg: #1f261f;
     --input-text-color: #f0f0f0; 
     --border-top-color: rgba(255, 255, 255, 0.1);
+    --stat-card-bg:#121812;
+
+    --money-background-fff4e0:#513a19;
+    --streak-background-fff0d4:#432c09;
+    --life-background-ffe0e0: #460000;
+    --cigarettes-background-e0f7ff: #003446;
+    
+
 }
 
 * {
@@ -218,7 +231,7 @@ body {
 }
 
 .stat-card { 
-    background-color: var(--bg-light);
+    background-color: var(--stat-card-bg);
     /* Refinement: A lighter border looks cleaner, closer to the image. */
     border: 2px solid var(--statcard-border); 
     border-radius: 20px;
@@ -240,14 +253,14 @@ body {
     justify-content: center;
     /* Background color will now be set by modifier classes below. */
 }
-.card-icon.money { background-color: #fff4e0; }
+/* .card-icon.money { background-color: #fff4e0; }
 .card-icon.health { background-color: #ffe0e0; }
 .card-icon.streak { background-color: #fff0d4; }
-.card-icon.avoided { background-color: #E0F7FF; }
-.card-icon--money { background-color: #fff4e0; }
-.card-icon--health { background-color: #ffe0e0; }
-.card-icon--streak { background-color: #fff0d4; }
-.card-icon--avoided { background-color: #E0F7FF; }
+.card-icon.avoided { background-color: #E0F7FF; } */
+.card-icon--money { background-color: var(--money-background-fff4e0); }
+.card-icon--health { background-color: var(--life-background-ffe0e0); }
+.card-icon--streak { background-color: var(--streak-background-fff0d4); }
+.card-icon--avoided { background-color: var(--cigarettes-background-e0f7ff); }
 [data-theme="dark"] .card-icon { color: #333; /* Make emoji colors pop on dark backgrounds */}
 .card-content { display: flex; flex-direction: column; }
 .stat-value {

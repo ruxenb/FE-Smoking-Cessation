@@ -21,12 +21,24 @@ export function UserProvider({ children }) {
   // Khi muốn thay đổi giá trị của user, bạn sẽ gọi setUser(newValue) với giá trị mới
   const [user, setUser] = useState(null); // user là giá trị state hiện tại, setUser là hàm để cập nhật giá trị của user
 
+    // Thêm một state loading, mặc định là true khi app vừa khởi động
+  const [loading, setLoading] = useState(true);
+
   // Load user từ localStorage khi app khởi động
   useEffect(() => {
+    try {
     const storedUser = localStorage.getItem("user");
     // Nếu storedUser không phải null, dùng JSON.parse(storedUser) để chuyển chuỗi JSON(string) thành object JavaScript
     if (storedUser) {
       setUser(JSON.parse(storedUser));
+    }
+  }catch(error){
+    console.error("Failed to parse user from localStorage", error);
+      // Nếu có lỗi, xóa user cũ để tránh lỗi lặp lại
+      localStorage.removeItem("user");
+  }finally {
+      // Dù thành công hay thất bại, báo hiệu rằng quá trình tải đã xong
+      setLoading(false);
     }
   }, []);
 
@@ -42,7 +54,7 @@ export function UserProvider({ children }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, logout }}>
+    <UserContext.Provider value={{ user, setUser, logout, loading }}>
       {children}
     </UserContext.Provider>
   );
