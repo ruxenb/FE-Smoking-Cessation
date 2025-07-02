@@ -39,7 +39,7 @@ function MainContent({ username, hasProfile, onCreateProfileClick, onEditProfile
       {/* Nếu CHƯA có profile, hiển thị prompt tạo mới */}
       {!hasProfile ? (
         <section className="profile-prompt-section">
-          <p>Bắt đầu hành trình của bạn bằng cách tạo một hồ sơ cá nhân.</p>
+          <p>Bắt đầu hành trình cai thuốc bằng cách tạo một hồ sơ cá nhân của bạn 😗</p>
           <button className="profile-prompt-button" onClick={onCreateProfileClick}>
             Tạo Hồ Sơ Hút Thuốc
           </button>
@@ -47,7 +47,7 @@ function MainContent({ username, hasProfile, onCreateProfileClick, onEditProfile
       ) : (
         // Nếu ĐÃ có profile, hiển thị prompt cập nhật
         <section className="profile-prompt-section">
-          <p>Hồ sơ của bạn đã sẵn sàng. Cập nhật nếu thói quen của bạn thay đổi.</p>
+          <p>Hồ sơ của bạn đã sẵn sàng. Cập nhật nếu thói quen hút thuốc của bạn thay đổi.</p>
           <button className="profile-prompt-button" onClick={onEditProfileClick}>
             Cập Nhật Hồ Sơ
           </button>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import "./LoginForm.css";
-import { Await, Link, useNavigate, useLocation  } from "react-router-dom";
+import { Await, Link, useNavigate, useLocation } from "react-router-dom";
 import FormItem from "antd/es/form/FormItem";
 import { FaFacebookSquare, FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
@@ -15,9 +15,12 @@ import { useUser } from "/src/userContext/UserContext";
 function LoginForm() {
   const navigate = useNavigate(); // dùng để chuyển hướng trang
   const { setUser } = useUser(); // setUser là một để cập nhật thông tin người dùng, lấy hàm setUser từ object mà useUser() trả về
-  const location = useLocation(); 
+  const location = useLocation();
 
-
+  /* Hàm xử lý khi nhấn nút Google */
+  const hangdleGoogleLogin = () => {
+    window.location.href = " http://localhost:8080/oauth2/authorization/google";
+  };
   /* onFinish được gọi khi người dùng nhấn nút Login */
   const onFinish = async (values) => {
     try {
@@ -75,14 +78,13 @@ function LoginForm() {
         });
         // log lại thông tin đã được dùng để đăng nhập thành công
 
-
         // 1. check nếu trạng trái 'from' tồn tại ở redirect.
         // 2. nếu nó tồn tại, dùng đường(path) đó.
         // 3. nếu ko, dùng default '/dashboard'.
         const from = location.state?.from?.pathname || "/dashboard";
 
         console.log("Login successful, redirecting to:", from);
-        
+
         // đưa tới nơi đến dự định (hoặc dashboard khi fall)
         navigate(from, { replace: true });
       } else {
@@ -101,9 +103,8 @@ function LoginForm() {
           "Lỗi Server chưa được khởi động, thử lại sau khi đã chạy hệ thống Back-End nhen 😏 ",
           { theme: "dark", position: "top-left" }
         );
-      } 
+      } else {
       /* Nếu kphai lỗi do chưa khởi động Back-End */
-      else {
         toast.error(
           "Đã xảy ra lỗi trong quá trình đăng nhập, vui lòng thử lại sau!",
           { theme: "dark", position: "top-left" }
@@ -178,7 +179,12 @@ function LoginForm() {
         </Form.Item>
         {/* Login Button */}
         <Form.Item label={null}>
-          <Button type="primary" htmlType="submit" className="login-button">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-button"
+            onClick={onFinish}
+          >
             Login
           </Button>
         </Form.Item>
@@ -193,7 +199,11 @@ function LoginForm() {
             <Button icon={<FaFacebookSquare />} className="facebook">
               Facebook
             </Button>
-            <Button icon={<FaGoogle />} className="google">
+            <Button
+              icon={<FaGoogle />}
+              className="google"
+              onClick={hangdleGoogleLogin}
+            >
               Google
             </Button>
           </div>
