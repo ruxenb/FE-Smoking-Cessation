@@ -39,7 +39,7 @@ function MainContent({ username, hasProfile, onCreateProfileClick, onEditProfile
       {/* Nếu CHƯA có profile, hiển thị prompt tạo mới */}
       {!hasProfile ? (
         <section className="profile-prompt-section">
-          <p>Start your journey by creating a personal smoking profile.</p>
+          <p>Start your quit-smoking journey by creating your personal profile 😗</p>
           <button className="profile-prompt-button" onClick={onCreateProfileClick}>
             Create Smoking Profile
           </button>
