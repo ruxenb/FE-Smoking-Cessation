@@ -2,7 +2,7 @@ import React from "react";
 import "./membership.css";
 import { Link } from "react-router-dom";
 import MemberCard from "./memberCards";
-
+import { useUser } from "../../userContext/userContext";
 
 const logoUrl = 'https://i.pravatar.cc/40?img=1'; // ảnh chờ cho logo project
 
@@ -30,46 +30,91 @@ const Navbar = () => {
 };
 
 
-function Membership({ userSubscription }) {
+function Membership() {
+  const { user } = useUser(); // Lấy thông tin user từ context
+
+  if (user) {
+  console.log("Membership data:", user.membership);
+} else {
+  console.log("Chưa đăng nhập hoặc user bị null.");
+}
+
+
+  // Xác định trạng thái của người dùng: 'guest', 'basic', hoặc 'advanced'
+  let subscriptionStatus = 'guest';
+  if (user) {
+    // Nếu user đã đăng nhập, kiểm tra xem có thông tin gói thành viên không
+    if (user.membership && user.membership.status === 'ACTIVE') {
+    subscriptionStatus = 'advanced';
+    } else {
+      // Đã đăng nhập nhưng không có gói active => coi là 'basic'
+      subscriptionStatus = 'basic';
+    }
+  }else {
+    // Nếu user là null => chưa đăng nhập
+    subscriptionStatus = 'guest';
+  }
   const renderCtaButton = (planType) => {
   // Nếu user là GUEST  (not logged in, no subscription)
   // Giả sử  'userSubscription' là null chỉ ra 1 guest
-  if (!userSubscription) {
-    if (planType === 'basic') {
-      return (
-        <Link to="/register" className={`cta-button ${planType}-cta`}>
-          Start now
-        </Link>
-      );
-    } else if (planType === 'advanced') {
-      // For guests, Advanced plan goes directly to checkout
-      return (
-        <Link to="/checkout/advanced" className={`cta-button ${planType}-cta`}>
-          Sign Up for Advanced
-        </Link>
-      );
-    }
-  }
-    if (userSubscription === planType) {
-      return (
-        <button className="cta-button current-usage-button" disabled>
-          Currently Using
-        </button>
-      );
-    } else if (userSubscription === 'advanced' && planType === 'basic') {
-        return (
+  switch (subscriptionStatus) {
+      // --- TRƯỜNG HỢP 1: KHÁCH (CHƯA ĐĂNG NHẬP) ---
+      case 'guest':
+        if (planType === 'basic') {
+          return (
+            <Link to="/register" className="cta-button basic-cta">
+              Start Now
+            </Link>
+          );
+        }
+        if (planType === 'advanced') {
+          // ProtectedRoute sẽ tự động chuyển hướng đến /login trước, rồi mới tới checkout
+          return (
+            <Link to="/checkout/advanced" className="cta-button advanced-cta">
+              Sign Up for Advanced
+            </Link>
+          );
+        }
+        break;
+
+      // --- TRƯỜNG HỢP 2: USER CÓ GÓI BASIC (HOẶC KHÔNG CÓ GÓI NÀO) ---
+      case 'basic':
+        if (planType === 'basic') {
+          return (
             <button className="cta-button current-usage-button" disabled>
-              Downgrade (Not Recommended)
+              Currently Using
             </button>
-        );
-    } else {
-      const linkPath = `/signup/${planType}`;
-      const buttonText = planType === 'basic' ? 'Start now' : 'Upgrade now';
-      return (
-        <Link to={linkPath} className={`cta-button ${planType}-cta`}>
-          {buttonText}
-        </Link>
-      );
+          );
+        }
+        if (planType === 'advanced') {
+          return (
+            <Link to="/checkout/advanced" className="cta-button advanced-cta">
+              Upgrade Now
+            </Link>
+          );
+        }
+        break;
+
+      // --- TRƯỜNG HỢP 3: USER CÓ GÓI ADVANCED ---
+      case 'advanced':
+        if (planType === 'basic') {
+          return (
+            <button className="cta-button current-usage-button" disabled>
+              Downgrade Not Available
+            </button>
+          );
+        }
+        if (planType === 'advanced') {
+          return (
+            <button className="cta-button current-usage-button" disabled>
+              Currently Using
+            </button>
+          );
+        }
+        break;
+      
+      default:
+        return null;
     }
   };
 
@@ -83,8 +128,8 @@ function Membership({ userSubscription }) {
         <p>Choose the right membership plan for you to achieve your smoking cessation goals.</p>
       </div>
 
-      {/* Membership Cards Wrapper - Render the MemberCard component and pass props */}
-      <MemberCard userSubscription={userSubscription} renderCtaButton={renderCtaButton} />
+      {/* Truyền hàm renderCtaButton xuống cho MemberCard */}
+      <MemberCard renderCtaButton={renderCtaButton} />
 
       {/* Compare Table Section */}
       <div className="compare-table-section">

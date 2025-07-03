@@ -51,13 +51,18 @@ function LoginForm() {
       console.log("result:", result);
       //Kiểm tra xem phản hồi HTTP có thành công không (status code từ 200–299) và có token được trả về hay không
       if (response.ok && result.accessToken) {
+         // Gộp thông tin user và thông tin gói thành viên vào một object
+        const userData = {
+          ...result.user, // Lấy tất cả các trường từ object user
+          membership: result.currentUserMembership, // Thêm trường membership
+        };
         // Lưu token vào localStorage để sử dụng sau này
         localStorage.setItem("accessToken", result.accessToken);
         localStorage.setItem("tokenType", result.tokenType); // "Bearer" hoặc "JWT", tuỳ backend
         // Lưu user info thành 1 object JSON vào localStorage
-        localStorage.setItem("user", JSON.stringify(result.user));
+        localStorage.setItem("user", JSON.stringify(userData)); 
         // lưu thông tin user vào context
-        setUser(result.user);
+        setUser(userData);
 
         localStorage.setItem("username", result.user.username); // hoặc email, tuỳ backend
         localStorage.setItem("email", result.user.email); //
