@@ -9,6 +9,7 @@ import Dashboard from "./pages/DashboardPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import MembershipPage from "./pages/MembershipPage";
+import CheckoutPage from "./pages/CheckoutPage"; 
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import HomePage from "./pages/HomePage";
@@ -61,16 +62,21 @@ function App() {
     //     </ProtectedRoute>
     //   ),
     // },
-
-
     // {
-    //   path: "/checkout/:planType", // route thanh toán
-    //   element: (
-    //     <ProtectedRoute>
-    //       <CheckoutPage />
+    //   path: "/payment-return",
+    //   element: <ProtectedRoute>
+    //     <PaymentReturnPage />
     //     </ProtectedRoute>
-    //   )
     // },
+
+    {
+      path: "/checkout/:planType", // route thanh toán
+      element: (
+        <ProtectedRoute>
+          <CheckoutPage />
+        </ProtectedRoute>
+      )
+    },
     //đang xem các phương án UX
     // {
     //   path: "/thank-you", // The page after a successful payment

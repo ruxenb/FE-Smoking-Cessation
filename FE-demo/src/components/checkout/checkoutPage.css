@@ -1,0 +1,213 @@
+/* src/pages/CheckoutPage/checkout.css */
+
+.checkout-container {
+    display: flex;
+    justify-content: center;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    font-family: 'Inter', sans-serif;
+    padding: 2rem 20px 5rem;
+    min-height: 100vh;
+}
+
+.checkout-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.checkout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+.checkout-header h1 {
+    font-size: 2.5rem;
+}
+
+.checkout-header-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.checkout-header-user img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.checkout-layout {
+    display: flex;
+    gap: 3rem;
+    width: 100%;
+}
+
+/* --- Main Content (Left Column) --- */
+.checkout-main {
+    flex: 1.5; /* Takes more space */
+}
+
+.checkout-section {
+    margin-bottom: 2.5rem;
+}
+
+.checkout-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Plan Details Card */
+.plan-details-card {
+    display: flex;
+    gap: 1.5rem;
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.plan-details-card .icon {
+    font-size: 2.5rem;
+    background-color: var(--bg-light);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.plan-info h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.2rem;
+}
+
+.plan-info p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.plan-price {
+    margin-left: auto;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Payment Methods */
+.payment-methods-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-option {
+    padding: 1.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-option.selected {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 2px var(--primary-green);
+}
+
+.payment-option-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.payment-option-header label {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.payment-option-header input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary-green);
+}
+
+.payment-logos {
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.payment-logos img {
+    height: 24px;
+}
+
+
+/* --- Summary (Right Column) --- */
+.checkout-summary {
+    flex: 1;
+    position: sticky; /* Makes it stick on scroll */
+    top: 2rem;
+    height: fit-content;
+}
+
+.summary-card {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+}
+
+.summary-card p, .summary-card div {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 1.5rem 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.purchase-button {
+    width: 100%;
+    background-color: var(--primary-green);
+    color: var(--text-light) !important;
+    border: none;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+
+.purchase-button:hover {
+    background-color: #406040;
+    transform: scale(1.02);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .checkout-layout {
+        flex-direction: column-reverse; /* Puts summary on top for mobile */
+    }
+    .checkout-summary {
+        position: static; /* Unstick the summary column */
+    }
+    .checkout-header h1 {
+        font-size: 2rem;
+    }
+}
