@@ -8,8 +8,8 @@
     --text-secondary: #555;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     --card-bg: #ffffff;
-    --navbar-bg: #101812; 
-    --navbar-button-bg: #305030; 
+    --navbar-bg: #101812;
+    --navbar-button-bg: #305030;
     --hero-button-green: #355E3B;
 }
 
@@ -107,7 +107,7 @@
     margin: 0 auto;
     display: grid;
     /* Two columns: left is slightly bigger. Adjust '1.2fr' as needed. */
-    grid-template-columns: 1.2fr 0.8fr; 
+    grid-template-columns: 1.2fr 0.8fr;
     align-items: center;
     gap: 3rem;
 }
@@ -143,6 +143,13 @@
     gap: 1rem;
 }
 
+/* Added for equal button size in hero section */
+.hero-buttons .cta-button {
+    flex: 1; /* Makes buttons take equal available space */
+    max-width: 250px; /* Optional: Cap their max width on larger screens */
+}
+
+
 /* --- Generic Section Styling --- */
 /* section {
 
@@ -150,7 +157,7 @@
 }
 
 .how-it-works-section {
-    background-color: var(--card-bg); 
+    background-color: var(--card-bg);
 }
 
 section h2 {
@@ -197,14 +204,14 @@ section h2 {
 /* Outline Button: "Membership" (This is the new style) */
 .cta-button.outline {
     background-color: transparent;
-    color: var(--hero-button-green);
-    border-color: var(--text-dark);
+    color: var(--primary-green); /* Changed to primary green */
+    border-color: var(--primary-green); /* Changed to primary green */
 }
 
 .cta-button.outline:hover {
-    background-color: var(--hero-button-green);
-    color: black;
-    border-color: var(--hero-button-green);
+    background-color: var(--primary-green); /* Changed to primary green */
+    color: var(--text-light); /* Changed to text light on hover */
+    border-color: var(--primary-green); /* Changed to primary green */
 }
 
 /* --- Features Section --- */
@@ -353,6 +360,11 @@ section h2 {
     .cta-button {
         width: 100%;
     }
+    /* Remove flex property when buttons stack on smaller screens */
+    .hero-buttons .cta-button {
+        flex: none;
+        max-width: none;
+    }
 }
 @media (max-width: 900px) {
     .hero-layout {
@@ -372,7 +384,7 @@ section h2 {
     }
 
     .hero-section {
-        min-height: auto; 
+        min-height: auto;
         padding: 6rem 20px;
     }
 }

@@ -5,17 +5,19 @@ import { ToastContainer } from "react-toastify"; /* 20/6/2025 */
 import "react-toastify/dist/ReactToastify.css"; /* 20/6/2025 */
 import { UserProvider } from "./userContext/userContext";
 
-import Dashboard from "./pages/DashboardPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import MembershipPage from "./pages/MembershipPage";
-import CheckoutPage from "./pages/CheckoutPage"; 
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import HomePage from "./pages/HomePage";
-import SettingsPage from "./components/dashboard/sidebarPages/SettingsPage";
 import CommunityPage from "./pages/CommunityPage";
 
+import Dashboard from "./pages/DashboardPage";
+import CheckoutPage from "./pages/CheckoutPage"; 
+import SettingsPage from "./components/dashboard/sidebarPages/SettingsPage";
+
+import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn";
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
 import ProtectedRoute from "./components/protectedRoute/protectedRoute";
 import OAuth2RedirectHandler from "./components/oauth2/redirect/OAuth2RedirectHandler";
@@ -63,10 +65,11 @@ function App() {
     //     </ProtectedRoute>
     //   ),
     // },
-<<<<<<< HEAD
-=======
-
->>>>>>> main
+        // --- THÊM ROUTE MỚI ĐỂ XỬ LÝ KẾT QUẢ TỪ VNPAY ---
+    {
+      path: "/payment-return",
+      element: <ProtectedRoute><PaymentReturnPage /></ProtectedRoute>
+    },
     // {
     //   path: "/payment-return",
     //   element: <ProtectedRoute>
@@ -75,13 +78,10 @@ function App() {
     // },
 
     {
-      path: "/checkout/:planType", // route thanh toán
-      element: (
-        <ProtectedRoute>
-          <CheckoutPage />
-        </ProtectedRoute>
-      )
+      path: "/checkout/:planType",
+      element: <ProtectedRoute><CheckoutPage /></ProtectedRoute>
     },
+
     //đang xem các phương án UX
     // {
     //   path: "/thank-you", // The page after a successful payment

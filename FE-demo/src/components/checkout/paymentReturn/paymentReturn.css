@@ -5,14 +5,16 @@
     justify-content: center;
     min-height: 80vh;
     text-align: center;
+    padding: 20px;
 }
 .payment-return-card {
     background-color: var(--card-bg);
-    padding: 3rem 4rem;
+    padding: 2rem 3rem;
     border-radius: 16px;
     box-shadow: var(--shadow);
     border: 1px solid var(--border-color);
     max-width: 500px;
+    width: 100%;
 }
 .payment-return-card .icon {
     font-size: 4rem;
@@ -30,3 +32,22 @@
 }
 .payment-return-card .success-icon { color: #28a745; }
 .payment-return-card .error-icon { color: #dc3545; }
+
+.return-button {
+    width: 100%;
+    background-color: var(--primary-green);
+    color: var(--text-light) !important;
+    border: none;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+.return-button:hover {
+    background-color: #406040;
+}
