@@ -19,7 +19,8 @@ function LoginForm() {
 
   /* Hàm xử lý khi nhấn nút Google */
   const hangdleGoogleLogin = () => {
-    window.location.href = " http://localhost:8080/oauth2/authorization/google";
+    /* http://localhost:8080/oauth2/authorization/google */
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
   /* onFinish được gọi khi người dùng nhấn nút Login */
   const onFinish = async (values) => {
@@ -104,7 +105,7 @@ function LoginForm() {
           { theme: "dark", position: "top-left" }
         );
       } else {
-      /* Nếu kphai lỗi do chưa khởi động Back-End */
+        /* Nếu kphai lỗi do chưa khởi động Back-End */
         toast.error(
           "Đã xảy ra lỗi trong quá trình đăng nhập, vui lòng thử lại sau!",
           { theme: "dark", position: "top-left" }
@@ -217,11 +218,6 @@ function LoginForm() {
           </Link>
         </div>
       </Form>
-      {/* About Us link */}
-      <div className="about-us">
-        <p>Want to know more about us?</p>
-        <Link to="/about">About Us</Link>
-      </div>
     </div>
   );
 }

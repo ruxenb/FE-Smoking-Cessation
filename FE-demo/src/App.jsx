@@ -17,6 +17,7 @@ import CommunityPage from "./pages/CommunityPage";
 
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
 import ProtectedRoute from "./components/protectedRoute/protectedRoute";
+import OAuth2RedirectHandler from "./components/oauth2/redirect/OAuth2RedirectHandler";
 
 function App() {
   // Tạo một router với createBrowserRouter, định nghĩa các route của ứng dụng
@@ -33,7 +34,7 @@ function App() {
     { path: "/membership", element: <MembershipPage /> },
     { path: "/about", element: <AboutUsPage /> },
     { path: "/community", element: <CommunityPage /> },
-
+    { path: "/oauth2/redirect", element: <OAuth2RedirectHandler /> },
     // --- Protected Routes (yêu cầu người dùng login) ---
     // bao các page bằng ProtectedRoute component.
     {
@@ -62,7 +63,6 @@ function App() {
     //   ),
     // },
 
-
     // {
     //   path: "/checkout/:planType", // route thanh toán
     //   element: (
@@ -85,7 +85,6 @@ function App() {
     // Route này phải nằm cuối array.
     // path '*'  đc xem như là wildcard, bắt những URL ko trùng bên trên above.
     { path: "*", element: <NotFoundPage /> },
-
   ]);
   // Sử dụng RouterProvider để cung cấp <Router> cho toàn bộ ứng dụng
   return (
