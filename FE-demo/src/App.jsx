@@ -63,6 +63,10 @@ function App() {
     //     </ProtectedRoute>
     //   ),
     // },
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
     // {
     //   path: "/payment-return",
     //   element: <ProtectedRoute>
