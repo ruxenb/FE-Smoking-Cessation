@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import BlogApp from "../../components/blog/BlogApp";
 import { toast } from "react-toastify";
 import Sidebar from "../../components/dashboard/Sidebar.jsx";
 import MainContent from "../../components/dashboard/dashboard.jsx";
@@ -131,6 +131,8 @@ function Dashboard() {
         return <AchievementsPage />;
       case "settings":
         return <SettingsPage currentTheme={theme} onThemeChange={setTheme} />;
+      case "community":
+        return <BlogApp user={user} />;  
       default:
         return <MainContent 
         username={user?.username}
