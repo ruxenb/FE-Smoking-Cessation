@@ -16,11 +16,11 @@ export const Navbar = () => {
      
         </div>
         <div className="navbar-right">
-          <Link to="about">About us</Link>
-          <Link to="membership">Membership</Link>
-          <Link to="blog">Blog</Link>
-          <Link to="register" className="navbar-button">Get Started</Link>
-          <Link to="login">Login</Link>
+          <Link to="/about">About us</Link>
+          <Link to="/membership">Membership</Link>
+          <Link to="/blog">Blog</Link>
+          <Link to="/register" className="navbar-button">Get Started</Link>
+          <Link to="/login">Login</Link>
         </div>
       </nav>
     </div>
