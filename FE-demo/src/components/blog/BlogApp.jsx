@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import api from '../../configs/axios';
 import PostCard from './PostCard';
 import './BlogApp.css';
+import LikeButtons from './LikeButtons';
+import {Navbar} from '../../components/home/homePage';
+
 
 export default function BlogApp() {
   const [posts, setPosts] = useState([]);
@@ -69,6 +72,8 @@ export default function BlogApp() {
   }
 
   return (
+    <>
+    <Navbar />
     <div className="blog-container">
       <div className="header">
         <h1>
@@ -129,5 +134,6 @@ export default function BlogApp() {
         ✏️
       </button>
     </div>
+    </>
   );
 }

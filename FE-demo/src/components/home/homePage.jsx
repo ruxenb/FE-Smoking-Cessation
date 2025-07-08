@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const Icon = ({ children }) => <div className="icon-placeholder">{children}</div>;
 const logoUrl = 'https://i.pravatar.cc/40?img=1'; // ảnh chờ cho logo project
 // --- NAVBAR COMPONENT ---
-const Navbar = () => {
+export const Navbar = () => {
   return (
     <div className="navbar-container">
       <nav className="navbar">
@@ -18,7 +18,7 @@ const Navbar = () => {
         <div className="navbar-right">
           <Link to="about">About us</Link>
           <Link to="membership">Membership</Link>
-          <Link to="#blog">Blog</Link>
+          <Link to="blog">Blog</Link>
           <Link to="register" className="navbar-button">Get Started</Link>
           <Link to="login">Login</Link>
         </div>
