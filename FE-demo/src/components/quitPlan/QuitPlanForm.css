@@ -1,0 +1,179 @@
+.quit-plan-date-picker .ant-picker {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.quit-plan-date-picker .ant-picker:hover,
+.quit-plan-date-picker .ant-picker-focused {
+    border-color: #40a9ff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/*Form Ant Design */
+.ant-form-item-label > label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+}
+
+.date-pickers-row {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.date-pickers-row .ant-form-item {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 0 !important;
+}
+
+.quit-plan-date-picker .ant-picker {
+    width: 100%; 
+}
+
+/* Section cho từng phương pháp cai thuốc */
+.quit-method-section {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.quit-method-section h4 {
+    color: #00CC00;
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.quit-options-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 10px;
+    align-items: stretch;
+}
+
+/*Option của method*/
+.quit-option-card {
+    background-color: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1 1 calc(33% - 15px); /* Responsive: 3 cột trên desktop, có thể điều chỉnh */
+    min-width: 250px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.quit-option-card:hover {
+    border-color: greenyellow;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px); 
+}
+
+.quit-option-card .ant-radio-input,
+.quit-option-card .ant-radio-inner,
+.quit-option-card .ant-checkbox-input,
+.quit-option-card .ant-checkbox-inner {
+    display: none !important; /* Ẩn biểu tượng Radio/Checkbox */
+}
+.quit-option-card .ant-radio-wrapper span:nth-child(2),
+.quit-option-card .ant-checkbox-wrapper span:nth-child(2) {
+    margin-left: 0 !important;
+    padding-left: 0 !important; /* Đảm bảo không có padding thừa */
+}
+
+/*Option sau khi được chọn*/
+.quit-option-card.selected {
+    background-color: #CCFFCC;
+    border-color:green;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.quit-option-card.selected strong {
+    color: black;
+}
+
+/* Đảm bảo nội dung Radio/Checkbox nằm đúng vị trí trong thẻ */
+.quit-option-card .ant-radio-wrapper,
+.quit-option-card .ant-checkbox-wrapper {
+    display: block; /* Chiếm toàn bộ chiều rộng thẻ */
+    margin: 0;
+    padding: 0;
+}
+
+.quit-option-card .ant-radio,
+.quit-option-card .ant-checkbox {
+    vertical-align: top;
+    margin-right: 8px;
+}
+
+.quit-option-card .ant-radio-inner,
+.quit-option-card .ant-checkbox-inner {
+    top: 5px;
+}
+
+.quit-option-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 5px;
+    margin-left: 24px;
+}
+
+.quit-option-card.selected p {
+    color: #333;
+}
+
+.option-noti {
+    display: block;
+    font-size: 0.8rem;
+    color: #08979c;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed #e0e0e0;
+    margin-left: 24px;
+}
+
+/* Nút Submit */
+.submit-quit-plan-btn {
+    width: 100%;
+    padding: 12px 0;
+    height: auto;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Trang chính */
+.quit-plan-page-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.quit-plan-page-container h1 {
+    text-align: center;
+    color: #006633;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+}
+
+.quit-plan-loading, .quit-plan-error {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+    color: #555;
+}

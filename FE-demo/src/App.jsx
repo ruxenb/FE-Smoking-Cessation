@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify"; /* 20/6/2025 */
 import "react-toastify/dist/ReactToastify.css"; /* 20/6/2025 */
 import { UserProvider } from "./userContext/userContext";
 
+// Import các trang (pages) của ứng dụng
 import Dashboard from "./pages/DashboardPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
@@ -15,8 +16,13 @@ import AboutUsPage from "./pages/AboutUsPage";
 import HomePage from "./pages/HomePage";
 import SettingsPage from "./components/dashboard/sidebarPages/SettingsPage";
 import CommunityPage from "./pages/CommunityPage";
+
 import BlogPage from "./pages/BlogPage";
 import PostDetail from "./components/blog/PostDetail"; // Import PostDetail component
+
+import SmokingQuiz from "./pages/SmokingQuizPage";
+import QuitPlanPage from "./pages/QuitPlanPage";
+import Feedback from "./pages/FeedbackPage";
 
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
 import ProtectedRoute from "./components/protectedRoute/protectedRoute";
@@ -48,6 +54,30 @@ function App() {
       element: (
         <ProtectedRoute>
           <Dashboard />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/smoking-quiz",
+      element: (
+        <ProtectedRoute>
+          <SmokingQuiz />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/feedback",
+      element: (
+        <ProtectedRoute>
+          <Feedback />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/quit-plan",
+      element: (
+        <ProtectedRoute>
+          <QuitPlanPage/>
         </ProtectedRoute>
       ),
     },
