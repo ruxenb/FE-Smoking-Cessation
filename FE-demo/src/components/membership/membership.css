@@ -57,26 +57,26 @@
 }
 
 .card-content-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* This makes this wrapper take all available vertical space */
-    justify-content: flex-start; /* Ensures content inside this wrapper starts from the top */
-     margin-bottom: 0; /*Add some space between this content block and the button/cancellation info */
-  
-  }
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* This makes this wrapper take all available vertical space */
+  justify-content: flex-start; /* Ensures content inside this wrapper starts from the top */
+  margin-bottom: 0; /*Add some space between this content block and the button/cancellation info */
+
+}
 
 .features-list {
   list-style: none;
   padding: 0;
-  margin-bottom: 0; 
+  margin-bottom: 0;
   text-align: left;
-  
+
   display: flex; /* Make the list itself a flex container */
   flex-direction: column; /* Stack list items vertically */
   justify-content: flex-start; /* Align list items to the start (top) */
   /* You might want to add a min-height here if you want to force more blank space in basic features */
   min-height: 250px; /* Example: Adjust this value to control the minimum height of the list area */
-                     /* This will create "blanks" if the content is shorter. */
+  /* This will create "blanks" if the content is shorter. */
 }
 
 .features-list li {
@@ -96,12 +96,13 @@
   top: 0;
 }
 
-.padding-ig{
+.padding-ig {
   padding-top: 20px;
 }
 
-.cta-button {
-  background-color: #0A100A;
+/* Updated specificity for .cta-button */
+.membership-page .cta-button {
+  background-color: #1f311f;
   color: #fff;
   padding: 15px 30px;
   border: none;
@@ -115,49 +116,55 @@
 }
 
 .card-bottom-cta {
-    display: flex;
-    flex-direction: column; /* Stacks the button and cancellation info */
-    align-items: center; /* Centers them horizontally within this new wrapper */
-    margin-top: 25px; /* Adds consistent space above this entire bottom block */
+  display: flex;
+  flex-direction: column; /* Stacks the button and cancellation info */
+  align-items: center; /* Centers them horizontally within this new wrapper */
+  margin-top: 25px; /* Adds consistent space above this entire bottom block */
 }
 
-.basic-cta{
+.basic-cta {
   margin-bottom: 29px;
 }
 
-.cta-button.current-usage-button {
+/* Updated specificity for .cta-button.current-usage-button */
+.membership-page .cta-button.current-usage-button {
   background-color: #cccccc;
   color: #666666;
   cursor: not-allowed;
   border: 1px solid #bbbbbb;
 }
 
-.cta-button.current-usage-button:hover {
+/* Updated specificity for .cta-button.current-usage-button:hover */
+.membership-page .cta-button.current-usage-button:hover {
   background-color: #cccccc;
   cursor: not-allowed;
 }
 
-.cta-button:hover {
+/* Updated specificity for .cta-button:hover */
+.membership-page .cta-button:hover {
   background-color: #333;
 }
 
-.br-ig{
+.br-ig {
   margin-top: 1000px;
   height: 20px;
 
 }
 
-.advanced-plan {
+/* Updated specificity for .advanced-plan */
+.membership-page .advanced-plan {
   background-color: #cfe2cf; /* Slightly different background for Advanced */
   border: 2px solid #28a745; /* Green border to make it stand out */
   position: relative; /* For the ribbon */
 }
 
-.advanced-cta {
+/* Updated specificity for .advanced-cta */
+.membership-page .advanced-cta {
   background-color: #28a745; /* Stronger green for CTA */
 }
 
-.advanced-cta:hover {
+/* Updated specificity for .advanced-cta:hover */
+.membership-page .advanced-cta:hover {
   background-color: #218838;
 }
 
@@ -200,88 +207,88 @@
 }
 
 .compare-table-section {
-    max-width: 960px; /* Adjust width as needed */
-    margin: 80px auto;
-    padding: 0 20px;
-    text-align: center; /* For the h2 and p */
+  max-width: 960px; /* Adjust width as needed */
+  margin: 80px auto;
+  padding: 0 20px;
+  text-align: center; /* For the h2 and p */
 }
 
 .compare-table-section h2 {
-    font-size: 36px;
-    color: #0A100A;
-    margin-bottom: 15px;
+  font-size: 36px;
+  color: #0A100A;
+  margin-bottom: 15px;
 }
 
 .compare-table-section p {
-    font-size: 18px;
-    color: #666;
-    margin-bottom: 40px;
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 40px;
 }
 
 .compare-table-container {
-    overflow-x: auto; /* Enables horizontal scrolling on small screens if table is too wide */
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  overflow-x: auto; /* Enables horizontal scrolling on small screens if table is too wide */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse; /* Removes double borders */
-    table-layout: fixed; /* Helps with column width distribution */
+  width: 100%;
+  border-collapse: collapse; /* Removes double borders */
+  table-layout: fixed; /* Helps with column width distribution */
 }
 
 thead {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 th, td {
-    padding: 18px 15px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-    font-size: 18px;
-    color: #333;
+  padding: 18px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 18px;
+  color: #333;
 }
 
 th {
-    font-weight: bold;
-    color: #0A100A;
-    text-align: center; /* Center align 'Basic' and 'Advanced' headers */
+  font-weight: bold;
+  color: #0A100A;
+  text-align: center; /* Center align 'Basic' and 'Advanced' headers */
 }
 
 th:first-child,
 td:first-child {
-    text-align: left; /* Keep feature names left aligned */
+  text-align: left; /* Keep feature names left aligned */
 }
 
 td {
-    text-align: center; /* Center align checkmarks/X marks */
-    vertical-align: middle; /* Vertically align content */
+  text-align: center; /* Center align checkmarks/X marks */
+  vertical-align: middle; /* Vertically align content */
 }
 
 /* Styling for checkmark and X icons */
 .icon-check {
-    color: #28a745; /* Green for checkmark */
-    font-weight: bold;
-    font-size: 24px;
+  color: #28a745; /* Green for checkmark */
+  font-weight: bold;
+  font-size: 24px;
 }
 
 .icon-x {
-    color: #dc3545; /* Red for X mark */
-    font-weight: bold;
-    font-size: 20px;
+  color: #dc3545; /* Red for X mark */
+  font-weight: bold;
+  font-size: 20px;
 }
 
 /* Highlight rows for Advanced-exclusive features */
 .highlight-row {
-    background-color: #fcfcfc; /* Slightly different background to make these rows stand out */
-    font-weight: 500; /* Slightly bolder text */
+  background-color: #fcfcfc; /* Slightly different background to make these rows stand out */
+  font-weight: 500; /* Slightly bolder text */
 }
 
 /* Optional: Style for the Advanced column to make it stand out */
 table tr th:nth-child(3), /* Third header (Advanced) */
 table tr td:nth-child(3) { /* Third column (Advanced) */
-    background-color: #e6ffe6; /* Light green background for advanced column */
+  background-color: #e6ffe6; /* Light green background for advanced column */
 }
 
 .faq-section {

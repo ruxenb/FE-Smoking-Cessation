@@ -189,7 +189,7 @@ function LoginForm() {
             type="primary"
             htmlType="submit"
             className="login-button"
-            onClick={onFinish}
+  
           >
             Login
           </Button>

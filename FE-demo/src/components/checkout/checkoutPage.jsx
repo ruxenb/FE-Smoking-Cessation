@@ -15,6 +15,8 @@ function Checkout() {
   const [packageDetails, setPackageDetails] = useState(null); // State để lưu thông tin gói
   const [isLoading, setIsLoading] = useState(true); // State để quản lý trạng thái loading
 
+ 
+
 useEffect(() => {
 
   // Nếu chưa có thông tin user, không làm gì cả và đợi lần render sau
@@ -118,27 +120,33 @@ useEffect(() => {
       const paymentPayload = {
         userId: user.userId,
         membershipPackageId: packageDetails.id,
+        paymentMethod: "VNPay", // Chọn phương thức thanh toán VNPay
         // Backend sẽ tự xử lý các trường còn lại như startDate, status
       };
+
+       // --- THÊM DÒNG NÀY ĐỂ DEBUG ---
+      console.log("Sending this payload to backend:", paymentPayload);
 
       const response = await createVnPayPayment(paymentPayload, fullToken);
       
       // Backend trả về status="Success" (chữ S viết hoa)
-      if (response.data?.status === "Success") { 
-        const paymentUrl = response.data.data;
-        
-        // Cập nhật toast và thông báo cho người dùng
-        toast.update(toastId, { render: "Redirecting to VNPay...", type: "success", isLoading: false, autoClose: 3000 });
-        
-        // Chuyển hướng người dùng sang trang thanh toán của VNPay
-        // Dùng một khoảng trễ nhỏ để người dùng kịp đọc toast
-        setTimeout(() => {
-            window.location.href = paymentUrl;
-        }, 1500);
+      if (response.data?.status === "Success" && response.data?.data) {
+        const paymentUrl = response.data.data; // Backend trả về URL thanh toán
+
+        toast.update(toastId, {
+          render: "Redirecting to payment gateway...",
+          type: "info",
+          isLoading: false,
+          autoClose: 3000,
+        });
+
+        // Chuyển hướng người dùng đến trang thanh toán của VNPay
+        window.location.href = paymentUrl;
 
       } else {
         const errorMsg = response.data?.message || "Failed to create payment link!";
         toast.update(toastId, { render: errorMsg, type: "error", isLoading: false, autoClose: 5000 });
+      
       }
     } catch (error) {
       const errorMsg = error.response?.data?.message || "An error occurred.";
@@ -146,6 +154,7 @@ useEffect(() => {
       console.error("Failed to create VNPay payment:", error);
     }
   };
+
 
   // --- QUẢN LÝ LUỒNG RENDER ---
   // 1. Luôn hiển thị loading cho đến khi tất cả logic trong useEffect hoàn tất
@@ -160,6 +169,8 @@ useEffect(() => {
 
 
     return (
+      <> 
+      
     <div className="checkout-container">
       <div className="checkout-content-wrapper">
         <header className="checkout-header">
@@ -206,14 +217,16 @@ useEffect(() => {
                 <span>Total now</span>
                 <span>{planInfo.priceText}</span>
               </div>
-              <a href="#" className="purchase-button" onClick={(e) => { e.preventDefault(); handlePurchase(); }}>
+             {/* Thay thế thẻ <a> bằng thẻ <button> */}
+              <button className="purchase-button" onClick={handlePurchase}>
                 Complete Purchase
-              </a>
+              </button>
             </div>
           </aside>
         </main>
       </div>
     </div>
+    </>
   );
 }
 

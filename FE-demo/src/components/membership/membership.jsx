@@ -119,7 +119,7 @@ function Membership() {
   };
 
   return (
-    <>
+    <div className="membership-page">
 
       <Navbar />
       {/* Header Section */}
@@ -188,7 +188,7 @@ function Membership() {
           <Link to="/privacy">Privacy policy</Link>
         </p>
       </footer>
-    </>
+    </div>
   );
 }
 

@@ -8,7 +8,7 @@ import api from "../configs/axios";
  * @returns {Promise} - Promise chứa URL thanh toán từ VNPay.
  */
 export const createVnPayPayment = async (paymentData, token) => {
-  return await api.post("/payment/create", paymentData, {
+  return await api.post("http://localhost:8080/api/payment/create", paymentData, {
     headers: {
       Authorization: token,
     },

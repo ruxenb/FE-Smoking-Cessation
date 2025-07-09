@@ -10,7 +10,7 @@
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     --card-bg: #ffffff;
     --sidebar-bg:#0A100A;
-    --input-bg: #fff; 
+    --input-bg: #fff;
     --input-text-color: #1a1a1a;
     --stat-card-bg:#ffffff;
 
@@ -22,7 +22,7 @@
     --sidebar-width-expanded: 260px;
     --sidebar-width-collapsed: 80px;
     --main-content-max-width: 1200px;
-    --content-area-padding: 3rem; 
+    --content-area-padding: 3rem;
 }
 
 /* --- DARK THEME OVERRIDES --- */
@@ -39,7 +39,7 @@
     --sidebar-bg:#000000;
     --statcard-border:#687468;
     --input-bg: #1f261f;
-    --input-text-color: #f0f0f0; 
+    --input-text-color: #f0f0f0;
     --border-top-color: rgba(255, 255, 255, 0.1);
     --stat-card-bg:#121812;
 
@@ -47,7 +47,7 @@
     --streak-background-fff0d4:#432c09;
     --life-background-ffe0e0: #460000;
     --cigarettes-background-e0f7ff: #003446;
-    
+
 
 }
 
@@ -72,10 +72,10 @@ body {
 .app-container {
     display: grid;
     min-height: 100vh;
-    
+
     /* Columns: One for sidebar, one for main content. 1fr = "fill remaining space" */
     grid-template-columns: var(--sidebar-width-expanded) 1fr;
-    
+
     /* KEY: Animate the change in column size for the smooth transition */
     transition: grid-template-columns 0.3s ease-in-out;
 }
@@ -96,8 +96,8 @@ body {
 }
 
 .sidebar-footer {
-  /* Add đường line để tách nút logout*/
-    margin-top: auto; 
+    /* Add đường line để tách nút logout*/
+    margin-top: auto;
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -148,19 +148,19 @@ body {
 .navigation .icon { font-size: 1.2rem; }
 
 /* .sidebar.collapsed .sidebar-footer {
-  Xóa border và padding để nhìn clean 
-  border-top: none;
-  padding-top: 0;
-  margin-top: 1rem; 
+     Xóa border và padding để nhìn clean
+    border-top: none;
+    padding-top: 0;
+    margin-top: 1rem;
 } */
 
 .sidebar.collapsed .logout-button {
 
-  padding: 1rem 0;
+    padding: 1rem 0;
 }
 
 .sidebar.collapsed .logout-button span:not(.icon) {
-  display: none;
+    display: none;
 }
 
 /* --- Main Content Area (The Grid Cell) --- */
@@ -173,7 +173,7 @@ body {
     /* Center the block within its grid cell */
     margin-left: auto;
     margin-right: auto;
-    width: 100%; 
+    width: 100%;
     max-width: var(--main-content-max-width); /* ko rộng hơn cái này */
     /* Add your desired padding here */
     padding: 2rem var(--content-area-padding);
@@ -185,10 +185,10 @@ body {
 .welcome-message .username { color: var(--primary-green); }
 .welcome-message p { font-size: 1rem; color: var(--text-secondary); margin-top: 0.25rem; }
 .user-profile img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-green); }
-.stats-grid { 
+.stats-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
     gap: 0.5rem;
-    margin-bottom: 3rem; 
+    margin-bottom: 3rem;
 }
 .profile-prompt-section {
     background-color: var(--card-bg);
@@ -227,22 +227,22 @@ body {
 
 /* Specific color for the button text in dark mode for better contrast */
 [data-theme="dark"] .profile-prompt-button {
-    color: var(--bg-dark); 
+    color: var(--bg-dark);
 }
 
-.stat-card { 
+.stat-card {
     background-color: var(--stat-card-bg);
     /* Refinement: A lighter border looks cleaner, closer to the image. */
-    border: 2px solid var(--statcard-border); 
+    border: 2px solid var(--statcard-border);
     border-radius: 20px;
     padding: 1.5rem;
     display: flex;
     align-items: center;
     /* Refinement: Slightly larger gap between icon and text. */
-    gap: 1.25rem; 
+    gap: 1.25rem;
     box-shadow: var(--shadow);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
- }
+}
 .stat-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); }
 .card-icon {
     font-size: 2.5rem;
@@ -287,9 +287,23 @@ body {
 .cta-section { background-color: var(--primary-green); color: var(--text-light); border-radius: 20px; padding: 2.5rem; text-align: center; }
 .cta-section h2 { font-size: 1.75rem; margin-bottom: 0.5rem; }
 .cta-section p { color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem; }
-.cta-button { background-color: var(--text-light); color: var(--primary-green); border: none; padding: 1rem 2.5rem; font-size: 1rem; font-weight: 700; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease; }
-.cta-button:hover { transform: scale(1.05); background-color: #f0f0f0; }
 
+/* RENAMED to avoid conflict with HomePage.css */
+.dashboard-cta-button {
+    background-color: var(--text-light);
+    color: var(--primary-green);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.dashboard-cta-button:hover {
+    transform: scale(1.05);
+    background-color: #f0f0f0;
+}
 
 
 /* --- NEW: Settings Page Styles --- */
@@ -349,117 +363,117 @@ body {
 /* --- Overlay & Form Styles --- */
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px) scale(0.98); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
+    from { transform: translateY(20px) scale(0.98); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .overlay-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(10, 16, 10, 0.7);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(10, 16, 10, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .overlay-content {
     position: relative;
-  background-color: var(--bg-light);
-  padding: 2.5rem;
-  border-radius: 20px;
-  max-width: 500px;
-  width: 90%;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  animation: slideUp 0.4s ease-out;
+    background-color: var(--bg-light);
+    padding: 2.5rem;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideUp 0.4s ease-out;
 }
 
 .overlay-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+    font-size: 3rem;
+    margin-bottom: 1rem;
 }
 
 .overlay-content h2 {
-  font-size: 1.75rem;
-  margin-bottom: 0.75rem;
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
 }
 
 .overlay-content p {
-  color: var(--text-secondary);
-  line-height: 1.6;
+    color: var(--text-secondary);
+    line-height: 1.6;
 }
 
 .overlay-form {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  text-align: left;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    text-align: left;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-group label {
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
 .form-group input,
 .form-group textarea {
-  background-color: var(--input-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  font-family: 'Inter', sans-serif;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  color: var(--input-text-color);
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    color: var(--input-text-color);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(48, 80, 48, 0.2);
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(48, 80, 48, 0.2);
 }
 
 .form-actions {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: flex-end;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .overlay-button {
-  background-color: var(--primary-green);
-  color: var(--text-light);
-  border: none;
-  padding: 1rem 2.5rem;
-  font-size: 1rem;
-  font-weight: 700;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+    background-color: var(--primary-green);
+    color: var(--text-light);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .overlay-button:hover {
-  transform: scale(1.05);
-  background-color: #406040;
+    transform: scale(1.05);
+    background-color: #406040;
 }
 .close-button {
     /* position: absolute; */
@@ -482,22 +496,22 @@ body {
 }
 
 .logout-button {
-  
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: #f0f0f0; /**/
-  text-decoration: none;
-  padding: 1rem;
-  border-radius: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #f0f0f0; /**/
+    text-decoration: none;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    width: 100%;
 }
 
 .logout-button:hover {
 
-  background-color: rgba(255, 82, 82, 0.1); 
-  color: #ffc2c2; 
+    background-color: rgba(255, 82, 82, 0.1);
+    color: #ffc2c2;
 }
 
 /* --- Responsive Design --- */
