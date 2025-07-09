@@ -1,0 +1,55 @@
+/* Question.css */
+
+.quiz-question-block {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px 0 rgba(0,0,0,0.04);
+  margin-bottom: 24px;
+  padding: 20px;
+  text-align: left;
+  transition: box-shadow 0.2s;
+}
+.quiz-question-block:hover {
+  box-shadow: 0 4px 20px 0 rgba(48,94,59,0.08);
+}
+.quiz-question-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+/* Base styles for text inputs (text and number input) */
+.quiz-text-answer-input,
+.quiz-number-answer-input {
+  width: calc(100% - 20px); 
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-sizing: border-box; 
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.quiz-text-answer-input:focus,
+.quiz-number-answer-input:focus {
+  border-color: #355E3B;
+  box-shadow: 0 0 0 3px rgba(53, 94, 59, 0.2);
+  outline: none;
+}
+
+/* Specific styles for text */
+.quiz-text-answer-input {
+  min-height: 100px; 
+  resize: vertical; 
+}
+
+/* Specific styles for number input */
+.quiz-number-answer-input {
+ 
+}
+
+/* Styles for the group of options (radio/checkbox) */
+.quiz-options-group {
+  margin-top: 10px;
+}
