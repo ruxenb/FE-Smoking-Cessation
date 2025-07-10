@@ -1,35 +1,29 @@
-// --- START OF NEW FILE AchievementsPage.jsx ---
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchAchievements } from '../../../services/achievementService'; // 👈 Gọi API từ file riêng
 import AchievementCard from '../../dashboard/AchievementCard';
-import '../../dashboard/dashboard.css'; // Using the same CSS file for consistency
+import '../../dashboard/dashboard.css';
 
 function AchievementsPage() {
-  const timeBasedAchievements = [
-    { name: "First 24 Hours", icon: "🏅", locked: false },
-    { name: "Three-Day Trial", icon: "🏅", locked: false },
-    { name: "Week One Warrior", icon: "🏅", locked: false },
-    { name: "Fortnight Feat", icon: "🔒", locked: true },
-    { name: "30-Day Milestone", icon: "🔒", locked: true },
-    { name: "Quarterly Quit", icon: "🔒", locked: true },
-    { name: "Half-Year Hero", icon: "🔒", locked: true },
-    { name: "One Year Legend", icon: "🔒", locked: true },
-  ];
+  const [achievements, setAchievements] = useState([]);
+  const tokenType = localStorage.getItem("tokenType");
+  const accessToken = localStorage.getItem("accessToken");
+  const fullToken = tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
 
-  const financialAchievements = [
-    { name: "First $10 Saved", icon: "💰", locked: false },
-    { name: "Money Saver ($100)", icon: "💰", locked: false },
-    { name: "Money Saver ($500)", icon: "💰", locked: true },
-    { name: "The $1k Club", icon: "💰", locked: true },
-    { name: "Big Spender (Not!)", icon: "💰", locked: true },
-  ];
-  
-  const healthAchievements = [
-      { name: "Breathe Easy", icon: "❤️", locked: false, description: "24 hours smoke-free." },
-      { name: "Nerve Ending Regrowth", icon: "❤️", locked: false, description: "48 hours smoke-free."},
-      { name: "Heart Helper", icon: "❤️", locked: true, description: "Risk of heart attack decreases." },
-      { name: "Lung Love", icon: "❤️", locked: true, description: "Lung function improves." },
-  ];
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const res = await fetchAchievements(fullToken);
+        setAchievements(res.data.data); // Dữ liệu nằm trong field `data`
+      } catch (err) {
+        console.error("Failed to load achievements:", err);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const filterByCategory = (cat) =>
+    achievements.filter(a => a.category === cat);
 
   return (
     <div className="main-content">
@@ -45,7 +39,7 @@ function AchievementsPage() {
           <h2>Time-Based Milestones</h2>
         </div>
         <div className="achievements-grid">
-          {timeBasedAchievements.map((ach, index) => (
+          {filterByCategory("time").map((ach, index) => (
             <AchievementCard key={`time-${index}`} {...ach} />
           ))}
         </div>
@@ -56,7 +50,7 @@ function AchievementsPage() {
           <h2>Financial Goals</h2>
         </div>
         <div className="achievements-grid">
-          {financialAchievements.map((ach, index) => (
+          {filterByCategory("financial").map((ach, index) => (
             <AchievementCard key={`financial-${index}`} {...ach} />
           ))}
         </div>
@@ -67,7 +61,7 @@ function AchievementsPage() {
           <h2>Health & Wellness</h2>
         </div>
         <div className="achievements-grid">
-          {healthAchievements.map((ach, index) => (
+          {filterByCategory("health").map((ach, index) => (
             <AchievementCard key={`health-${index}`} {...ach} />
           ))}
         </div>

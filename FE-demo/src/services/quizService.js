@@ -20,8 +20,8 @@ export const getQuizById = async (id, token) => {
  * @param {string} token - Token xác thực của người dùng.
  * @returns {Promise}
  */
-export const submitUserQuizAnswer = async (userQuizAnswerRequestDto, token) => {
-  return await api.post(`http://localhost:8080/api/users/smokingprofile/quiz-answer`, userQuizAnswerRequestDto, {
+export const submitUserQuizAnswer = async (userQuizAnswerRequestDto, token, url) => {
+  return await api.post(url, userQuizAnswerRequestDto, {
     headers: {
       Authorization: token,
     },

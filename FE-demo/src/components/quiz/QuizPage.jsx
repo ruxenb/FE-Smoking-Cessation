@@ -6,7 +6,7 @@ import { useUser } from '../../userContext/userContext';
 import { useNavigate } from 'react-router-dom'; // <-- Thêm dòng này
 import "./QuizPage.css";
 
-function QuizPage({quizId}) {
+function QuizPage({quizId, quizUrl}) {
   const [quiz, setQuiz] = useState(null);
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState({});
@@ -156,7 +156,7 @@ function QuizPage({quizId}) {
 
     try {
       // Gọi API để gửi dữ liệu
-      const response = await submitUserQuizAnswer(requestBody, fullToken);
+      const response = await submitUserQuizAnswer(requestBody, fullToken, quizUrl);
       console.log("Quiz submitted successfully:", response.data);
       // Hiển thị thông báo thành công
       toast.success(`Quiz submitted successfully! ${response.data.message || ''}`);
