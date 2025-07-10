@@ -1,5 +1,3 @@
-// Trong QuizPage.jsx
-
 import React, { useEffect, useState } from "react";
 import QuizForm from "./QuizForm";
 import { getQuizById, submitUserQuizAnswer } from "../../services/quizService";

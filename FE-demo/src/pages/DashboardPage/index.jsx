@@ -126,7 +126,10 @@ function Dashboard() {
         return <MainContent 
             username={user?.username}
             hasProfile={hasSmokingProfile} 
-            onCreateProfileClick={openProfileOverlay} onEditProfileClick={openProfileOverlay} />;
+            onCreateProfileClick={openProfileOverlay} 
+            onEditProfileClick={openProfileOverlay} 
+            currentQuitPlan={user?.quitplan} 
+            />;
       case "achievements":
         return <AchievementsPage />;
       case "settings":
