@@ -59,6 +59,7 @@ function LoginForm() {
         const userData = {
           ...result.user, // Lấy tất cả các trường từ object user
           membership: result.currentUserMembership, // Thêm trường membership
+          quitplan: result.currentQuitPlan, // Thêm trường quitPlan
         };
         // Lưu token vào localStorage để sử dụng sau này
         localStorage.setItem("accessToken", result.accessToken);

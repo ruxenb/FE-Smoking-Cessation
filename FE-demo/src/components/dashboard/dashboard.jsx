@@ -4,7 +4,7 @@ import AchievementCard from "./AchievementCard";
 import CTASection from "./CTASection";
 import "./dashboard.css";
 
-function MainContent({ username, hasProfile, onCreateProfileClick, onEditProfileClick  }) {
+function MainContent({ username, hasProfile, onCreateProfileClick, onEditProfileClick, currentQuitPlan }){
   const moneySaved = "1,244.50";
   const lifeReclaimed = "28";
   const streakCount = "92";

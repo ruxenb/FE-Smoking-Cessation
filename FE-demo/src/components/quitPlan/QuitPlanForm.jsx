@@ -181,7 +181,7 @@ function QuitPlanForm({ quitMethods, onSubmit, initialValues, loading }) {
                                 >
                                     <Radio value={option.id}>
                                         <strong>{option.optionText}</strong>
-                                        <p>{option.optionDescription}</p>
+                                        <div dangerouslySetInnerHTML={{ __html: option.optionDescription }} />
                                     </Radio>
                                 </div>
                             ))}
@@ -228,7 +228,7 @@ function QuitPlanForm({ quitMethods, onSubmit, initialValues, loading }) {
                                 >
                                     <Checkbox value={option.id}>
                                         <strong>{option.optionText}</strong>
-                                        <p>{option.optionDescription}</p>
+                                        <div dangerouslySetInnerHTML={{ __html: option.optionDescription }} />
                                     </Checkbox>
                                 </div>
                             ))}
