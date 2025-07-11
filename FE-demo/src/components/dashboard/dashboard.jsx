@@ -4,12 +4,14 @@ import AchievementCard from "./AchievementCard";
 import CTASection from "./CTASection";
 import QuitProgressCard from "./QuitProgressCard";
 import "./dashboard.css";
+import { Link } from 'react-router-dom';
+import { useUser } from '../../userContext/userContext'; // Import useUser
+import { submitUserQuizAnswer } from '../../services/quizService';
+
 
 function MainContent({
   username,
   hasProfile,
-  onCreateProfileClick,
-  onEditProfileClick,
   currentQuitPlan,
 }) {
   const moneySaved = "1,244.50";
@@ -49,23 +51,17 @@ function MainContent({
           <p>
             Start your quit-smoking journey by creating your personal profile 😗
           </p>
-          <button
-            className="profile-prompt-button"
-            onClick={onCreateProfileClick}
-          >
+          <Link to="/smoking-quiz" className="profile-prompt-button">
             Create Smoking Profile
-          </button>
+          </Link>
         </section>
       ) : (
         // Nếu ĐÃ có profile, hiển thị prompt cập nhật
         <section className="profile-prompt-section">
           <p>Your profile is ready. Update it if your habits change.</p>
-          <button
-            className="profile-prompt-button"
-            onClick={onEditProfileClick}
-          >
-            Update Profile
-          </button>
+          <Link to="/smoking-quiz" className="profile-prompt-button">
+            Update Smoking Profile
+          </Link>
         </section>
       )}
       <section className="quit-progress-section">

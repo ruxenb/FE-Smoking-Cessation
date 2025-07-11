@@ -219,6 +219,7 @@ body {
     cursor: pointer;
     transition: transform 0.2s ease, background-color 0.2s ease;
     white-space: nowrap; /* Prevents text wrapping on smaller screens */
+    text-decoration: none; 
 }
 
 .profile-prompt-button:hover {

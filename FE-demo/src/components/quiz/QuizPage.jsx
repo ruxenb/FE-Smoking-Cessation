@@ -15,7 +15,7 @@ function QuizPage({quizId, quizUrl}) {
   const tokenType = localStorage.getItem("tokenType");
   const accessToken = localStorage.getItem("accessToken");
   const fullToken = tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
-  const { user } = useUser(); // Lấy thông tin người dùng từ context
+  const { user, refreshUser  } = useUser(); // Lấy thông tin người dùng từ context
 
   const navigate = useNavigate();
 
@@ -153,23 +153,50 @@ function QuizPage({quizId, quizUrl}) {
     };
 
     //console.log("Submitting this data to BE:", requestBody);
+    const toastId = toast.loading("Saving your profile...");
+
 
     try {
       // Gọi API để gửi dữ liệu
       const response = await submitUserQuizAnswer(requestBody, fullToken, quizUrl);
       console.log("Quiz submitted successfully:", response.data);
       // Hiển thị thông báo thành công
-      toast.success(`Quiz submitted successfully! ${response.data.message || ''}`);
+      toast.update(toastId, { render: "Profile saved! Updating your dashboard...", isLoading: true });
 
-      // Chuyển hướng người dùng về trang Dashboard sau khi thành công
+      const refreshed = await refreshUser();
+
+      if (refreshed) {
+        // Nếu refresh thành công, thông báo và điều hướng
+        toast.update(toastId, { 
+            render: "Dashboard updated! Redirecting...", 
+            type: "success", 
+            isLoading: false, 
+            autoClose: 2000 
+        });
+        // Chuyển hướng người dùng về trang Dashboard sau khi thành công
       setTimeout(() => {
         navigate('/dashboard');
       }, 1500);
+      } else {
+        // Nếu refresh thất bại, cảnh báo người dùng
+        toast.update(toastId, { 
+            render: "Profile saved, but please log in again to see the changes.", 
+            type: "warning", 
+            isLoading: false, 
+            autoClose: 5000 
+        });
+      }   
 
     } catch (err) {
       // Xử lý lỗi khi gửi dữ liệu
-      let msg = err.response?.data?.message || err.message || "Failed to submit quiz";
-      console.error("Error submitting quiz:", err.response?.data || err);
+      const errorMsg = err.response?.data?.message || err.message || "An error occurred.";
+      toast.update(toastId, { 
+          render: `Error: ${errorMsg}`, 
+          type: "error", 
+          isLoading: false, 
+          autoClose: 4000 
+      });
+      console.error("Error during submission process:", err);
     }
   };
   // Hiển thị các trạng thái của quiz

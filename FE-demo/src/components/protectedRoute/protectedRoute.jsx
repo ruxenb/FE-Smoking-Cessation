@@ -3,7 +3,7 @@
 //pass luôn cái trang mà muốn truy cấp (VD: membership checkout)
 import React from "react";
 import { useLocation, Navigate } from "react-router-dom";
-import { useUser } from "/src/userContext/UserContext";
+import { useUser } from "/src/userContext/userContext";
 
 const ProtectedRoute = ({ children, allowedRoles  }) => {
   const { user, loading } = useUser(); // lấy user từ context
