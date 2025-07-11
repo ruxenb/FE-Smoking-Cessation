@@ -3,8 +3,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../userContext/userContext';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs'; // Thư viện để xử lý ngày tháng
-import { getMembershipPackageById } from '../../services/membershipService'; // Import service mới
-import { createVnPayPayment } from '../../services/paymentService'; // Import service mới
+import { getMembershipPackageById, initiatePurchase } from '../../services/membershipService'; 
+import { createVnPayPayment } from '../../services/paymentService'; 
 import './checkoutPage.css'; 
 
 function Checkout() {
@@ -14,6 +14,7 @@ function Checkout() {
   // State để quản lý phương thức thanh toán được chọn
   const [packageDetails, setPackageDetails] = useState(null); // State để lưu thông tin gói
   const [isLoading, setIsLoading] = useState(true); // State để quản lý trạng thái loading
+  const [isProcessing, setIsProcessing] = useState(false); // Thêm state để vô hiệu hóa nút khi đang xử lý
 
  
 
@@ -109,6 +110,7 @@ useEffect(() => {
     }
 
     // Hiển thị thông báo cho người dùng biết hệ thống đang xử lý
+    setIsProcessing(true); // Bắt đầu xử lý, vô hiệu hóa nút
     const toastId = toast.loading("Processing your request...");
 
     try {
@@ -116,43 +118,49 @@ useEffect(() => {
       const accessToken = localStorage.getItem("accessToken");
       const fullToken = `${tokenType} ${accessToken}`;
 
+      // --- BƯỚC 1: KHỞI TẠO GIAO DỊCH, TẠO BẢN GHI "PENDING" ---
       // Chuẩn bị payload cho API backend theo UserMembershipDto
-      const paymentPayload = {
+      const purchasePayload = {
         userId: user.userId,
         membershipPackageId: packageDetails.id,
-        paymentMethod: "VNPay", // Chọn phương thức thanh toán VNPay
-        // Backend sẽ tự xử lý các trường còn lại như startDate, status
+        paymentMethod: "VNPay",
       };
+      const initResponse = await initiatePurchase(purchasePayload, fullToken);
+            
+      // Lấy ID của bản ghi UserMembership vừa tạo
+      const pendingMembershipId = initResponse.data.data?.id;
 
-       // --- THÊM DÒNG NÀY ĐỂ DEBUG ---
-      console.log("Sending this payload to backend:", paymentPayload);
+      if (!pendingMembershipId) {
+        throw new Error("Failed to get a transaction ID.");
+      }
 
-      const response = await createVnPayPayment(paymentPayload, fullToken);
-      
-      // Backend trả về status="Success" (chữ S viết hoa)
-      if (response.data?.status === "Success" && response.data?.data) {
-        const paymentUrl = response.data.data; // Backend trả về URL thanh toán
+      toast.update(toastId, { render: "Generating payment link..." });
 
+       // --- BƯỚC 2: TẠO URL THANH TOÁN VỚI ID GIAO DỊCH ĐÃ CÓ ---
+      const vnPayPayload = {
+        userMembershipId: pendingMembershipId
+      };
+      const paymentResponse = await createVnPayPayment(vnPayPayload, fullToken);
+
+      if (paymentResponse.data?.status === "Success" && paymentResponse.data?.data) {
+        const paymentUrl = paymentResponse.data.data;
         toast.update(toastId, {
           render: "Redirecting to payment gateway...",
           type: "info",
           isLoading: false,
           autoClose: 3000,
         });
-
-        // Chuyển hướng người dùng đến trang thanh toán của VNPay
-        window.location.href = paymentUrl;
-
-      } else {
-        const errorMsg = response.data?.message || "Failed to create payment link!";
-        toast.update(toastId, { render: errorMsg, type: "error", isLoading: false, autoClose: 5000 });
-      
-      }
-    } catch (error) {
-      const errorMsg = error.response?.data?.message || "An error occurred.";
-      toast.update(toastId, { render: `Error: ${errorMsg}`, type: "error", isLoading: false, autoClose: 5000 });
-      console.error("Failed to create VNPay payment:", error);
-    }
+        window.location.href = paymentUrl; // Chuyển hướng
+        } else {
+          const errorMsg = paymentResponse.data?.message || "Failed to create payment link!";
+          throw new Error(errorMsg);
+        }
+         } catch (error) {
+            const errorMsg = error.response?.data?.message || error.message || "An error occurred.";
+            toast.update(toastId, { render: `Error: ${errorMsg}`, type: "error", isLoading: false, autoClose: 5000 });
+            console.error("Purchase process failed:", error);
+            setIsProcessing(false); // Kích hoạt lại nút nếu có lỗi
+        }
   };
 
 
@@ -217,8 +225,8 @@ useEffect(() => {
                 <span>Total now</span>
                 <span>{planInfo.priceText}</span>
               </div>
-             {/* Thay thế thẻ <a> bằng thẻ <button> */}
-              <button className="purchase-button" onClick={handlePurchase}>
+              {/* Vô hiệu hóa nút khi đang xử lý để tránh click nhiều lần */}
+              <button className="purchase-button" onClick={handlePurchase} disabled={isProcessing}>
                 Complete Purchase
               </button>
             </div>

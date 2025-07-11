@@ -37,20 +37,22 @@ function LoginForm() {
           password: values.password,
         }),
       });
-      // Kiểm tra xem loại dữ liệu mà server trả về là gì, có chứa Content-Type hay k, có thì kiểm tra xem có phải là JSON hay không
-      const contentType = response.headers.get("Content-Type");
-      console.log("contentType:", contentType);
-      let result;
-      // Nếu response có Content-Type là application/json, thì parse kết quả trả về thành JSON
-      if (contentType && contentType.includes("application/json")) {
-        result = await response.json(); // result là một đối tượng JSON, chứa dữ liệu đăng nhập trả về từ server
-      }
-      // Nếu không, thì trả về một thông báo lỗi
-      else {
-        // nếu không phải là JSON, có thể là lỗi server hoặc không phải định dạng JSON
-        const text = await response.text();
-        result = { message: text };
-      }
+      const result = await response.json(); 
+
+      // // Kiểm tra xem loại dữ liệu mà server trả về là gì, có chứa Content-Type hay k, có thì kiểm tra xem có phải là JSON hay không
+      // const contentType = response.headers.get("Content-Type");
+      // console.log("contentType:", contentType);
+      
+      // // Nếu response có Content-Type là application/json, thì parse kết quả trả về thành JSON
+      // if (contentType && contentType.includes("application/json")) {
+      //   result = await response.json(); // result là một đối tượng JSON, chứa dữ liệu đăng nhập trả về từ server
+      // }
+      // // Nếu không, thì trả về một thông báo lỗi
+      // else {
+      //   // nếu không phải là JSON, có thể là lỗi server hoặc không phải định dạng JSON
+      //   const text = await response.text();
+      //   result = { message: text };
+      // }
       console.log("response:", response);
       console.log("result:", result);
       //Kiểm tra xem phản hồi HTTP có thành công không (status code từ 200–299) và có token được trả về hay không
@@ -85,15 +87,37 @@ function LoginForm() {
         });
         // log lại thông tin đã được dùng để đăng nhập thành công
 
+        // --- LOGIC CHUYỂN HƯỚNG MỚI DỰA TRÊN DỮ LIỆU TỨC THÌ ---
+        // Lấy vai trò trực tiếp từ `result.user` vừa nhận được
+        const userRole = result.user.role;
+
         // 1. check nếu trạng trái 'from' tồn tại ở redirect.
         // 2. nếu nó tồn tại, dùng đường(path) đó.
         // 3. nếu ko, dùng default '/dashboard'.
-        const from = location.state?.from?.pathname || "/dashboard";
+        let defaultRedirectPath = '/home'; // Trang mặc định nếu role không xác định
 
-        console.log("Login successful, redirecting to:", from);
+        console.log("Login successful, redirecting to:", defaultRedirectPath);
 
-        // đưa tới nơi đến dự định (hoặc dashboard khi fall)
-        navigate(from, { replace: true });
+        // 1. Xác định trang dashboard mặc định dựa trên role của người dùng
+        if (userRole === 'MEMBER') {
+          defaultRedirectPath = '/dashboard';
+        } else if (userRole === 'COACH') {
+          defaultRedirectPath = '/coach-dashboard';
+        } else if (userRole === 'ADMIN') {
+          defaultRedirectPath = '/admin-panel'; // Ví dụ cho admin
+        }
+        
+        // 2. Lấy trang đích mà người dùng đang cố gắng truy cập (nếu có)
+          const from = location.state?.from?.pathname;
+
+        // 3. Quyết định trang cuối cùng sẽ chuyển hướng đến
+        //    Ưu tiên trang `from` nếu nó tồn tại, nếu không thì dùng trang mặc định theo role.
+        const destination = from || defaultRedirectPath;
+
+        console.log(`Login successful. Role: ${userRole}. Redirecting to: ${destination}`);
+
+        // 4. Thực hiện chuyển hướng
+        navigate(destination, { replace: true });
       } else {
         // Đăng nhập sai thông tin
         console.warn("Login failed:", result.message);

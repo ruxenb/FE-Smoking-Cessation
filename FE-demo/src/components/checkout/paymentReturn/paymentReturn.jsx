@@ -32,7 +32,9 @@ function PaymentReturnPage() {
       // bắt người dùng đăng nhập lại. Khi đó, API login sẽ trả về
       // object user đã được cập nhật với gói membership ACTIVE.
       logout(); // Xóa thông tin user cũ khỏi localStorage và context
-      navigate('/login');
+      // Chuyển hướng đến trang login và thay thế entry hiện tại trong history.
+      // Quan trọng nhất là `state: {}` để đảm bảo không có `from` nào được truyền đi.
+      navigate('/login', { replace: true, state: {} });
       toast.info("Please log in again to update your account status.", { autoClose: 5000 });
   };
 

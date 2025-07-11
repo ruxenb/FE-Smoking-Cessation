@@ -25,6 +25,8 @@ import Feedback from "./pages/FeedbackPage";
 import Dashboard from "./pages/DashboardPage";
 import CheckoutPage from "./pages/CheckoutPage"; 
 import SettingsPage from "./components/dashboard/sidebarPages/SettingsPage";
+import CoachDashboard from "./pages/CoachDashboardPage"; // <-- Import trang mới
+
 
 import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn";
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
@@ -50,12 +52,15 @@ function App() {
     { path: "/oauth2/redirect", element: <OAuth2RedirectHandler /> },
     { path: "/blog", element: <BlogPage /> },
     { path: "/blog/:id", element: <PostDetail /> },
+    // { path: "/coach-dashboard", element: <CoachDashboard /> },
+
+
     // --- Protected Routes (yêu cầu người dùng login) ---
     // bao các page bằng ProtectedRoute component.
     {
       path: "/dashboard",
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute allowedRoles={['MEMBER']}> 
           <Dashboard />
         </ProtectedRoute>
       ),
@@ -81,6 +86,14 @@ function App() {
       element: (
         <ProtectedRoute>
           <QuitPlanPage/>
+          </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/coach-dashboard",
+      element: (
+        <ProtectedRoute allowedRoles={['COACH']}>
+          <CoachDashboard />
         </ProtectedRoute>
       ),
     },

@@ -113,7 +113,7 @@ const HomePage = () => {
           <p className="footer-title">Ready to begin?</p>
           <button className="cta-button secondary">Join the Community Today</button>
           <div className="footer-bottom">
-            <p>© 2024 Smoking Cessation Support Platform. All Rights Reserved.</p>
+            <p>© 2025 Smoking Cessation Support Platform. All Rights Reserved.</p>
           </div>
         </div>
       </footer>
