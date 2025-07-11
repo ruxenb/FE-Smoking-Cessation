@@ -16,7 +16,9 @@ function MainContent({
   const lifeReclaimed = "28";
   const streakCount = "92";
   const cigsAvoided = "1,840";
-
+  const tokenType = localStorage.getItem("tokenType");
+  const accessToken = localStorage.getItem("accessToken");
+  const fullToken = tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
   const achievements = [
     { name: "First 24 Hours", icon: "🏅", locked: false },
     { name: "Week One Warrior", icon: "🏅", locked: false },
@@ -72,7 +74,7 @@ function MainContent({
         {currentQuitPlan && (
           <QuitProgressCard
             quitplan={currentQuitPlan}
-            progressLogs={currentQuitPlan.progressLogs || []}
+            fullToken={fullToken}
           />
         )}
       </section>

@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import "./quitProgressCard.css";
 import { parseDate, formatDate } from "../../services/dateUtils";
+import { saveQuitProgressLog, updateQuitProgressLog } from "../../services/quitPlanService";
+import { toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
 
-function QuitProgressCard({ quitplan, progressLogs = [] }) {
+function QuitProgressCard({ quitplan, fullToken }) {
   const [selectedLog, setSelectedLog] = useState(null);
-  const startDate= quitplan.startDate;
+  const [cigarettes, setCigarettes] = useState("");
+  const [note, setNote] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const startDate = quitplan.startDate;
   const targetEndDate = quitplan.targetEndDate;
-
-  // Dùng parseDate đã được định nghĩa
+  const progressLogs = quitplan.progressLogs || [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const todayStr = formatDate(today); // "dd-MM-yyyy"
+  const todayStr = formatDate(today);
+  const navigate = useNavigate();
 
-  // Generate list of days between start and end
   const generateDaysArray = (startStr, endStr) => {
     const start = parseDate(startStr);
     const end = parseDate(endStr);
@@ -20,10 +25,8 @@ function QuitProgressCard({ quitplan, progressLogs = [] }) {
 
     const dates = [];
     let current = new Date(start);
-    current.setHours(0, 0, 0, 0);
     while (current <= end) {
-      const copy = new Date(current);
-      dates.push(copy);
+      dates.push(new Date(current));
       current.setDate(current.getDate() + 1);
     }
     return dates;
@@ -31,20 +34,71 @@ function QuitProgressCard({ quitplan, progressLogs = [] }) {
 
   const dateList = generateDaysArray(startDate, targetEndDate);
 
-  // Tạo map để tra nhanh log theo ngày
   const logMap = {};
   progressLogs.forEach((log) => {
-    const logDate = parseDate(log.createdAt);
-    const formatted = formatDate(logDate);
-    logMap[formatted] = log;
+    const parsed = parseDate(log.createdAt); // <-- Sửa ở đây
+    if (parsed) {
+      const formatted = formatDate(parsed);
+      logMap[formatted] = log;
+      //console.log("[Mapped Log]", log.createdAt, "->", formatted);
+    } else {
+      console.warn("[Invalid log date]", log.createdAt);
+    }
   });
+
+  const handleSelectLog = (log, dateStr) => {
+    const existingLog = log || { createdAt: dateStr };
+    setSelectedLog(existingLog);
+    setCigarettes(existingLog.cigarettesSmoked ?? "");
+    setNote(existingLog.notes ?? "");
+  };
+
+  const handleSave = async () => {
+  const isExistingLog = !!selectedLog?.logId;
+
+  const payload = {
+    quitPlanId: quitplan.id,
+    cigarettesSmoked: parseInt(cigarettes) || null,
+    notes: note,
+    createdAt: selectedLog.createdAt,
+  };
+
+  setIsSaving(true);
+  try {
+    if (isExistingLog) {
+      // Gọi API update nếu có logId
+      await updateQuitProgressLog(selectedLog.logId, payload, fullToken);
+    } else {
+      // Gọi API create nếu chưa có logId
+      await saveQuitProgressLog(payload, fullToken);
+    }
+
+    toast.success("Progress saved successfully!", {
+      theme: "colored",
+      position: "top-right",
+    });
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to save progress. Please try again.", {
+      theme: "dark",
+      position: "top-left",
+    });
+  } finally {
+    setIsSaving(false);
+  }
+};
+
 
   return (
     <div className="quit-progress-container">
       <h1>Quit Journey Progress</h1>
       <div className="road-track">
         {dateList.map((date, index) => {
-          const dateStr = formatDate(date); // "dd-MM-yyyy"
+          const dateStr = formatDate(date);
           const log = logMap[dateStr];
           const isFilled = !!log;
 
@@ -67,10 +121,14 @@ function QuitProgressCard({ quitplan, progressLogs = [] }) {
               key={dateStr}
               className={classNames}
               title={dateStr}
-              onClick={() => setSelectedLog(log || { createdAt: dateStr })}
+              onClick={() => handleSelectLog(log, dateStr)}
             >
               <div className="day-label">
-                {isStart ? `Day ${index + 1} 🚩` : isEnd ? `Day ${index + 1} 🎉` : `Day ${index + 1}`}
+                {isStart
+                  ? `Day ${index + 1} 🚩`
+                  : isEnd
+                  ? `Day ${index + 1} 🎉`
+                  : `Day ${index + 1}`}
               </div>
               <div className="info-label">
                 {date.toLocaleDateString("en-GB", {
@@ -88,15 +146,33 @@ function QuitProgressCard({ quitplan, progressLogs = [] }) {
       </div>
 
       {selectedLog && (
-        <div className="log-details">
-          <h3>Details for {selectedLog.createdAt}</h3>
-          <p>
-            <strong>Cigarettes Smoked:</strong>{" "}
-            {selectedLog.cigarettesSmoked ?? "N/A"}
-          </p>
-          <p>
-            <strong>Notes:</strong> {selectedLog.notes || "No notes recorded."}
-          </p>
+        <div className="overlay">
+          <div className="modal">
+            <h3>Log for {selectedLog.createdAt}</h3>
+            <div>
+              <label>Number of Cigarettes Smoked:</label>
+              <input
+                type="number"
+                min="0"
+                value={cigarettes}
+                onChange={(e) => setCigarettes(e.target.value)}
+              />
+            </div>
+            <div>
+              <label>Note:</label>
+              <textarea
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                rows={3}
+              />
+            </div>
+            <div className="modal-buttons">
+              <button onClick={handleSave} disabled={isSaving}>
+                {isSaving ? "Saving..." : "Save"}
+              </button>
+              <button onClick={() => setSelectedLog(null)}>Cancel</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
