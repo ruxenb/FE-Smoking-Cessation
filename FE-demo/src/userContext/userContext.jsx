@@ -50,6 +50,7 @@ export function UserProvider({ children }) {
     localStorage.removeItem("user");
     localStorage.removeItem("username");
     localStorage.removeItem("email");
+    localStorage.removeItem("quitplan");
     setUser(null); // Cập nhật state user về null
   };
 

@@ -1,0 +1,89 @@
+.quit-progress-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.road-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 20px 0;
+}
+
+.road-segment {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #eee;
+  border: 2px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  transition: transform 0.2s;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.road-segment:hover {
+  transform: scale(1.05);
+}
+
+.road-segment.start {
+  background-color: #4caf50;
+  border-color: #2e7d32;
+  color: white;
+}
+
+.road-segment.end {
+  background-color: #ffb300;
+  border-color: #ffa000;    
+  color: white;
+}
+
+.road-segment.today {
+  background-color: #2e7d32;
+  border-color: green;
+  font-weight: bold;
+  color: white;
+}
+
+.road-segment.past {
+  background-color: #43cc40;
+  border-color: #88fe86;
+  color: white;
+}
+
+.road-segment.future {
+  background-color: #607d8b;
+  border-color: #455a64;
+  color: white;
+}
+
+
+.road-segment.filled {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.day-label {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.info-label {
+  font-size: 11px;
+  line-height: 1;
+  color:white;
+  white-space: nowrap;
+}
+
+.log-details {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 6px;
+}

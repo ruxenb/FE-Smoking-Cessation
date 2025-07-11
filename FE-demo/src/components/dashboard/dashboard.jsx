@@ -2,9 +2,16 @@ import React from "react";
 import StatCard from "./StatCard";
 import AchievementCard from "./AchievementCard";
 import CTASection from "./CTASection";
+import QuitProgressCard from "./QuitProgressCard";
 import "./dashboard.css";
 
-function MainContent({ username, hasProfile, onCreateProfileClick, onEditProfileClick, currentQuitPlan }){
+function MainContent({
+  username,
+  hasProfile,
+  onCreateProfileClick,
+  onEditProfileClick,
+  currentQuitPlan,
+}) {
   const moneySaved = "1,244.50";
   const lifeReclaimed = "28";
   const streakCount = "92";
@@ -35,12 +42,17 @@ function MainContent({ username, hasProfile, onCreateProfileClick, onEditProfile
         </div>
       </header>
 
-       {/* --- HIỂN THỊ CÓ ĐIỀU KIỆN --- */}
+      {/* --- HIỂN THỊ CÓ ĐIỀU KIỆN --- */}
       {/* Nếu CHƯA có profile, hiển thị prompt tạo mới */}
       {!hasProfile ? (
         <section className="profile-prompt-section">
-          <p>Start your quit-smoking journey by creating your personal profile 😗</p>
-          <button className="profile-prompt-button" onClick={onCreateProfileClick}>
+          <p>
+            Start your quit-smoking journey by creating your personal profile 😗
+          </p>
+          <button
+            className="profile-prompt-button"
+            onClick={onCreateProfileClick}
+          >
             Create Smoking Profile
           </button>
         </section>
@@ -48,12 +60,22 @@ function MainContent({ username, hasProfile, onCreateProfileClick, onEditProfile
         // Nếu ĐÃ có profile, hiển thị prompt cập nhật
         <section className="profile-prompt-section">
           <p>Your profile is ready. Update it if your habits change.</p>
-          <button className="profile-prompt-button" onClick={onEditProfileClick}>
+          <button
+            className="profile-prompt-button"
+            onClick={onEditProfileClick}
+          >
             Update Profile
           </button>
         </section>
       )}
-
+      <section className="quit-progress-section">
+        {currentQuitPlan && (
+          <QuitProgressCard
+            quitplan={currentQuitPlan}
+            progressLogs={currentQuitPlan.progressLogs || []}
+          />
+        )}
+      </section>
 
       <section className="stats-grid">
         {/*

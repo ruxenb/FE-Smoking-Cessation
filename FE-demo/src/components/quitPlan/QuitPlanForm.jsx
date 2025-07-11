@@ -145,7 +145,7 @@ function QuitPlanForm({ quitMethods, onSubmit, initialValues, loading }) {
             </div>
 
             <Form.Item
-                label="Cigarettes Smoked Daily (before quitting)"
+                label="Cigarettes Smoked Daily"
                 name="dailySmoke"
                 rules={[
                     { required: true, message: 'Please input daily cigarette count!' },
