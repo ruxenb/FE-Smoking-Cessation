@@ -16,6 +16,9 @@ export default function BlogApp() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('Recent');
 
+  // Check login status
+  const user = JSON.parse(localStorage.getItem("user"));
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -73,7 +76,7 @@ export default function BlogApp() {
 
   return (
     <>
-    <Navbar />
+    {!user && <Navbar />}
     <div className="blog-container">
       <div className="header">
         <h1>
