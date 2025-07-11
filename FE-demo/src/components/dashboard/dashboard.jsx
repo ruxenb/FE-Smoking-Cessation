@@ -5,14 +5,14 @@ import CTASection from "./CTASection";
 import QuitProgressCard from "./QuitProgressCard";
 import "./dashboard.css";
 import { Link } from 'react-router-dom';
-import { useUser } from '../../userContext/userContext'; // Import useUser
-import { submitUserQuizAnswer } from '../../services/quizService';
+import SmokingProfileInfo from './smokeInfo'; // <-- BƯỚC 3.1: Import component mới
 
 
 function MainContent({
   username,
   hasProfile,
   currentQuitPlan,
+  smokingProfile, // <-- BƯỚC 3.2: Nhận smokingProfile làm prop
 }) {
   const moneySaved = "1,244.50";
   const lifeReclaimed = "28";
@@ -102,6 +102,8 @@ function MainContent({
           label="Cigarettes Avoided"
         />
       </section>
+
+      <SmokingProfileInfo smokingProfile={smokingProfile} />
 
       <section className="achievements-section">
         <div className="section-header">

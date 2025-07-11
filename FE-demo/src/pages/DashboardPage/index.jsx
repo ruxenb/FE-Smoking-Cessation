@@ -151,6 +151,8 @@ function Dashboard() {
             onCreateProfileClick={openProfileOverlay}
             onEditProfileClick={openProfileOverlay}
             currentQuitPlan={user?.quitplan}
+            smokingProfile={user?.smokingProfile} 
+
           />
         );
       case "achievements":
