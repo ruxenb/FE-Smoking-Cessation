@@ -3,7 +3,6 @@ import "./quitProgressCard.css";
 import { parseDate, formatDate } from "../../services/dateUtils";
 import { saveQuitProgressLog, updateQuitProgressLog } from "../../services/quitPlanService";
 import { toast } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
 
 function QuitProgressCard({ quitplan, fullToken }) {
   const [selectedLog, setSelectedLog] = useState(null);
@@ -16,7 +15,6 @@ function QuitProgressCard({ quitplan, fullToken }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayStr = formatDate(today);
-  const navigate = useNavigate();
 
   const generateDaysArray = (startStr, endStr) => {
     const start = parseDate(startStr);
@@ -130,7 +128,7 @@ function QuitProgressCard({ quitplan, fullToken }) {
                   ? `Day ${index + 1} 🎉`
                   : `Day ${index + 1}`}
               </div>
-              <div className="info-label">
+              <div className="roadinfo-label">
                 {date.toLocaleDateString("en-GB", {
                   day: "2-digit",
                   month: "2-digit",
