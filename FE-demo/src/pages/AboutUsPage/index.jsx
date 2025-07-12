@@ -1,10 +1,10 @@
 import React from "react";
 import "./about.css";
+import { Navbar } from "../../components/home/homePage";
 function AboutUsPage() {
   return (
     <div>
-      <h1>Welcome to the Gay</h1>
-      <img src="/public/images/gay.jpg" alt="About Us" className="gay-image" />
+      <Navbar />
     </div>
   );
 }

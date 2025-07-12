@@ -1,12 +1,15 @@
 import React from 'react';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
+import { useUser } from '../../userContext/userContext';
 
 // component đơn giản cho icon
 const Icon = ({ children }) => <div className="icon-placeholder">{children}</div>;
 const logoUrl = 'https://i.pravatar.cc/40?img=1'; // ảnh chờ cho logo project
+
 // --- NAVBAR COMPONENT ---
 export const Navbar = () => {
+  const {user} = useUser();
   return (
     <div className="navbar-container">
       <nav className="navbar">
@@ -19,8 +22,14 @@ export const Navbar = () => {
           <Link to="/about">About us</Link>
           <Link to="/membership">Membership</Link>
           <Link to="/blog">Blog</Link>
-          <Link to="/register" className="navbar-button">Get Started</Link>
-          <Link to="/login">Login</Link>
+          {user ? (
+            <Link to="/dashboard" className="navbar-button">Dashboard</Link>
+          ) : (
+            <>
+              <Link to="/register" className="navbar-button">Get Started</Link>
+              <Link to="/login">Login</Link>
+            </>
+          )}
         </div>
       </nav>
     </div>

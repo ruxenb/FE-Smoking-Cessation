@@ -159,7 +159,6 @@ function LoginForm() {
         name="basic"
         layout="vertical" /* các label(nhãn) sẽ nằm phía trên các thẻ input */
         labelCol={{ span: 24 }} /* độ rộng của label */
-        style={{ maxWidth: 600 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}

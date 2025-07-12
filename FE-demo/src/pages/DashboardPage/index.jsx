@@ -9,10 +9,11 @@ import SettingsPage from "../../components/dashboard/sidebarPages/SettingsPage.j
 import { useUser } from "../../userContext/userContext";
 import { createSmokingProfile, updateSmokingProfile } from "../../services/smokingProfileService"; // Import service mới
 import { fetchAndSaveCurrentQuitPlan } from "../../services/quitPlanService"; // <-- Thêm để fetch quit plan mới nhất
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const { user, setUser } = useUser(); // <-- Thêm dòng này
-
+  const navigate = useNavigate();
   // Kiểm tra xem sidebar đóng hay ko
   const [isCollapsed, setIsCollapsed] = useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -143,6 +144,8 @@ function Dashboard() {
   // Render the correct page based on state
   const renderCurrentPage = () => {
     switch (currentPage) {
+      case "home":
+        navigate("/"); // Redirect to home
       case "dashboard" /* truy cập tới dashboard khi đăng nhập thành công, truyền data */:
         return (
           <MainContent

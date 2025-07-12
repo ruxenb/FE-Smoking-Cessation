@@ -31,15 +31,14 @@
   align-items: center;
   width: 100%;
   height: 100%; /* hoặc chiều cao cố định nếu bạn muốn */
-  padding: 0px 40px;
+  padding: 0px 20px;
   text-align: center;
   position: relative;
   animation: fadeInDown 2s ease-out; /* animation drop down  */
 }
 
 .login-form form {
-  width: 100%;
-  max-width: 600px;
+  width: 90%;
   display: flex;
   flex-direction: column;
   flex-grow: 1; /* để form chiếm phần lớn chiều cao */
@@ -211,4 +210,29 @@
   background: #1e1e2f;
   color: #fff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .login-form {
+    padding: 0 10px;
+  }
+
+  .login-form form {
+    max-width: 100%;
+  }
+
+  .alt-login-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .alt-login-buttons button {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .remember-me-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

@@ -24,7 +24,7 @@ function RegisterForm() {
       const submitData = {
         ...values, // ...values có nghĩa là lấy tất cả các trường từ form
         dob: dayjs(values.dob).format(
-          "YYYY-MM-DD"
+          "DD-MM-YYYY"
         ) /* dùng thư viện dayjs để định dạng lại ngày tháng datepicker của antd */,
       };
       // Xoá confirm_password khỏi payload trước khi gửi về Backendf
@@ -36,7 +36,7 @@ function RegisterForm() {
       const response = await register(submitData);
 
       if (response.status == 200 || response.status == 201) {
-        toast.success("Đăng ký tài khoản thành công ^3^");
+        toast.success("Registration successful!");
         console.log("Register success:", response.data);
         // Sau 3 giây chuyển trang
         setTimeout(() => {
@@ -53,7 +53,7 @@ function RegisterForm() {
         toast.error(responseData, { theme: "dark" });
         console.log(responseData);
       } else {
-        toast.error("Đăng ký tài khoản thất bại, vui lòng thử lại!", {
+        toast.error("Registration failed, please try again!", {
           theme: "dark",
         });
       }

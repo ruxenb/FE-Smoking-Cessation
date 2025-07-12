@@ -1,12 +1,12 @@
 /* Dùng cho AuthenTemplate (index.jsx)*/
 .authen-template {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
+  align-items: stretch; 
 }
 .authen-template-form {
   width: 40%;
-  height: 100%;
   background-color: lightgray;
   display: flex;
   justify-content: center; /* căn chỉnh phần tử theo chiều chính */
@@ -18,7 +18,8 @@
   align-items: center;
   justify-content: center;
   width: 60%;
-  height: 100%;
+  height: auto;
+  min-height: 100vh;
   overflow: hidden;
   background-image: url("/public/images/Image3.png");
   background-repeat: no-repeat;

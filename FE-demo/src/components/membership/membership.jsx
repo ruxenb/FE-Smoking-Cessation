@@ -6,30 +6,6 @@ import { useUser } from "../../userContext/userContext";
 
 const logoUrl = 'https://i.pravatar.cc/40?img=1'; // ảnh chờ cho logo project
 
-
-const Navbar = () => {
-  return (
-    <div className="navbar-container">
-      <nav className="navbar">
-        <a href="/">
-          <div className="navbar-left">
-        
-              <img src={logoUrl} alt="Site Logo" className="logo-img" />
-                  
-            <Link to="/" className="site-name">NicoClear</Link>
-          </div>
-        </a>
-        <div className="navbar-right">
-
-          <a href="login" className="navbar-button">Login</a>
-
-        </div>
-      </nav>
-    </div>
-  );
-};
-
-
 function Membership() {
   const { user } = useUser(); // Lấy thông tin user từ context
 
@@ -121,7 +97,7 @@ function Membership() {
   return (
     <div className="membership-page">
 
-      <Navbar />
+      {/* <Navbar /> */}
       {/* Header Section */}
       <div className="page-header">
         <h1>Succeed in quitting smoking with us</h1>
