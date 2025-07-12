@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../configs/axios';
-import './BlogApp.css'; // Reuse the same CSS
+import './BlogApp.css';
+import { Navbar } from '../../components/home/homePage';
+import CommentSection from './CommentSection';
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -11,6 +13,7 @@ export default function PostDetail() {
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(true);
   const [likes, setLikes] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -21,13 +24,19 @@ export default function PostDetail() {
           api.get(`/comments/post/${id}`),
           api.get(`/likes/count?postId=${id}`)
         ]);
-        
         setPost(postRes.data.data);
         setComments(commentsRes.data.data);
         setLikes(likesRes.data.data);
-        
+
         const storedUser = localStorage.getItem("user");
-        if (storedUser) setUser(JSON.parse(storedUser));
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+
+          // Check if user liked this post
+          const statusRes = await api.get(`/likes/status?postId=${id}&userId=${parsedUser.userId}`);
+          setIsLiked(statusRes.data.data);
+        }
       } catch (err) {
         console.error("Failed to fetch post data", err);
       } finally {
@@ -45,10 +54,20 @@ export default function PostDetail() {
     }
 
     try {
-      await api.post(`/likes/like?postId=${id}&userId=${user.id}`);
-      setLikes(likes + 1);
+      if (isLiked) {
+        await api.post(`/likes/unlike?postId=${id}&userId=${user.userId}`);
+      } else {
+        await api.post(`/likes/like?postId=${id}&userId=${user.userId}`);
+      }
+      // Always re-fetch the latest like count and status from backend
+      const [likesRes, statusRes] = await Promise.all([
+        api.get(`/likes/count?postId=${id}`),
+        api.get(`/likes/status?postId=${id}&userId=${user.userId}`)
+      ]);
+      setLikes(likesRes.data.data);
+      setIsLiked(statusRes.data.data);
     } catch (err) {
-      console.error("Failed to like post", err);
+      console.error("Error toggling like:", err);
     }
   };
 
@@ -63,13 +82,13 @@ export default function PostDetail() {
     try {
       await api.post('/comments', {
         postId: id,
-        userId: user.id,
+        userId: user.userId,
         content: newComment
       });
-      
+      setNewComment('');
+      // Refresh comments
       const res = await api.get(`/comments/post/${id}`);
       setComments(res.data.data);
-      setNewComment('');
     } catch (err) {
       console.error("Failed to post comment", err);
     }
@@ -83,96 +102,72 @@ export default function PostDetail() {
     return <div className="no-posts">Post not found</div>;
   }
 
+  // Only show edit button if user is owner
+  const isOwner = user && post && user.userId === post.userId;
+
   return (
-    <div className="blog-container">
-      <div className="header">
-        <h1>
-          <div className="header-icon">🌱</div>
-          Post Details
-        </h1>
-      </div>
+    <>
+      {!user && <Navbar />}
+      <div className="blog-container">
+        <div className="header">
+          <h1>
+            <div className="header-icon">🌱</div>
+            Green Posts
+          </h1>
+        </div>
 
-      <div className="content-area">
-        <button 
-          onClick={() => navigate(-1)}
-          className="back-button"
-        >
-          ← Back to Posts
-        </button>
+        <div className="content-area">
+          <button
+            onClick={() => navigate(-1)}
+            className="back-button"
+          >
+            ← Back to Blog
+          </button>
 
-        <div className="post-detail-card">
-          <div className="post-header">
-            <div className="user-avatar">U{post.userId}</div>
-            <div className="post-meta">
-              <div className="post-title">{post.title}</div>
-              <div className="post-info">
-                <span>Posted by user {post.userId}</span>
-                <span>•</span>
-                <span>{new Date(post.createdAt).toLocaleDateString()}</span>
-                <span className="tag">{post.category || 'Journey'}</span>
+          <div className="post-detail-card">
+            <div className="post-header">
+              <div className="user-avatar">U{post.userId}</div>
+              <div className="post-meta">
+                <div className="post-title">{post.title}</div>
+                <div className="post-info">
+                  <span>Posted by user {post.userId}</span>
+                  <span>•</span>
+                  <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                  <span className="tag">{post.category || 'Journey'}</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="post-content">
-            {post.content}
-          </div>
+            <div className="post-content">
+              {post.content}
+            </div>
 
-          <div className="post-actions">
-            <button className="action-btn" onClick={handleLike}>
-              <span>❤️</span>
-              <span className="like-count">{likes} likes</span>
-            </button>
-            <button className="action-btn">
-              <span>💬</span>
-              <span>{comments.length} comments</span>
-            </button>
-            <button className="action-btn">
-              <span>📤</span>
-              <span>Share</span>
-            </button>
-          </div>
-
-          <div className="comments-section">
-            <h3 className="comments-title">💬 Comments ({comments.length})</h3>
-            
-            {comments.length === 0 ? (
-              <p className="no-comments">No comments yet. Be the first to comment!</p>
-            ) : (
-              <div className="comments-list">
-                {comments.map(comment => (
-                  <div key={comment.commentId} className="comment">
-                    <div className="comment-header">
-                      <span className="comment-user">User {comment.userId}</span>
-                      <span className="comment-date">
-                        {new Date(comment.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <div className="comment-content">{comment.content}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <form onSubmit={handleCommentSubmit} className="comment-form">
-              <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Write your comment..."
-                className="comment-input"
-                rows="3"
-              />
-              <button 
-                type="submit" 
-                className="comment-submit"
-                disabled={!newComment.trim()}
+            <div className="post-actions">
+              <button
+                className={`action-btn ${isLiked ? 'liked' : ''}`}
+                onClick={handleLike}
               >
-                Post Comment
+                <span>{isLiked ? '❤️' : '🤍'}</span>
+                <span className="like-count">{likes} likes</span>
               </button>
-            </form>
+              <button className="action-btn">
+                <span>💬</span>
+                <span>{comments.length} comments</span>
+              </button>
+              {isOwner && (
+                <button
+                  className="edit-btn"
+                  onClick={() => navigate(`/blog/${id}/edit`)}
+                >
+                  Edit Post
+                </button>
+              )}
+            </div>
+
+            <CommentSection postId={id} user={user} />
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -17,6 +17,8 @@ import CommunityPage from "./pages/CommunityPage";
 
 import BlogPage from "./pages/BlogPage";
 import PostDetail from "./components/blog/PostDetail"; // Import PostDetail component
+import CreatePost from "./components/blog/CreatePost";
+import EditPost from "./components/blog/EditPosts"; // Import EditPost component
 
 import SmokingQuiz from "./pages/SmokingQuizPage";
 import QuitPlanPage from "./pages/QuitPlanPage";
@@ -51,6 +53,8 @@ function App() {
     { path: "/community", element: <CommunityPage /> },
     { path: "/oauth2/redirect", element: <OAuth2RedirectHandler /> },
     { path: "/blog", element: <BlogPage /> },
+    { path: "/blog/new", element: <ProtectedRoute><CreatePost /></ProtectedRoute> },
+    { path: "/blog/:id/edit", element: <ProtectedRoute><EditPost /></ProtectedRoute> },
     { path: "/blog/:id", element: <PostDetail /> },
     // { path: "/coach-dashboard", element: <CoachDashboard /> },
 
@@ -65,6 +69,7 @@ function App() {
         </ProtectedRoute>
       ),
     },
+    
     {
       path: "/smoking-quiz",
       element: (

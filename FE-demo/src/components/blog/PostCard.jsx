@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
+import api from '../../configs/axios';
 
-export default function PostCard({ post, onLike }) {
-  const [likes, setLikes] = useState(post.likes || 0);
+export default function PostCard({ post }) {
   const navigate = useNavigate();
-  
-  const handleLike = (e) => {
-    e.stopPropagation();
-    setLikes(likes + 1);
-    onLike(post.postId);
-  };
+  const [likes, setLikes] = useState(0);
+  const [commentsCount, setCommentsCount] = useState(0);
+
+  useEffect(() => {
+    const fetchMeta = async () => {
+      try {
+        const likeRes = await api.get(`/likes/count?postId=${post.postId}`);
+        const commentRes = await api.get(`/comments/post/${post.postId}`);
+        setLikes(likeRes.data.data || 0);
+        setCommentsCount((commentRes.data.data && commentRes.data.data.length) || 0);
+      } catch (err) {
+        setLikes(0);
+        setCommentsCount(0);
+      }
+    };
+    fetchMeta();
+  }, [post.postId]);
 
   const handleCardClick = () => {
     navigate(`/blog/${post.postId}`);
@@ -31,18 +42,15 @@ export default function PostCard({ post, onLike }) {
         </div>
       </div>
       <div className="post-actions">
-        <button className="action-btn" onClick={handleLike}>
+        <button className="action-btn" disabled>
           <span>❤️</span>
           <span className="like-count">{likes}</span>
         </button>
-        <button className="action-btn">
+        <button className="action-btn" disabled>
           <span>💬</span>
-          <span>{post.commentCount || 0} comments</span>
+          <span>{commentsCount} comments</span>
         </button>
-        <button className="action-btn">
-          <span>📤</span>
-          <span>Share</span>
-        </button>
+        
       </div>
     </div>
   );
