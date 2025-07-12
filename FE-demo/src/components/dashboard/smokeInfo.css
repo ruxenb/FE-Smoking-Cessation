@@ -3,7 +3,7 @@
     padding: 24px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-top: 24px; /* Khoảng cách với phần tử bên trên */
+    margin:24px 0; /* Khoảng cách với phần tử bên trên và dưới */
 }
 
 /* Grid layout for info items */
@@ -45,4 +45,8 @@
     font-size: 1.125rem; /* 18px */
     font-weight: 600;
     color: var(--text-primary);
+}
+
+.section-header{
+    color: green;
 }

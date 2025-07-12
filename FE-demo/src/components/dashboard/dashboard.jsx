@@ -46,6 +46,8 @@ function MainContent({
         </div>
       </header>
 
+      <SmokingProfileInfo smokingProfile={smokingProfile} />
+
       {/* --- HIỂN THỊ CÓ ĐIỀU KIỆN --- */}
       {/* Nếu CHƯA có profile, hiển thị prompt tạo mới */}
       {!hasProfile ? (
@@ -71,6 +73,7 @@ function MainContent({
           <QuitProgressCard
             quitplan={currentQuitPlan}
             fullToken={fullToken}
+            costPerPack={smokingProfile?.costPerPack || 0} // Truyền giá trị costPerPack từ smokingProfile
           />
         )}
       </section>
@@ -83,7 +86,7 @@ function MainContent({
           icon="💰"
           iconClass="card-icon--money"
           value={`$${moneySaved}`}
-          label="Money Saved"
+          label="Total Money Saved"
         />
         <StatCard
           icon="❤️"
@@ -101,11 +104,9 @@ function MainContent({
           icon="🚭"
           iconClass="card-icon--avoided"
           value={cigsAvoided}
-          label="Cigarettes Avoided"
+          label="Total Cigarettes Avoided"
         />
       </section>
-
-      <SmokingProfileInfo smokingProfile={smokingProfile} />
 
       <section className="achievements-section">
         <div className="section-header">

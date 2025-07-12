@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import "./quitProgressCard.css";
 import { parseDate, formatDate } from "../../services/dateUtils";
-import { saveQuitProgressLog, updateQuitProgressLog } from "../../services/quitPlanService";
+import {
+  saveQuitProgressLog,
+  updateQuitProgressLog,
+  cancelQuitPlan,
+} from "../../services/quitPlanService";
 import { toast } from "react-toastify";
+import StatCard from "./StatCard";
+import { FaPiggyBank } from "react-icons/fa";
 
-function QuitProgressCard({ quitplan, fullToken }) {
+function QuitProgressCard({ quitplan, fullToken, costPerPack }) {
   const [selectedLog, setSelectedLog] = useState(null);
   const [cigarettes, setCigarettes] = useState("");
   const [note, setNote] = useState("");
@@ -43,7 +49,24 @@ function QuitProgressCard({ quitplan, fullToken }) {
       console.warn("[Invalid log date]", log.createdAt);
     }
   });
+  //Hủy bỏ Quit Plan
+  const handleCancelQuitPlan = async () => {
+    if (!window.confirm("Are you sure you want to cancel this quit plan?"))
+      return;
 
+    try {
+      await cancelQuitPlan(quitplan.id, fullToken);
+      toast.success("Quit plan cancelled.", { theme: "colored" });
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to cancel quit plan.", { theme: "dark" });
+    }
+  };
+
+  //Hiện log đuọc chọn
   const handleSelectLog = (log, dateStr) => {
     const existingLog = log || { createdAt: dateStr };
     setSelectedLog(existingLog);
@@ -51,45 +74,45 @@ function QuitProgressCard({ quitplan, fullToken }) {
     setNote(existingLog.notes ?? "");
   };
 
+  //Lưu log mới hoặc cập nhật log đã có
   const handleSave = async () => {
-  const isExistingLog = !!selectedLog?.logId;
+    const isExistingLog = !!selectedLog?.logId;
 
-  const payload = {
-    quitPlanId: quitplan.id,
-    cigarettesSmoked: parseInt(cigarettes) || null,
-    notes: note,
-    createdAt: selectedLog.createdAt,
-  };
+    const payload = {
+      quitPlanId: quitplan.id,
+      cigarettesSmoked: parseInt(cigarettes) || null,
+      notes: note,
+      createdAt: selectedLog.createdAt,
+    };
 
-  setIsSaving(true);
-  try {
-    if (isExistingLog) {
-      // Gọi API update nếu có logId
-      await updateQuitProgressLog(selectedLog.logId, payload, fullToken);
-    } else {
-      // Gọi API create nếu chưa có logId
-      await saveQuitProgressLog(payload, fullToken);
+    setIsSaving(true);
+    try {
+      if (isExistingLog) {
+        // Gọi API update nếu có logId
+        await updateQuitProgressLog(selectedLog.logId, payload, fullToken);
+      } else {
+        // Gọi API create nếu chưa có logId
+        await saveQuitProgressLog(payload, fullToken);
+      }
+
+      toast.success("Progress saved successfully!", {
+        theme: "colored",
+        position: "top-right",
+      });
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save progress. Please try again.", {
+        theme: "dark",
+        position: "top-left",
+      });
+    } finally {
+      setIsSaving(false);
     }
-
-    toast.success("Progress saved successfully!", {
-      theme: "colored",
-      position: "top-right",
-    });
-
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  } catch (err) {
-    console.error(err);
-    toast.error("Failed to save progress. Please try again.", {
-      theme: "dark",
-      position: "top-left",
-    });
-  } finally {
-    setIsSaving(false);
-  }
-};
-
+  };
 
   return (
     <div className="quit-progress-container">
@@ -119,7 +142,9 @@ function QuitProgressCard({ quitplan, fullToken }) {
               key={dateStr}
               className={classNames}
               title={dateStr}
-              onClick={() => handleSelectLog(log, dateStr)}
+              onClick={() => {
+                if (date <= today) handleSelectLog(log, dateStr);
+              }}
             >
               <div className="day-label">
                 {isStart
@@ -142,7 +167,52 @@ function QuitProgressCard({ quitplan, fullToken }) {
           );
         })}
       </div>
+      {/* Hiển thị thông tin của quit plan */}
+      <div className="summary-section">
+        <div className="summary-left">
+          <StatCard
+            icon={<FaPiggyBank />}
+            iconClass="card-icon--money"
+            value={(quitplan.totalSmoke * (costPerPack/20)).toLocaleString() + " VND"}
+            label="Money Saved"
+          />
+          <StatCard
+            icon="🚭"
+            iconClass="card-icon--avoided"
+            value={quitplan.totalSmoke}
+            label="Cigarettes Avoided"
+          />
+        </div>
+        <div className="summary-right">
+          {quitplan.methodOptions?.map((method) => (
+            <div key={method.id} className="method-description">
+              <h4 className="method-title">{method.optionText}</h4>
+              <div
+                dangerouslySetInnerHTML={{ __html: method.optionDescription }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
 
+      <div style={{ textAlign: "center", marginTop: "30px" }}>
+        <button
+          onClick={handleCancelQuitPlan}
+          style={{
+            backgroundColor: "#e53935",
+            color: "white",
+            padding: "12px 24px",
+            fontSize: "1rem",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          Cancel Quit Plan
+        </button>
+      </div>
+
+      {/* Hiển thị UI overlay của log khi click vào các day*/}
       {selectedLog && (
         <div className="overlay">
           <div className="modal">

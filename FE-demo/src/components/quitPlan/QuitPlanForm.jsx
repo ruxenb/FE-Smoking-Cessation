@@ -85,8 +85,8 @@ function QuitPlanForm({ quitMethods, onSubmit, initialValues, loading }) {
 
         const dataToSubmit = {
             ...values,
-            startDate: values.startDate ? values.startDate.format('YYYY-MM-DD') : null,
-            targetEndDate: values.targetEndDate ? values.targetEndDate.format('YYYY-MM-DD') : null,
+            startDate: values.startDate ? values.startDate.format('DD-MM-YYYY') : null,
+            targetEndDate: values.targetEndDate ? values.targetEndDate.format('DD-MM-YYYY') : null,
             methodOptions: methodOptionsForSubmission,
         };
         onSubmit(dataToSubmit);

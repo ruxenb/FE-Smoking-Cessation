@@ -55,6 +55,15 @@ export const fetchAndSaveCurrentQuitPlan = async (token) => {
   }
 };
 
+//Hàm hủy bỏ Quit Plan
+export const cancelQuitPlan = async (quitPlanId, token) => {
+  return api.delete(`${API_BASE_URL}/quitplans/${quitPlanId}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
 // Hàm tạo QuitProgressLog của Quit Plan
 export const saveQuitProgressLog = async (log, token) => {
   return await api.post(`${API_BASE_URL}/users/quit-progress`, log, {

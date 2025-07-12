@@ -252,6 +252,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0; 
     /* Background color will now be set by modifier classes below. */
 }
 /* .card-icon.money { background-color: #fff4e0; }
@@ -262,6 +265,9 @@ body {
 .card-icon--health { background-color: var(--life-background-ffe0e0); }
 .card-icon--streak { background-color: var(--streak-background-fff0d4); }
 .card-icon--avoided { background-color: var(--cigarettes-background-e0f7ff); }
+.card-icon--money svg {
+  color: #ffc107;;
+}
 [data-theme="dark"] .card-icon { color: #333; /* Make emoji colors pop on dark backgrounds */}
 .card-content { display: flex; flex-direction: column; }
 .stat-value {
