@@ -30,6 +30,13 @@ function AdminSidebar({ collapsed }) {
         }
     };
 
+    const menuItems = [
+        { key: '/admin', icon: <DashboardOutlined />, label: 'Dashboard' },
+        { key: '/admin/blog', icon: <ReadOutlined />, label: 'Blog Management' },
+        { key: '/admin/users', icon: <UserOutlined />, label: 'User Management' },
+        // ...add more items as needed
+    ];
+
     return (
         <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="logo" style={{ height: '64px', color: 'white', textAlign: 'center', lineHeight: '64px', fontSize: '1.2rem' }}>
@@ -40,18 +47,8 @@ function AdminSidebar({ collapsed }) {
                 mode="inline" 
                 selectedKeys={[location.pathname]} 
                 onClick={handleMenuClick} // <-- Gán hàm xử lý mới
+                items={menuItems}
             >
-                <Menu.Item key="/admin" icon={<DashboardOutlined />}>
-                    Dashboard
-                </Menu.Item>
-                <Menu.Item key="/admin/blog" icon={<ReadOutlined />}>
-                    Blog Management
-                </Menu.Item>
-                <Menu.Item key="/admin/users" icon={<UserOutlined />}>
-                    User Management
-                </Menu.Item>
-                {/* Thêm các mục khác ở đây */}
-
                 {/* BƯỚC 5: Thêm một đường kẻ và mục Logout */}
                 <Menu.Divider />
                 <Menu.Item key="logout" icon={<LogoutOutlined />} danger>
