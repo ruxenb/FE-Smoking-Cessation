@@ -4,6 +4,7 @@ import CoachSidebar from "../../components/coach/coachSidebar";
 import CoachOverview from "../../components/coach/coachDashboard"; // <-- Component này sẽ được làm lại hoàn toàn
 import MemberListPage from "../../components/coach/memberList"; // <-- Component này sẽ được cải tiến
 import LeaderboardPage from "../../components/coach/leaderboard";
+import CoachChatPage from "../../components/chat/CoachChatPage"; // <-- Component này sẽ được làm lại
 // import ChatPlaceholder from "../../components/coach/ChatPlaceholder";
 import SettingsPage from "../../components/dashboard/sidebarPages/SettingsPage";
 
@@ -31,7 +32,7 @@ function CoachDashboard() {
       case "members":
         return <MemberListPage />;
       case "chat":
-        return <ChatPlaceholder />;
+        return <CoachChatPage coach={user} jwt={localStorage.getItem("accessToken")} />;
       case "leaderboard":
         return <LeaderboardPage />;
       case "settings":

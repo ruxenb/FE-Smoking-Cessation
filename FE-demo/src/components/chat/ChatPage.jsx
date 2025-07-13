@@ -1,41 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import CoachSelector from './CoachSelector';
 import ChatBox from './ChatBox';
-import { useUser } from "../../userContext/userContext"; // adjust path if needed
+import { useUser } from "../../userContext/userContext";
+import './chat.css'; // Shared chat styles
 
 export default function ChatPage({ jwt }) {
-  const { user } = useUser(); // get user from context
+  const { user } = useUser();
   const [coaches, setCoaches] = useState([]);
   const [selectedCoach, setSelectedCoach] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const token = jwt || (localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken"));
+    setLoading(true);
+    setError(null);
+    
     fetch('/api/users/role/COACH', {
       headers: { Authorization: token }
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch coaches');
+        return res.json();
+      })
       .then(data => {
-        // Normalize all coaches to have userId and name
         const arr = Array.isArray(data) ? data : data.data;
         setCoaches(
           (arr || []).map(coach => ({
             userId: coach.userId ?? coach.id ?? coach._id,
-            name: coach.name || coach.fullName || coach.username || "Unnamed",
+            name: coach.name || coach.fullName || coach.username || "Unnamed Coach",
             ...coach
           }))
         );
       })
-      .catch(console.error);
+      .catch(err => {
+        console.error(err);
+        setError('Failed to load coaches. Please try again.');
+      })
+      .finally(() => setLoading(false));
   }, [jwt]);
 
   return (
-    <div>
+    <div className="chat-page-container">
       {!selectedCoach ? (
-        <CoachSelector
-          coaches={coaches}
-          onSelect={setSelectedCoach}
-          selectedCoach={selectedCoach}
-        />
+        <div className="coach-selection-section">
+          
+          {loading ? (
+            <div className="loading-message">Loading available coaches...</div>
+          ) : error ? (
+            <div className="error-message">{error}</div>
+          ) : (
+            <CoachSelector
+              coaches={coaches}
+              onSelect={setSelectedCoach}
+              selectedCoach={selectedCoach}
+            />
+          )}
+        </div>
       ) : (
         <ChatBox
           fromUser={user}

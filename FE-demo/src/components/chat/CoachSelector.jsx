@@ -1,34 +1,39 @@
-// CoachSelector.jsx
 import React from 'react';
+import './chat.css'; // Import the separate CSS file
 
 export default function CoachSelector({ coaches = [], onSelect, selectedCoach }) {
   return (
-    <div>
-      <h3>Select your coach to start chatting:</h3>
-      <ul>
+    <div className="coach-selector-container">
+      <h3 className="coach-selector-header">Select your coach to start chatting:</h3>
+      <div className="coach-list">
         {coaches.length === 0 ? (
-          <li>No coaches available.</li>
+          <div className="no-coaches-message">No coaches available</div>
         ) : (
           coaches.map(coach => {
-            // Always normalize to userId and name
             const normalizedCoach = {
-              userId: coach.userId ?? coach.id ?? coach._id, // add more fallbacks if needed
-              name: coach.name || coach.fullName || coach.username || "Unnamed",
+              userId: coach.userId ?? coach.id ?? coach._id,
+              name: coach.name || coach.fullName || coach.username || "Unnamed Coach",
               ...coach
             };
+            
             return (
-              <li key={normalizedCoach.userId ?? normalizedCoach.id ?? Math.random()}>
-                <button
-                  disabled={selectedCoach && selectedCoach.userId === normalizedCoach.userId}
-                  onClick={() => onSelect(normalizedCoach)}
-                >
-                  {normalizedCoach.name}
-                </button>
-              </li>
+              <div 
+                key={normalizedCoach.userId} 
+                className={`coach-card ${selectedCoach?.userId === normalizedCoach.userId ? 'selected' : ''}`}
+                onClick={() => onSelect(normalizedCoach)}
+              >
+                <div className="coach-avatar">👤</div>
+                <div className="coach-info">
+                  <div className="coach-name">{normalizedCoach.name}</div>
+                  {selectedCoach?.userId === normalizedCoach.userId && (
+                    <div className="selected-indicator">Selected ✓</div>
+                  )}
+                </div>
+              </div>
             );
           })
         )}
-      </ul>
+      </div>
     </div>
   );
 }
