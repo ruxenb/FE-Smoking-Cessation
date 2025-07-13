@@ -28,7 +28,7 @@ import Dashboard from "./pages/DashboardPage";
 import CheckoutPage from "./pages/CheckoutPage"; 
 import SettingsPage from "./components/dashboard/sidebarPages/SettingsPage";
 import CoachDashboard from "./pages/CoachDashboardPage"; // <-- Import trang mới
-
+import ChatPage from "./components/chat/ChatPage";
 
 import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn";
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
@@ -107,6 +107,14 @@ function App() {
       element: (
         <ProtectedRoute>
           <SettingsPage />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/chat",
+      element: (
+        <ProtectedRoute>
+          <ChatPage />
         </ProtectedRoute>
       ),
     },
