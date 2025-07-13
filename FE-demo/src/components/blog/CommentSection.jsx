@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../configs/axios';
+import { useUser } from '../../userContext/userContext'; // Lấy user từ Context
+import { message } from 'antd'; // Dùng antd để có thông báo đẹp
 import './BlogApp.css';
 
-export default function CommentSection({ postId, user }) {
+export default function CommentSection({ postId}) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [editingComment, setEditingComment] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [replyTo, setReplyTo] = useState(null);
   const [replyContent, setReplyContent] = useState('');
+
+  const { user } = useUser(); // <-- LẤY USER TỪ CONTEXT, KHÔNG QUA PROP
 
   useEffect(() => {
     fetchComments();
@@ -57,9 +61,13 @@ export default function CommentSection({ postId, user }) {
   const handleDelete = async (commentId) => {
     if (window.confirm('Are you sure you want to delete this comment?')) {
       try {
-        await api.delete(`/comments/${commentId}`);
+const token = `Bearer ${localStorage.getItem("accessToken")}`;
+        // Dùng API đã được phân quyền ở backend
+        await api.delete(`/comments/${commentId}`, { headers: { Authorization: token } });
+        message.success('Comment deleted successfully!');
         fetchComments();
       } catch (err) {
+        message.error('Failed to delete comment.');
         console.error("Failed to delete comment", err);
       }
     }
@@ -100,7 +108,10 @@ export default function CommentSection({ postId, user }) {
     return roots;
   };
 
-  const renderComment = (comment, depth = 0) => (
+  const renderComment = (comment, depth = 0) => {
+    const isOwner = user && user.userId === comment.userId;
+    const isAdmin = user && user.role === 'ADMIN';
+    return(
     <div 
       key={comment.commentId} 
       className={`comment ${depth > 0 ? 'is-reply' : ''}`}
@@ -138,8 +149,8 @@ export default function CommentSection({ postId, user }) {
           <div className="comment-content">{comment.content}</div>
           
           <div className="comment-controls">
-            {user?.userId === comment.userId && (
-              <>
+           {/* Chỉ chủ sở hữu mới được SỬA */}
+              {isOwner && (
                 <button
                   className="edit-btn"
                   onClick={() => {
@@ -149,26 +160,30 @@ export default function CommentSection({ postId, user }) {
                 >
                   Edit
                 </button>
+              )}
+
+              {/* Chủ sở hữu HOẶC Admin đều được XÓA */}
+              {(isOwner || isAdmin) && (
                 <button
                   className="delete-btn"
                   onClick={() => handleDelete(comment.commentId)}
                 >
                   Delete
                 </button>
-              </>
-            )}
-            
-            {user && (
-              <button
-                className="reply-btn"
-                onClick={() => setReplyTo(comment.commentId)}
-              >
-                Reply
-              </button>
-            )}
-          </div>
-        </>
-      )}
+              )}
+              
+              {/* Bất kỳ người dùng nào đăng nhập cũng có thể TRẢ LỜI */}
+              {user && (
+                <button
+                  className="reply-btn"
+                  onClick={() => setReplyTo(comment.commentId)}
+                >
+                  Reply
+                </button>
+              )}
+            </div>
+          </>
+        )}
       
       {replyTo === comment.commentId && (
         <form 
@@ -204,6 +219,7 @@ export default function CommentSection({ postId, user }) {
       )}
     </div>
   );
+  }
 
   const nestedComments = nestComments(comments);
 

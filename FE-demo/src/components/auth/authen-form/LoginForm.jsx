@@ -104,7 +104,7 @@ function LoginForm() {
         } else if (userRole === 'COACH') {
           defaultRedirectPath = '/coach-dashboard';
         } else if (userRole === 'ADMIN') {
-          defaultRedirectPath = '/admin-panel'; // Ví dụ cho admin
+          defaultRedirectPath = '/admin'; // Ví dụ cho admin
         }
         
         // 2. Lấy trang đích mà người dùng đang cố gắng truy cập (nếu có)

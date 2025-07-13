@@ -30,6 +30,10 @@ import SettingsPage from "./components/dashboard/sidebarPages/SettingsPage";
 import CoachDashboard from "./pages/CoachDashboardPage"; // <-- Import trang mới
 import ChatPage from "./components/chat/ChatPage";
 
+import AdminDashboardPage from "./pages/AdminPage/AdminDashboard"; // <-- IMPORT TRANG ADMIN MỚI
+
+
+
 import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn";
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
 import ProtectedRoute from "./components/protectedRoute/protectedRoute";
@@ -142,6 +146,15 @@ function App() {
     {
       path: "/checkout/:planType",
       element: <ProtectedRoute><CheckoutPage /></ProtectedRoute>
+    },
+
+    {
+      path: "/admin",
+      element: (
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <AdminDashboardPage />
+        </ProtectedRoute>
+      ),
     },
 
     //đang xem các phương án UX

@@ -28,7 +28,7 @@ function Dashboard() {
   const [isProfileOverlayVisible, setIsProfileOverlayVisible] = useState(false);
 
   // Coaches state
-  const [coaches, setCoaches] = useState([]);
+  // const [coaches, setCoaches] = useState([]);
 
   // --- LOGIC CHÍNH: Kiểm tra smoking profile khi component được load hoặc khi user thay đổi ---
   useEffect(() => {
@@ -151,7 +151,8 @@ function Dashboard() {
     switch (currentPage) {
       case "home":
         navigate("/"); // Redirect to home
-      case "dashboard" /* truy cập tới dashboard khi đăng nhập thành công, truyền data */:
+        return null;
+      case "dashboard": /* truy cập tới dashboard khi đăng nhập thành công, truyền data */
         return (
           <MainContent
             username={user?.username}
@@ -160,7 +161,6 @@ function Dashboard() {
             onEditProfileClick={openProfileOverlay}
             currentQuitPlan={user?.quitplan}
             smokingProfile={user?.smokingProfile} 
-
           />
         );
       case "achievements":
