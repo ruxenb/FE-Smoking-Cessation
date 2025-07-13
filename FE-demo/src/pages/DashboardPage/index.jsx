@@ -6,7 +6,6 @@ import MainContent from "../../components/dashboard/dashboard.jsx";
 import SmokeSetupOverlay from "../../components/dashboard/Overlay/SmokeSetup.jsx";
 import AchievementsPage from "../../components/dashboard/sidebarPages/AchievementsPage.jsx";
 import SettingsPage from "../../components/dashboard/sidebarPages/SettingsPage.jsx";
-import ChatPage from "../../components/chat/ChatPage";
 import { useUser } from "../../userContext/userContext";
 import { createSmokingProfile, updateSmokingProfile } from "../../services/smokingProfileService"; // Import service mới
 import { fetchAndSaveCurrentQuitPlan } from "../../services/quitPlanService"; // <-- Thêm để fetch quit plan mới nhất
@@ -26,9 +25,6 @@ function Dashboard() {
   // State để quản lý việc hiển thị overlay và trạng thái profile
   const [hasSmokingProfile, setHasSmokingProfile] = useState(false);
   const [isProfileOverlayVisible, setIsProfileOverlayVisible] = useState(false);
-
-  // Coaches state
-  const [coaches, setCoaches] = useState([]);
 
   // --- LOGIC CHÍNH: Kiểm tra smoking profile khi component được load hoặc khi user thay đổi ---
   useEffect(() => {
@@ -144,7 +140,6 @@ function Dashboard() {
       console.error("Failed to save profile:", error);
     }
   };
-  
 
   // Render the correct page based on state
   const renderCurrentPage = () => {
@@ -176,18 +171,8 @@ function Dashboard() {
             onEditProfileClick={openProfileOverlay}
           />
         );
-      case "chat":
-        return (
-          <ChatPage
-            user={user}
-            jwt={localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")}
-           
-          />
-        );
     }
   };
-
-  
 
   return (
     <div className={`app-container ${isCollapsed ? "sidebar-collapsed" : ""}`}>

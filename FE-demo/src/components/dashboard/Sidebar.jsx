@@ -72,7 +72,6 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
         <NavLink page="achievements" icon="🏆" label="Achievements" />
         <NavLink page="community" icon="💬" label="Community" />
         <NavLink page="resources" icon="📚" label="Resources" />
-        <NavLink page="chat" icon="💬" label="Chat" /> {/* <-- Add this line */}
         <NavLink page="settings" icon="⚙️" label="Settings" />
 
         <div className="sidebar-footer">

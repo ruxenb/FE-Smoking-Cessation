@@ -1,6 +1,5 @@
 /* main.jsx entry point - file gốc của dự án (tuong đương với index.jsx) */
-// Polyfill for sockjs-client in browser
-window.global = window;
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
