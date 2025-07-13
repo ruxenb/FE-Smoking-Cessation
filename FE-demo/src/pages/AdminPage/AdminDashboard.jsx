@@ -3,9 +3,9 @@ import { useUser } from '../../userContext/userContext';
 import { useNavigate } from 'react-router-dom';
 
 // Import các component con của Admin
-import AdminSidebarCom from '../../components/admin/adminSidebar';
+import AdminSidebarCom from '../../components/admin/layout/adminSidebar';
 import AdminDashboardContent from '../../components/admin/adminDashboardContent';
-import AdminBlogManagementContent from '../../components/admin/blogManagement';
+import AdminBlogManagementContent from '../../components/admin/AdminBlogManagement';
 // import AdminUserManagementContent from '../components/admin/AdminUserManagementContent';
 
 // Import CSS chung (nếu có)

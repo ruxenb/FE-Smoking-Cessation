@@ -26,6 +26,19 @@ export const adminDeletePost = async (postId, token) => {
 };
 
 /**
+ * [Admin] Khôi phục (hiện lại) một bài đăng đã bị ẩn.
+ * @param {number} postId - ID của bài đăng cần khôi phục.
+ * @param {string} token - Token xác thực của Admin.
+ * @returns {Promise}
+ */
+export const adminRestorePost = async (postId, token) => {
+    // Gọi đến endpoint mới mà chúng ta đã tạo ở backend
+    return await api.post(`/posts/${postId}/restore`, null, {
+        headers: { Authorization: token }
+    });
+};
+
+/**
  * [Admin] Xóa một bình luận theo ID.
  * Backend cần được phân quyền để chỉ Admin mới thực hiện được hành động này.
  * @param {number} commentId - ID của bình luận cần xóa.

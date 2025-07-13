@@ -30,8 +30,9 @@ import SettingsPage from "./components/dashboard/sidebarPages/SettingsPage";
 import CoachDashboard from "./pages/CoachDashboardPage"; // <-- Import trang mới
 import ChatPage from "./components/chat/ChatPage";
 
-import AdminDashboardPage from "./pages/AdminPage/AdminDashboard"; // <-- IMPORT TRANG ADMIN MỚI
-
+import AdminLayout from "./components/admin/layout/adminLayout";
+import AdminDashboard from "./components/admin/adminDashboardContent"; // Trang tổng quan
+import AdminBlogManagement from "./components/admin/AdminBlogManagement"; // Trang quản lý blog
 
 
 import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn";
@@ -148,14 +149,30 @@ function App() {
       element: <ProtectedRoute><CheckoutPage /></ProtectedRoute>
     },
 
-    {
+     {
       path: "/admin",
       element: (
         <ProtectedRoute allowedRoles={['ADMIN']}>
-          <AdminDashboardPage />
+          <AdminLayout />
         </ProtectedRoute>
       ),
+      // Các trang con sẽ được render bên trong <Outlet /> của AdminLayout
+      children: [
+        {
+          index: true, // Trang mặc định khi vào /admin
+          element: <AdminDashboard />, 
+        },
+        {
+          path: "blog", // URL sẽ là /admin/blog
+          element: <AdminBlogManagement />,
+        },
+        // {
+        //   path: "users", // URL sẽ là /admin/users
+        //   element: <AdminUserManagement />,
+        // },
+      ],
     },
+    
 
     //đang xem các phương án UX
     // {
