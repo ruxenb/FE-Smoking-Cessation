@@ -6,12 +6,11 @@ import api from '../configs/axios';
  * @returns {Promise}
  */
 export const adminGetAllPosts = async (token) => {
-    // Chúng ta dùng lại endpoint GET /api/posts vì nó trả về tất cả bài đăng
-    return await api.get('/posts', {
+    // --- SỬA LẠI ĐỂ GỌI ENDPOINT MỚI ---
+    return await api.get('/admin/posts/all', {
         headers: { Authorization: token }
     });
 };
-
 /**
  * [Admin] Xóa một bài đăng theo ID.
  * Backend cần được phân quyền để chỉ Admin mới thực hiện được hành động này.
