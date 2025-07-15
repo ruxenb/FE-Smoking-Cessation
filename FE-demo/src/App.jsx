@@ -33,6 +33,7 @@ import ChatPage from "./components/chat/ChatPage";
 import AdminLayout from "./components/admin/layout/adminLayout";
 import AdminDashboard from "./components/admin/adminDashboardContent"; // Trang tổng quan
 import AdminBlogManagement from "./components/admin/AdminBlogManagement"; // Trang quản lý blog
+import AdminUserManagement from "./components/admin/userManagement"; // Trang quản lý blog
 
 
 import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn";
@@ -166,10 +167,10 @@ function App() {
           path: "blog", // URL sẽ là /admin/blog
           element: <AdminBlogManagement />,
         },
-        // {
-        //   path: "users", // URL sẽ là /admin/users
-        //   element: <AdminUserManagement />,
-        // },
+        {
+          path: "users",
+          element: <AdminUserManagement />,
+        },
       ],
     },
     

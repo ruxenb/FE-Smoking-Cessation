@@ -61,3 +61,40 @@ export const getAdminDashboardStats = async (token) => {
         headers: { Authorization: token }
     });
 };
+
+/**
+ * [Admin] Lấy danh sách tất cả người dùng.
+ * @param {string} token - Token xác thực của Admin.
+ * @returns {Promise}
+ */
+export const adminGetAllUsers = async (token) => {
+    // Gọi đến endpoint GET /api/users đã có sẵn
+    return await api.get('/users', {
+        headers: { Authorization: token }
+    });
+};
+
+/**
+ * [Admin] Thay đổi trạng thái của một người dùng (active/inactive).
+ * @param {number} userId - ID của người dùng.
+ * @param {string} token - Token xác thực của Admin.
+ * @returns {Promise}
+ */
+export const adminChangeUserStatus = async (userId, token) => {
+    return await api.put(`/admin/users/${userId}/change-status`, null, {
+        headers: { Authorization: token }
+    });
+};
+
+/**
+ * [Admin] Thay đổi vai trò của một người dùng.
+ * @param {number} userId - ID của người dùng.
+ * @param {string} newRole - Vai trò mới ('MEMBER', 'COACH').
+ * @param {string} token - Token xác thực của Admin.
+ * @returns {Promise}
+ */
+export const adminChangeUserRole = async (userId, newRole, token) => {
+    return await api.put(`/admin/users/${userId}/change-role`, { role: newRole }, {
+        headers: { Authorization: token }
+    });
+};

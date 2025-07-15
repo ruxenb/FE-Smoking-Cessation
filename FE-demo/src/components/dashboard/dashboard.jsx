@@ -14,10 +14,10 @@ function MainContent({
   currentQuitPlan,
   smokingProfile, // <-- BƯỚC 3.2: Nhận smokingProfile làm prop
 }) {
-  const moneySaved = "1,244.50";
-  const lifeReclaimed = "28";
-  const streakCount = "92";
-  const cigsAvoided = "1,840";
+  // const moneySaved = "1,244.50";
+  // const lifeReclaimed = "28";
+  // const streakCount = "92";
+  // const cigsAvoided = "1,840";
   const tokenType = localStorage.getItem("tokenType");
   const accessToken = localStorage.getItem("accessToken");
   const fullToken = tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
@@ -78,10 +78,7 @@ function MainContent({
         )}
       </section>
 
-      <section className="stats-grid">
-        {/*
-          UPDATED: We now pass the 'iconClass' prop with our new CSS class names.
-        */}
+      {/* <section className="stats-grid">
         <StatCard
           icon="💰"
           iconClass="card-icon--money"
@@ -106,7 +103,7 @@ function MainContent({
           value={cigsAvoided}
           label="Total Cigarettes Avoided"
         />
-      </section>
+      </section> */}
 
       <section className="achievements-section">
         <div className="section-header">

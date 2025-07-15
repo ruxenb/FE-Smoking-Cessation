@@ -9,6 +9,8 @@ import {
 import { toast } from "react-toastify";
 import StatCard from "./StatCard";
 import { FaPiggyBank } from "react-icons/fa";
+import { useUser } from "../../userContext/userContext"; // <-- BƯỚC 1: IMPORT useUser
+
 
 function QuitProgressCard({ quitplan, fullToken, costPerPack }) {
   const [selectedLog, setSelectedLog] = useState(null);
@@ -21,6 +23,8 @@ function QuitProgressCard({ quitplan, fullToken, costPerPack }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayStr = formatDate(today);
+  const { refreshUser } = useUser();
+
 
   const generateDaysArray = (startStr, endStr) => {
     const start = parseDate(startStr);
@@ -86,6 +90,8 @@ function QuitProgressCard({ quitplan, fullToken, costPerPack }) {
     };
 
     setIsSaving(true);
+    const toastId = toast.loading("Saving progress..."); // Dùng toast loading
+
     try {
       if (isExistingLog) {
         // Gọi API update nếu có logId
@@ -94,21 +100,31 @@ function QuitProgressCard({ quitplan, fullToken, costPerPack }) {
         // Gọi API create nếu chưa có logId
         await saveQuitProgressLog(payload, fullToken);
       }
+      
+      toast.update(toastId, { render: "Progress saved! Refreshing dashboard...", isLoading: true });
+      const refreshed = await refreshUser();
+      
+      if (refreshed) {
+        toast.update(toastId, { render: "Dashboard updated!", type: "success", isLoading: false, autoClose: 2000 });
+      } else {
+        toast.update(toastId, { render: "Progress saved, but failed to refresh dashboard. Please refresh manually.", type: "warning", isLoading: false, autoClose: 5000 });
+      }
 
-      toast.success("Progress saved successfully!", {
-        theme: "colored",
-        position: "top-right",
-      });
+      // toast.success("Progress saved successfully!", {
+      //   theme: "colored",
+      //   position: "top-right",
+      // });
 
       setTimeout(() => {
         window.location.reload();
       }, 2000);
     } catch (err) {
       console.error(err);
-      toast.error("Failed to save progress. Please try again.", {
-        theme: "dark",
-        position: "top-left",
-      });
+      toast.update(toastId, { render: "Failed to save progress. Please try again.", type: "error", isLoading: false, autoClose: 4000 });
+      // toast.error("Failed to save progress. Please try again.", {
+      //   theme: "dark",
+      //   position: "top-left",
+      // });
     } finally {
       setIsSaving(false);
     }

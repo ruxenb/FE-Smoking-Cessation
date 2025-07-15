@@ -49,6 +49,8 @@ function AdminBlogManagement() {
                     fetchPosts(); // Tải lại danh sách để cập nhật giao diện
                 } catch (error) {
                     message.error('Failed to delete post.');
+                    console.error(error);
+
                 }
 
             },
