@@ -115,9 +115,7 @@ function QuitProgressCard({ quitplan, fullToken, costPerPack }) {
       //   position: "top-right",
       // });
 
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+
     } catch (err) {
       console.error(err);
       toast.update(toastId, { render: "Failed to save progress. Please try again.", type: "error", isLoading: false, autoClose: 4000 });
