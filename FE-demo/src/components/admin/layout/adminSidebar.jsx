@@ -31,10 +31,32 @@ function AdminSidebar({ collapsed }) {
     };
 
     const menuItems = [
-        { key: '/admin', icon: <DashboardOutlined />, label: 'Dashboard' },
-        { key: '/admin/blog', icon: <ReadOutlined />, label: 'Blog Management' },
-        { key: '/admin/users', icon: <UserOutlined />, label: 'User Management' },
-        // ...add more items as needed
+        {
+            key: '/admin',
+            icon: <DashboardOutlined />,
+            label: 'Dashboard',
+        },
+        {
+            key: '/admin/blog',
+            icon: <ReadOutlined />,
+            label: 'Blog Management',
+        },
+        {
+            key: '/admin/users',
+            icon: <UserOutlined />,
+            label: 'User Management',
+        },
+        // Thêm một mục đặc biệt cho đường kẻ
+        {
+            type: 'divider',
+        },
+        // Thêm mục Logout vào đây
+        {
+            key: 'logout',
+            icon: <LogoutOutlined />,
+            label: 'Logout',
+            danger: true, // Thuộc tính danger sẽ làm cho nó có màu đỏ
+        },
     ];
 
     return (
@@ -44,17 +66,12 @@ function AdminSidebar({ collapsed }) {
             </div>
             {/* Sử dụng hàm xử lý mới */}
             <Menu 
+                theme="dark"
                 mode="inline" 
                 selectedKeys={[location.pathname]} 
-                onClick={handleMenuClick} // <-- Gán hàm xử lý mới
-                items={menuItems}
-            >
-                {/* BƯỚC 5: Thêm một đường kẻ và mục Logout */}
-                <Menu.Divider />
-                <Menu.Item key="logout" icon={<LogoutOutlined />} danger>
-                    Logout
-                </Menu.Item>
-            </Menu>
+                onClick={handleMenuClick}
+                items={menuItems} // Chỉ sử dụng prop `items`
+            />
         </Sider>
     );
 }

@@ -36,8 +36,8 @@ function AdminDashboardPage() {
                 return <AdminDashboardContent />;
             case 'blog':
                 return <AdminBlogManagementContent />;
-            // case 'users':
-            //     return <AdminUserManagementContent />;
+            case 'users':
+                return <AdminUserManagementContent />;
             default:
                 return <AdminDashboardContent />;
         }
