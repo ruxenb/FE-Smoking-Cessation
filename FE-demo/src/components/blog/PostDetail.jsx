@@ -94,6 +94,21 @@ export default function PostDetail() {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+    try {
+      const token = `Bearer ${localStorage.getItem("accessToken")}`;
+      await api.delete(`/posts/${id}`, {
+        headers: { Authorization: token }
+      });
+      alert("Post deleted successfully!");
+      navigate('/blog');
+    } catch (err) {
+      alert("Failed to delete post.");
+      console.error(err);
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading post...</div>;
   }
@@ -130,7 +145,7 @@ export default function PostDetail() {
               <div className="post-meta">
                 <div className="post-title">{post.title}</div>
                 <div className="post-info">
-                  <span>Posted by user {post.userId}</span>
+                  <span>Posted by {post.authorName || `User ${post.userId}`}</span>
                   <span>•</span>
                   <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                   <span className="tag">{post.category || 'Journey'}</span>
@@ -155,16 +170,26 @@ export default function PostDetail() {
                 <span>{comments.length} comments</span>
               </button>
               {isOwner && (
-                <button
-                  className="edit-btn"
-                  onClick={() => navigate(`/blog/${id}/edit`)}
-                >
-                  Edit Post
-                </button>
+                <>
+                  <button
+                    className="edit-btn"
+                    onClick={() => navigate(`/blog/${id}/edit`)}
+                  >
+                    Edit Post
+                  </button>
+                  <button
+                    className="delete-btn"
+                    onClick={handleDelete}
+                    style={{ marginLeft: 8 }}
+                  >
+                    Delete Post
+                  </button>
+                </>
               )}
             </div>
 
             <CommentSection postId={id} user={user} />
+
           </div>
         </div>
       </div>

@@ -842,6 +842,21 @@ body {
 .delete-btn:hover {
   background: rgba(211, 47, 47, 0.1);
 }
+/* delete styles */
+.delete-btn {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 0.95em;
+  transition: background 0.2s;
+}
+.delete-btn:hover {
+  background: #b71c1c;
+}
 
 /* Edit Form */
 .edit-form {
@@ -897,6 +912,37 @@ body {
   display: flex;
   gap: 8px;
   margin-top: 8px;
+}
+
+/* pagination tab*/
+.pagination-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 32px 0 16px 0;
+}
+
+.pagination-btn {
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pagination-btn:disabled {
+  background: #bdbdbd;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-weight: 500;
+  font-size: 1rem;
 }
 
 

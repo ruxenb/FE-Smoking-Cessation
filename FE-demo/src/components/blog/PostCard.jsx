@@ -34,7 +34,7 @@ export default function PostCard({ post }) {
         <div className="post-meta">
           <div className="post-title">{post.title}</div>
           <div className="post-info">
-            <span>Posted by user {post.userId}</span>
+            <span>Posted by {post.authorName || `User ${post.userId}`}</span>
             <span>•</span>
             <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
             <span className="tag">{post.category || 'Journey'}</span>

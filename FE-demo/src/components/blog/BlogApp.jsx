@@ -13,7 +13,9 @@ export default function BlogApp() {
     totalPosts: 0
   });
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('Recent');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(2);
+  const [activeTab, setActiveTab] = useState('Recent'); // 'Admin' or 'Mine'
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -50,7 +52,24 @@ export default function BlogApp() {
     fetchData();
   }, []);
 
-  
+  // Filtering
+  let filteredPosts = posts;
+
+  if (activeTab === 'Admin') {
+    filteredPosts = posts.filter(post => post.userId === 3); // Replace 3 with your admin userId
+  } else if (activeTab === 'Mine') {
+    filteredPosts = user ? posts.filter(post => post.userId === user.userId) : [];
+  } else if (activeTab === 'Popular') {
+    filteredPosts = [...posts].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+  } else if (activeTab === 'Recent') {
+    filteredPosts = [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+
+  // Pagination
+  const paginatedPosts = filteredPosts.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   if (loading) {
     return <div className="loading">Loading...</div>;
@@ -86,15 +105,28 @@ export default function BlogApp() {
           <div className="filter-tabs">
             <button
               className={`filter-tab ${activeTab === 'Recent' ? 'active' : ''}`}
-              onClick={() => setActiveTab('Recent')}
+              onClick={() => { setActiveTab('Recent'); setCurrentPage(1); }}
             >
               Recent
             </button>
             <button
               className={`filter-tab ${activeTab === 'Popular' ? 'active' : ''}`}
-              onClick={() => setActiveTab('Popular')}
+              onClick={() => { setActiveTab('Popular'); setCurrentPage(1); }}
             >
               Popular
+            </button>
+            <button
+              className={`filter-tab ${activeTab === 'Admin' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('Admin'); setCurrentPage(1); }}
+            >
+              Notice
+            </button>
+            <button
+              className={`filter-tab ${activeTab === 'Mine' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('Mine'); setCurrentPage(1); }}
+              disabled={!user}
+            >
+              Mine
             </button>
           </div>
 
@@ -102,15 +134,36 @@ export default function BlogApp() {
             ✨ Share Your Journey
           </button>
 
-          {posts.length === 0 ? (
+          {paginatedPosts.length === 0 ? (
             <div className="no-posts">No posts available yet.</div>
           ) : (
-            posts.map(post => (
+            paginatedPosts.map(post => (
               <div key={post.postId} className="post-section">
                 <PostCard post={post} />
               </div>
             ))
           )}
+
+          {/* Pagination Controls */}
+          <div className="pagination-bar">
+            <button
+              className="pagination-btn"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span className="pagination-info">
+              Page {currentPage} of {Math.ceil(filteredPosts.length / pageSize)}
+            </span>
+            <button
+              className="pagination-btn"
+              onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredPosts.length / pageSize), p + 1))}
+              disabled={currentPage === Math.ceil(filteredPosts.length / pageSize) || filteredPosts.length === 0}
+            >
+              Next
+            </button>
+          </div>
         </div>
 
         <button className="floating-action" onClick={handleCreatePost}>

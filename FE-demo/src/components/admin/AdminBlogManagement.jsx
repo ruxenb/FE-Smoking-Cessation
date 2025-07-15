@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, Modal, message, Input, Tag, App } from 'antd';
+import { Table, Button, Space, Modal, message, Input, Tag, Form } from 'antd';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import { adminGetAllPosts, adminDeletePost, adminRestorePost  } from '../../services/adminService';
-import 'antd/dist/reset.css'
+import { adminGetAllPosts, adminDeletePost, adminRestorePost } from '../../services/adminService';
+import api from '../../configs/axios'; // <-- Make sure you have this import for API calls
+import 'antd/dist/reset.css';
+import { useUser } from "../../userContext/userContext"; // or your actual user context path
 
 const { Search } = Input;
 
 function AdminBlogManagement() {
+    const { user } = useUser(); // user.userId should be the admin's id
+
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchText, setSearchText] = useState('');
-
     const [modal, contextHolder] = Modal.useModal();
 
-
+    // Create Post Modal State
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [createLoading, setCreateLoading] = useState(false);
+    const [form] = Form.useForm();
 
     const fetchPosts = async () => {
         try {
@@ -46,13 +52,12 @@ function AdminBlogManagement() {
                     const token = `Bearer ${localStorage.getItem("accessToken")}`;
                     await adminDeletePost(postId, token);
                     message.success('Post deleted successfully!');
-                    fetchPosts(); // Tải lại danh sách để cập nhật giao diện
+                    fetchPosts();
                 } catch (error) {
                     message.error('Failed to delete post.');
                     console.error(error);
 
                 }
-
             },
         });
     };
@@ -62,10 +67,39 @@ function AdminBlogManagement() {
             const token = `Bearer ${localStorage.getItem("accessToken")}`;
             await adminRestorePost(postId, token);
             message.success('Post restored successfully!');
-            fetchPosts(); // Tải lại danh sách để cập nhật trạng thái
+            fetchPosts();
         } catch (error) {
             message.error('Failed to restore post.');
             console.error(error);
+        }
+    };
+
+    // CREATE POST HANDLERS
+    const openCreateModal = () => {
+        form.resetFields();
+        setIsCreateModalOpen(true);
+    };
+
+    const handleCreatePost = async () => {
+        try {
+            const values = await form.validateFields();
+            setCreateLoading(true);
+            const token = `Bearer ${localStorage.getItem("accessToken")}`;
+            await api.post('/posts', {
+                ...values,
+                userId: user.userId // use the actual admin's userId
+            }, {
+                headers: { Authorization: token }
+            });
+            message.success('Post created successfully!');
+            setIsCreateModalOpen(false);
+            fetchPosts();
+        } catch (err) {
+            if (err.errorFields) return; // Form validation error
+            message.error('Failed to create post.');
+            console.error(err);
+        } finally {
+            setCreateLoading(false);
         }
     };
 
@@ -77,7 +111,18 @@ function AdminBlogManagement() {
             key: 'title', 
             sorter: (a, b) => a.title.localeCompare(b.title) 
         },
-        { title: 'Author (User ID)', dataIndex: 'userId', key: 'author', sorter: (a, b) => a.userId - b.userId, width: 150 },
+        { 
+            title: 'Author', 
+            dataIndex: 'authorName', 
+            key: 'author',
+            render: (text) => text || <span style={{ color: '#aaa' }}>Unknown</span>,
+            sorter: (a, b) => {
+                const nameA = a.authorName || '';
+                const nameB = b.authorName || '';
+                return nameA.localeCompare(nameB);
+            },
+            width: 180 
+        },
         { 
             title: 'Created At', 
             dataIndex: 'createdAt', 
@@ -88,16 +133,14 @@ function AdminBlogManagement() {
         },
         {
             title: 'Status',
-            dataIndex: 'published', // Dùng thuộc tính 'published' từ DTO
+            dataIndex: 'published',
             key: 'status',
             width: 120,
-            // Dùng `render` để tùy biến cách hiển thị
             render: (isPublished) => {
-                const color = isPublished ? 'green' : 'volcano'; // Chọn màu cho Tag
-                const text = isPublished ? 'Published' : 'Hidden'; // Chọn chữ cho Tag
+                const color = isPublished ? 'green' : 'volcano';
+                const text = isPublished ? 'Published' : 'Hidden';
                 return <Tag color={color}>{text.toUpperCase()}</Tag>;
             },
-            // Thêm bộ lọc để Admin có thể xem riêng bài Published/Hidden
             filters: [
                 { text: 'Published', value: true },
                 { text: 'Hidden', value: false },
@@ -113,15 +156,11 @@ function AdminBlogManagement() {
                     <Link to={`/blog/${record.postId}`} target="_blank" rel="noopener noreferrer">
                         View Details
                     </Link>
-                    
-                    {/* Hiển thị nút dựa trên trạng thái 'published' của bài đăng */}
                     {record.published ? (
-                        // Nếu bài đăng đang được published, hiển thị nút Delete
                         <Button type="link" danger onClick={() => handleDelete(record.postId)}>
                             Delete (Hide)
                         </Button>
                     ) : (
-                        // Nếu bài đăng đang bị ẩn, hiển thị nút Restore
                         <Button type="link" onClick={() => handleRestore(record.postId)}>
                             Restore
                         </Button>
@@ -138,14 +177,19 @@ function AdminBlogManagement() {
     return (
         <div>
             <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                 <h2 style={{margin: 0}}>All Community Posts</h2>
-                 <Search
-                    placeholder="Search by post title..."
-                    onSearch={value => setSearchText(value)}
-                    onChange={e => setSearchText(e.target.value)}
-                    style={{ width: 300 }}
-                    allowClear
-                />
+                <h2 style={{margin: 0}}>All Community Posts</h2>
+                <div style={{ display: 'flex', gap: 8 }}>
+                    <Button type="primary" onClick={openCreateModal}>
+                        + Create Post
+                    </Button>
+                    <Search
+                        placeholder="Search by post title..."
+                        onSearch={value => setSearchText(value)}
+                        onChange={e => setSearchText(e.target.value)}
+                        style={{ width: 300 }}
+                        allowClear
+                    />
+                </div>
             </div>
             <Table
                 columns={columns}
@@ -157,6 +201,34 @@ function AdminBlogManagement() {
                 scroll={{ x: 'max-content' }}
             />
             {contextHolder}
+
+            <Modal
+                title="Create New Post"
+                open={isCreateModalOpen}
+                onOk={handleCreatePost}
+                onCancel={() => setIsCreateModalOpen(false)}
+                confirmLoading={createLoading}
+                okText="Create"
+                destroyOnClose
+            >
+                <Form form={form} layout="vertical" preserve={false}>
+                    <Form.Item
+                        label="Title"
+                        name="title"
+                        rules={[{ required: true, message: 'Please enter the post title' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Content"
+                        name="content"
+                        rules={[{ required: true, message: 'Please enter the post content' }]}
+                    >
+                        <Input.TextArea rows={6} />
+                    </Form.Item>
+                    {/* Optional: Add category or other fields here */}
+                </Form>
+            </Modal>
         </div>
     );
 }
