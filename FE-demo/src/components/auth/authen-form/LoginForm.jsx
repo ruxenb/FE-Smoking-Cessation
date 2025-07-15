@@ -11,6 +11,7 @@ import { BiUnderline } from "react-icons/bi";
 import { UserAddOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { useUser } from "/src/userContext/UserContext";
+import { login } from "../../../services/authService";
 
 function LoginForm() {
   const navigate = useNavigate(); // dùng để chuyển hướng trang
@@ -25,24 +26,20 @@ function LoginForm() {
   /* onFinish được gọi khi người dùng nhấn nút Login */
   const onFinish = async (values) => {
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        // gửi HTTP Request đến địa chỉ API phía server backend)
-        method: "POST", // phương thức HTTP là POST
-        headers: {
-          "Content-Type": "application/json", // Báo cho server biết rằng dữ liệu gửi lên là JSON
-        },
+      const submitData = {
         // Chuyển đổi dữ liệu đối tượng Javascript(username/email + password) thành JSON để gửi lên server
-        body: JSON.stringify({
-          usernameOrEmail: values.usernameOrEmail,
-          password: values.password,
-        }),
-      });
-      const result = await response.json(); 
+        usernameOrEmail: values.usernameOrEmail,
+        password: values.password,
+      };
+      const response = await login(submitData);
+      console.log("response:", response);
+      const result = response.data;
+      console.log("result:", result);
 
       // // Kiểm tra xem loại dữ liệu mà server trả về là gì, có chứa Content-Type hay k, có thì kiểm tra xem có phải là JSON hay không
       // const contentType = response.headers.get("Content-Type");
       // console.log("contentType:", contentType);
-      
+
       // // Nếu response có Content-Type là application/json, thì parse kết quả trả về thành JSON
       // if (contentType && contentType.includes("application/json")) {
       //   result = await response.json(); // result là một đối tượng JSON, chứa dữ liệu đăng nhập trả về từ server
@@ -53,11 +50,10 @@ function LoginForm() {
       //   const text = await response.text();
       //   result = { message: text };
       // }
-      console.log("response:", response);
-      console.log("result:", result);
+
       //Kiểm tra xem phản hồi HTTP có thành công không (status code từ 200–299) và có token được trả về hay không
-      if (response.ok && result.accessToken) {
-         // Gộp thông tin user và thông tin gói thành viên vào một object
+      if (response.status === 200 && result.accessToken) {
+        // Gộp thông tin user và thông tin gói thành viên vào một object
         const userData = {
           ...result.user, // Lấy tất cả các trường từ object user
           membership: result.currentUserMembership, // Thêm trường membership
@@ -67,7 +63,7 @@ function LoginForm() {
         localStorage.setItem("accessToken", result.accessToken);
         localStorage.setItem("tokenType", result.tokenType); // "Bearer" hoặc "JWT", tuỳ backend
         // Lưu user info thành 1 object JSON vào localStorage
-        localStorage.setItem("user", JSON.stringify(userData)); 
+        localStorage.setItem("user", JSON.stringify(userData));
         // lưu thông tin user vào context
         setUser(userData);
 
@@ -85,7 +81,6 @@ function LoginForm() {
           theme: "dark", // hoặc "dark", "colored"
           toastClassName: "success-toast",
         });
-        // log lại thông tin đã được dùng để đăng nhập thành công
 
         // --- LOGIC CHUYỂN HƯỚNG MỚI DỰA TRÊN DỮ LIỆU TỨC THÌ ---
         // Lấy vai trò trực tiếp từ `result.user` vừa nhận được
@@ -94,27 +89,29 @@ function LoginForm() {
         // 1. check nếu trạng trái 'from' tồn tại ở redirect.
         // 2. nếu nó tồn tại, dùng đường(path) đó.
         // 3. nếu ko, dùng default '/dashboard'.
-        let defaultRedirectPath = '/home'; // Trang mặc định nếu role không xác định
+        let defaultRedirectPath = "/home"; // Trang mặc định nếu role không xác định
 
         console.log("Login successful, redirecting to:", defaultRedirectPath);
 
         // 1. Xác định trang dashboard mặc định dựa trên role của người dùng
-        if (userRole === 'MEMBER') {
-          defaultRedirectPath = '/dashboard';
-        } else if (userRole === 'COACH') {
-          defaultRedirectPath = '/coach-dashboard';
-        } else if (userRole === 'ADMIN') {
-          defaultRedirectPath = '/admin'; // Ví dụ cho admin
+        if (userRole === "MEMBER") {
+          defaultRedirectPath = "/dashboard";
+        } else if (userRole === "COACH") {
+          defaultRedirectPath = "/coach-dashboard";
+        } else if (userRole === "ADMIN") {
+          defaultRedirectPath = "/admin"; // Ví dụ cho admin
         }
-        
+
         // 2. Lấy trang đích mà người dùng đang cố gắng truy cập (nếu có)
-          const from = location.state?.from?.pathname;
+        const from = location.state?.from?.pathname;
 
         // 3. Quyết định trang cuối cùng sẽ chuyển hướng đến
         //    Ưu tiên trang `from` nếu nó tồn tại, nếu không thì dùng trang mặc định theo role.
         const destination = from || defaultRedirectPath;
 
-        console.log(`Login successful. Role: ${userRole}. Redirecting to: ${destination}`);
+        console.log(
+          `Login successful. Role: ${userRole}. Redirecting to: ${destination}`
+        );
 
         // 4. Thực hiện chuyển hướng
         navigate(destination, { replace: true });
@@ -126,10 +123,18 @@ function LoginForm() {
       }
     } catch (error) {
       console.error("Error Info: ", error);
-      console.error("Error Message: ", error.message);
-      /* toast cảnh báo khi chưa chạy hệ thống phía backend */
-      /* TypeError - xảy ra khi gọi fetch() mà không kết nối được tới server - BackEnd chưa đc chạy */
-      if (error instanceof TypeError && error.message === "Failed to fetch") {
+      if (error.status === 404 && error.response) {
+        console.warn("Login failed:", error.response);
+        toast.error(error.response.data, {
+          theme: "dark",
+          position: "top-left",
+        });
+        console.log(error.response.data);
+      } else if (
+        /* TypeError - xảy ra khi gọi fetch() mà không kết nối được tới server - BackEnd chưa đc chạy */
+        error instanceof TypeError &&
+        error.message === "Failed to fetch"
+      ) {
         toast.warning(
           "Lỗi Server chưa được khởi động, thử lại sau khi đã chạy hệ thống Back-End nhen 😏 ",
           { theme: "dark", position: "top-left" }
@@ -209,12 +214,7 @@ function LoginForm() {
         </Form.Item>
         {/* Login Button */}
         <Form.Item label={null}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-button"
-  
-          >
+          <Button type="primary" htmlType="submit" className="login-button">
             Login
           </Button>
         </Form.Item>

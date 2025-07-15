@@ -6,3 +6,7 @@ export const register = async (registerData) => {
     registerData
   );
 };
+
+export const login = async (loginData) => {
+  return await api.post("http://localhost:8080/api/auth/login", loginData);
+};
