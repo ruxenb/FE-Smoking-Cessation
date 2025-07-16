@@ -25,7 +25,7 @@ import QuitPlanPage from "./pages/QuitPlanPage";
 import Feedback from "./pages/FeedbackPage";
 
 import Dashboard from "./pages/DashboardPage";
-import CheckoutPage from "./pages/CheckoutPage"; 
+import CheckoutPage from "./pages/CheckoutPage";
 import SettingsPage from "./components/dashboard/sidebarPages/SettingsPage";
 import CoachDashboard from "./pages/CoachDashboardPage"; // <-- Import trang mới
 import ChatPage from "./components/chat/ChatPage";
@@ -35,12 +35,10 @@ import AdminDashboard from "./components/admin/adminDashboardContent"; // Trang 
 import AdminBlogManagement from "./components/admin/AdminBlogManagement"; // Trang quản lý blog
 import AdminUserManagement from "./components/admin/userManagement"; // Trang quản lý blog
 
-
 import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn";
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
 import ProtectedRoute from "./components/protectedRoute/protectedRoute";
-import OAuth2RedirectHandler from "./components/oauth2/redirect/OAuth2RedirectHandler";
-
+import OAuth2RedirectHandler from "./components/GoogleAuthen/OAuth2RedirectHandler";
 
 function App() {
   // Tạo một router với createBrowserRouter, định nghĩa các route của ứng dụng
@@ -57,25 +55,38 @@ function App() {
     { path: "/membership", element: <MembershipPage /> },
     { path: "/about", element: <AboutUsPage /> },
     { path: "/community", element: <CommunityPage /> },
-    { path: "/oauth2/redirect", element: <OAuth2RedirectHandler /> },
+    { path: "/oauth2-redirect", element: <OAuth2RedirectHandler /> },
     { path: "/blog", element: <BlogPage /> },
-    { path: "/blog/new", element: <ProtectedRoute><CreatePost /></ProtectedRoute> },
-    { path: "/blog/:id/edit", element: <ProtectedRoute><EditPost /></ProtectedRoute> },
+    {
+      path: "/blog/new",
+      element: (
+        <ProtectedRoute>
+          <CreatePost />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/blog/:id/edit",
+      element: (
+        <ProtectedRoute>
+          <EditPost />
+        </ProtectedRoute>
+      ),
+    },
     { path: "/blog/:id", element: <PostDetail /> },
     // { path: "/coach-dashboard", element: <CoachDashboard /> },
-
 
     // --- Protected Routes (yêu cầu người dùng login) ---
     // bao các page bằng ProtectedRoute component.
     {
       path: "/dashboard",
       element: (
-        <ProtectedRoute allowedRoles={['MEMBER']}> 
+        <ProtectedRoute allowedRoles={["MEMBER"]}>
           <Dashboard />
         </ProtectedRoute>
       ),
     },
-    
+
     {
       path: "/smoking-quiz",
       element: (
@@ -96,14 +107,14 @@ function App() {
       path: "/quit-plan",
       element: (
         <ProtectedRoute>
-          <QuitPlanPage/>
-          </ProtectedRoute>
+          <QuitPlanPage />
+        </ProtectedRoute>
       ),
     },
     {
       path: "/coach-dashboard",
       element: (
-        <ProtectedRoute allowedRoles={['COACH']}>
+        <ProtectedRoute allowedRoles={["COACH"]}>
           <CoachDashboard />
         </ProtectedRoute>
       ),
@@ -133,10 +144,14 @@ function App() {
     //     </ProtectedRoute>
     //   ),
     // },
-        // --- THÊM ROUTE MỚI ĐỂ XỬ LÝ KẾT QUẢ TỪ VNPAY ---
+    // --- THÊM ROUTE MỚI ĐỂ XỬ LÝ KẾT QUẢ TỪ VNPAY ---
     {
       path: "/payment-return",
-      element: <ProtectedRoute><PaymentReturnPage /></ProtectedRoute>
+      element: (
+        <ProtectedRoute>
+          <PaymentReturnPage />
+        </ProtectedRoute>
+      ),
     },
     // {
     //   path: "/payment-return",
@@ -147,13 +162,17 @@ function App() {
 
     {
       path: "/checkout/:planType",
-      element: <ProtectedRoute><CheckoutPage /></ProtectedRoute>
+      element: (
+        <ProtectedRoute>
+          <CheckoutPage />
+        </ProtectedRoute>
+      ),
     },
 
-     {
+    {
       path: "/admin",
       element: (
-        <ProtectedRoute allowedRoles={['ADMIN']}>
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
           <AdminLayout />
         </ProtectedRoute>
       ),
@@ -161,7 +180,7 @@ function App() {
       children: [
         {
           index: true, // Trang mặc định khi vào /admin
-          element: <AdminDashboard />, 
+          element: <AdminDashboard />,
         },
         {
           path: "blog", // URL sẽ là /admin/blog
@@ -173,7 +192,6 @@ function App() {
         },
       ],
     },
-    
 
     //đang xem các phương án UX
     // {
