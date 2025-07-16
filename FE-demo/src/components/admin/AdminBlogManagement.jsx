@@ -233,4 +233,11 @@ function AdminBlogManagement() {
     );
 }
 
-export default AdminBlogManagement;
+const AdminBlogManagementPage = () => (
+    <App>
+        <AdminBlogManagement />
+    </App>
+);
+
+// Export component đã được bọc
+export default AdminBlogManagementPage;

@@ -32,8 +32,8 @@ import ChatPage from "./components/chat/ChatPage";
 
 import AdminLayout from "./components/admin/layout/adminLayout";
 import AdminDashboard from "./components/admin/adminDashboardContent"; // Trang tổng quan
-import AdminBlogManagement from "./components/admin/AdminBlogManagement"; // Trang quản lý blog
-import AdminUserManagement from "./components/admin/userManagement"; // Trang quản lý blog
+import AdminBlogManagementPage from "./components/admin/AdminBlogManagement"; // Trang quản lý blog
+import AdminUserManagementPage from "./components/admin/userManagement"; // Trang quản lý blog
 
 import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn";
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
@@ -184,11 +184,11 @@ function App() {
         },
         {
           path: "blog", // URL sẽ là /admin/blog
-          element: <AdminBlogManagement />,
+          element: <AdminBlogManagementPage />,
         },
         {
           path: "users",
-          element: <AdminUserManagement />,
+          element: <AdminUserManagementPage />,
         },
       ],
     },

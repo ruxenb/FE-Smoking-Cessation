@@ -31,8 +31,24 @@ function CoachSidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
   return (
     <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="logo" onClick={onToggle} style={{ cursor: "pointer" }}>
-        {/* You can use a proper icon here */}
-        <span className="icon">👨‍🏫</span>
+        <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            onClick={onToggle} // Gán sự kiện onToggle cho nút hamburger
+            style={{ cursor: "pointer", padding: "8px" }}
+        >
+            <path
+                d="M4 6H20M4 12H20M4 18H20"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+        {/* Tên/Logo của khu vực Coach */}
         <span>Coach Panel</span>
       </div>
       <nav className="navigation">
