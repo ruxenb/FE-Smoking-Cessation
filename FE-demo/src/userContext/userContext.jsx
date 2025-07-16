@@ -8,7 +8,10 @@ useState: Quản lý state cục bộ.
 useEffect: Chạy code khi component mount hoặc update.
  */
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { getCurrentUser, getCurrentUserMembership } from "../services/userService"; 
+import {
+  getCurrentUser,
+  getCurrentUserMembership,
+} from "../services/userService";
 
 const UserContext = createContext(null); // Tạo một Context tên là UserContext với giá trị mặc định là null
 
@@ -22,28 +25,28 @@ export function UserProvider({ children }) {
   // Khi muốn thay đổi giá trị của user, bạn sẽ gọi setUser(newValue) với giá trị mới
   const [user, setUser] = useState(null); // user là giá trị state hiện tại, setUser là hàm để cập nhật giá trị của user
 
-    // Thêm một state loading, mặc định là true khi app vừa khởi động
+  // Thêm một state loading, mặc định là true khi app vừa khởi động
   const [loading, setLoading] = useState(true);
 
   // Load user từ localStorage khi app khởi động
   useEffect(() => {
     try {
-    const storedUser = localStorage.getItem("user");
-    // Nếu storedUser không phải null, dùng JSON.parse(storedUser) để chuyển chuỗi JSON(string) thành object JavaScript
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }catch(error){
-    console.error("Failed to parse user from localStorage", error);
+      const storedUser = localStorage.getItem("user");
+      // Nếu storedUser không phải null, dùng JSON.parse(storedUser) để chuyển chuỗi JSON(string) thành object JavaScript
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Failed to parse user from localStorage", error);
       // Nếu có lỗi, xóa user cũ để tránh lỗi lặp lại
       localStorage.removeItem("user");
-  }finally {
+    } finally {
       // Dù thành công hay thất bại, báo hiệu rằng quá trình tải đã xong
       setLoading(false);
     }
   }, []);
 
-    /**
+  /**
    * Gọi API để lấy dữ liệu người dùng mới nhất từ server và cập nhật state toàn cục.
    * @returns {Promise<boolean>} Trả về true nếu cập nhật thành công, false nếu thất bại.
    */
@@ -69,15 +72,20 @@ export function UserProvider({ children }) {
 
         // 2. Gọi API để lấy thông tin membership (đây là optional)
         try {
-            const membershipResponse = await getCurrentUserMembership(baseUser.userId, fullToken);
-            if (membershipResponse.data?.status === "success") {
-                membershipData = membershipResponse.data.data;
-            }
+          const membershipResponse = await getCurrentUserMembership(
+            baseUser.userId,
+            fullToken
+          );
+          if (membershipResponse.data?.status === "success") {
+            membershipData = membershipResponse.data.data;
+          }
         } catch (membershipError) {
-             // Bỏ qua lỗi nếu user không có membership, đó là trường hợp bình thường
-            console.log("User does not have an active membership, which is normal.");
+          // Bỏ qua lỗi nếu user không có membership, đó là trường hợp bình thường
+          console.log(
+            "User does not have an active membership, which is normal."
+          );
         }
-        
+
         // 3. Gộp dữ liệu user và membership lại
         const updatedUserData = {
           ...baseUser,
@@ -91,7 +99,9 @@ export function UserProvider({ children }) {
         console.log("User context refreshed successfully!");
         return true; // Trả về true báo hiệu thành công
       } else {
-        throw new Error(userResponse.data?.message || "Failed to fetch user data");
+        throw new Error(
+          userResponse.data?.message || "Failed to fetch user data"
+        );
       }
     } catch (error) {
       console.error("Failed to refresh user data:", error);
@@ -103,10 +113,10 @@ export function UserProvider({ children }) {
     }
   };
 
-
   const logout = () => {
     //localStorage.clear(); // Xóa toàn bộ thông tin người dùng khỏi localStorage
     // nên xóa từng mục cụ thể để tránh xóa nhầm dữ liệu khác
+    localStorage.removeItem("fullToken");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("tokenType");
     localStorage.removeItem("user");
@@ -117,7 +127,9 @@ export function UserProvider({ children }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, logout, loading, refreshUser }}>
+    <UserContext.Provider
+      value={{ user, setUser, logout, loading, refreshUser }}
+    >
       {children}
     </UserContext.Provider>
   );

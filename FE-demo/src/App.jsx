@@ -38,7 +38,7 @@ import AdminUserManagement from "./components/admin/userManagement"; // Trang qu
 import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn";
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
 import ProtectedRoute from "./components/protectedRoute/protectedRoute";
-import OAuth2RedirectHandler from "./components/GoogleAuthen/OAuth2RedirectHandler";
+import OAuth2RedirectHandler from "./components/oauth2/OAuth2RedirectHandler";
 
 function App() {
   // Tạo một router với createBrowserRouter, định nghĩa các route của ứng dụng

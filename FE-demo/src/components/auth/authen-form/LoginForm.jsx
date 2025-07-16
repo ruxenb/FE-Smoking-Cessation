@@ -31,8 +31,10 @@ function LoginForm() {
         usernameOrEmail: values.usernameOrEmail,
         password: values.password,
       };
+      // gọi tới api từ AuthService
       const response = await login(submitData);
       console.log("response:", response);
+      
       const result = response.data;
       console.log("result:", result);
 
