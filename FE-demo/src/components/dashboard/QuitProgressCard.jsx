@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./quitProgressCard.css";
+import "./QuitProgressCard.css";
 import { parseDate, formatDate } from "../../services/dateUtils";
 import {
   saveQuitProgressLog,
