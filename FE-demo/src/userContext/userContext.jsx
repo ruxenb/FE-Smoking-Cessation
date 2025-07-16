@@ -82,7 +82,8 @@ export function UserProvider({ children }) {
         } catch (membershipError) {
           // Bỏ qua lỗi nếu user không có membership, đó là trường hợp bình thường
           console.log(
-            "User does not have an active membership, which is normal."
+            "User does not have an active membership, which is normal.",
+            membershipError
           );
         }
 

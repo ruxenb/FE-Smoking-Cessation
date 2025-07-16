@@ -1,4 +1,3 @@
-// src/pages/OAuth2RedirectHandler.jsx
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "/src/userContext/UserContext";
@@ -36,35 +35,42 @@ const OAuth2RedirectHandler = () => {
       );
       if (!response.ok) throw new Error("Failed to fetch user info");
 
+      // result sẽ là biến chứa dữ liệu được JSON trả về từ BE khi login thành công
       const result = await response.json();
+      if (result && result.user) {
+        console.log("result:", result);
+        const membership = result.user.currentUserMembership;
+        const quitPlan = result.user.quitplan;
+        const smokingProfile = result.user.smokingProfile;
 
-     const membership =  result.currentUserMembership;
-     const quitPlan =  result.quitPlan;
-     const smokingProfile = result.smokingProfile;
+        const userData = {
+          ...result.user,
+          accessToken: localStorage.getItem("accessToken"),
+          tokenType: localStorage.getItem("tokenType"),
+          membership,
+          quitPlan,
+          smokingProfile,
+        };
 
-      const userData = {
-        ...result.user,
-        accessToken: localStorage.getItem("accessToken"),
-        tokenType: localStorage.getItem("tokenType"),
-        membership,
-        quitPlan,
-        smokingProfile
-      };
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData);
 
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
+        localStorage.setItem("membership", JSON.stringify(userData.membership));
+        localStorage.setItem("quitplan", JSON.stringify(quitPlan));
+        localStorage.setItem(
+          "smokingProfile",
+          JSON.stringify(userData.smokingProfile)
+        );
 
-      localStorage.setItem("membership", userData.membership);
-      localStorage.setItem("quitplan", userData.quitPlan);
-      localStorage.setItem("smokingProfile", userData.smokingProfile);
-
-      // Gọi refreshUser để đảm bảo userId và toàn bộ info được đồng bộ
-      const refreshed = await refreshUser();
-      if (!refreshed) {
-        toast.warn("Partial login: Please re-login to complete your profile");
+        // Gọi refreshUser để đảm bảo userId và toàn bộ info được đồng bộ
+        const refreshed = await refreshUser();
+        if (!refreshed) {
+          toast.warn("Partial login: Please re-login to complete your profile");
+        }
+        toast.success("Google Login Success!", { theme: "dark" });
+        navigate("/dashboard");
+        return;
       }
-      toast.success("Google Login Success!", { theme: "dark" });
-      navigate("/dashboard");
     } catch (error) {
       toast.error("Failed to login with Google", { theme: "dark" });
       console.error("Google OAuth fetch error:", error);

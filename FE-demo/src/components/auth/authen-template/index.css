@@ -3,26 +3,24 @@
   width: 100vw;
   min-height: 100vh;
   display: flex;
-  align-items: stretch; 
+  align-items: stretch;
 }
 .authen-template-form {
   width: 40%;
-  background-color: lightgray;
+  background-color: white;
   display: flex;
   justify-content: center; /* căn chỉnh phần tử theo chiều chính */
   align-items: center; /* căn chỉnh phần tử theo chiều phụ */
 }
-
 .authen-template-image {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 60%;
-  height: auto;
   min-height: 100vh;
-  overflow: hidden;
-  background-image: url("/public/images/Image3.png");
+  background-image: url("/images/Image3.png");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: center center;
+  position: relative;
 }

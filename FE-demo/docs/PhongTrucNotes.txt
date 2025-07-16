@@ -30,3 +30,6 @@ mà không cần reload lại trang như các trang web truyền thống
 =>
 
 +) Redux
+
+
++) npm install react-idle-timer
