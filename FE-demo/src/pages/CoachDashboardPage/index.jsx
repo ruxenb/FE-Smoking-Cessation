@@ -7,6 +7,7 @@ import LeaderboardPage from "../../components/coach/leaderboard";
 import CoachChatPage from "../../components/chat/CoachChatPage"; // <-- Component này sẽ được làm lại
 // import ChatPlaceholder from "../../components/coach/ChatPlaceholder";
 import SettingsPage from "../../components/dashboard/sidebarPages/SettingsPage";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 import '../../components/dashboard/dashboard.css';
 
@@ -15,6 +16,8 @@ function CoachDashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState("overview");
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  
 
   useEffect(() => {
     document.body.setAttribute("data-theme", theme);
@@ -50,7 +53,11 @@ function CoachDashboard() {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
-      <div className="main-content-area">{renderCurrentPage()}</div>
+      <div className="main-content-area">
+        <div className="main-content">
+          {renderCurrentPage()}
+        </div>
+      </div>
     </div>
   );
 }

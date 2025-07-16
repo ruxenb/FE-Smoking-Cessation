@@ -8,6 +8,8 @@ import {
   DatePicker,
   Select,
   Tooltip,
+  ConfigProvider, // <-- Import ConfigProvider
+  App, // <-- Import App để sửa lỗi context cho Modal
 } from "antd";
 import dayjs from "dayjs";
 import { useUser } from "/src/userContext/UserContext";
@@ -16,6 +18,8 @@ import {
   changePassword,
   updateUserProfile,
 } from "../../../services/userService";
+import { antdTheme } from "../../../theme/antdTheme"; // <-- Import theme của bạn
+
 
 const { Option } = Select;
 
@@ -27,6 +31,7 @@ function SettingsPage({ currentTheme, onThemeChange }) {
   const handleCancel = () => setIsModalOpen(false);
   // Lấy thông tin người dùng từ context
   const { user, setUser } = useUser();
+  const { modal } = App.useApp();
 
   /* được gọi khi ấn nút save changes */
   const onFinish = async (values) => {
