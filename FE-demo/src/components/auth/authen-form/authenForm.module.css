@@ -6,8 +6,8 @@
 }
 
 .authLogo {
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
   border-radius: 20px; /* Bo góc logo cho mềm mại */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -31,12 +31,15 @@
 
 .authFormCard {
   background: #ffffff;
-  padding: 40px;
+  padding: 40px 20px;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   width: 100%;
   max-width: 460px; /* TĂNG KÍCH THƯỚC Ở ĐÂY (ví dụ từ 420px lên 460px) */
   text-align: left;
+  margin: 0 16px;          /* đảm bảo có khoảng cách ở mobile */
+  box-sizing: border-box;  /* Đảm bảo padding không làm vỡ khung */
+  max-height: fit-content;
 }
 
 .authFormTitle {

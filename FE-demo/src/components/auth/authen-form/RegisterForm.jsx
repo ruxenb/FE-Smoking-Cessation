@@ -69,6 +69,8 @@ function RegisterForm() {
   };
 
   return (
+    <div className={styles.authContainer}>
+    
     <div className={styles.authFormCard}>
       <div className={styles.logoContainer}>
         <Link to="/home">
@@ -195,6 +197,7 @@ function RegisterForm() {
           <Link to="/login">Login here</Link>
         </div>
       </Form>
+    </div>
     </div>
   );
 }
