@@ -12,7 +12,7 @@ import {
   App, // <-- Import App để sửa lỗi context cho Modal
 } from "antd";
 import dayjs from "dayjs";
-import { useUser } from "/src/userContext/UserContext";
+import { useUser } from "../../../userContext/userContext";
 import { toast } from "react-toastify";
 import {
   changePassword,
@@ -49,7 +49,7 @@ function SettingsPage({ currentTheme, onThemeChange }) {
       const submitData = {
         email: values.email,
         fullName: values.fullName,
-        dob: values.dob.format("YYYY-MM-DD"),
+        dob: values.dob.format("DD-MM-YYYY"),
         gender: values.gender,
       };
       /* khai báo hàm cha onFinish là async nếu muốn dùng await */
