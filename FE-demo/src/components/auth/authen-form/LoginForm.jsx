@@ -17,7 +17,6 @@ import { login } from "../../../services/authService";
 
 // import { useUser } from "../../../userContext/userContext";
 
-
 function LoginForm() {
   const navigate = useNavigate(); // dùng để chuyển hướng trang
   const { setUser } = useUser(); // setUser là một để cập nhật thông tin người dùng, lấy hàm setUser từ object mà useUser() trả về
@@ -39,11 +38,10 @@ function LoginForm() {
       // gọi tới api từ AuthService
       const response = await login(submitData);
       console.log("response:", response);
-      
+
       const result = response.data;
       console.log("result:", result);
 
-  
       //Kiểm tra xem phản hồi HTTP có thành công không (status code từ 200–299) và có token được trả về hay không
       if (response.status === 200 && result.accessToken) {
         // Gộp thông tin user và thông tin gói thành viên vào một object
@@ -145,21 +143,21 @@ function LoginForm() {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-   return (
+  return (
     <div className={styles.authContainer}>
       <div className={styles.authFormCard}>
-      <div className={styles.logoContainer}>
-        <Link to="/home">
-          <img
-            src="/images/Image2.png"
-            alt="App Logo"
-            className={styles.authLogo}
-          />
-        </Link>
-      </div>  
-      <h1 className={styles.authFormTitle}>Welcome back!</h1>
-      
-      <Form
+        <div className={styles.logoContainer}>
+          <Link to="/home">
+            <img
+              src="/images/Image2.png"
+              alt="App Logo"
+              className={styles.authLogo}
+            />
+          </Link>
+        </div>
+        <h1 className={styles.authFormTitle}>Welcome back!</h1>
+
+        <Form
           name="login"
           layout="vertical"
           initialValues={{ remember: true }}
@@ -171,7 +169,10 @@ function LoginForm() {
             label="Email"
             name="usernameOrEmail"
             rules={[
-              { required: true, message: "Please input your email or username!" },
+              {
+                required: true,
+                message: "Please input your email or username!",
+              },
             ]}
           >
             <Input placeholder="Enter your email" />
@@ -187,14 +188,24 @@ function LoginForm() {
 
           {/* === PHẦN ĐƯỢC THÊM LẠI === */}
           <Form.Item>
-             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                    <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-                <Link to="/forgot" className={styles.authLink} style={{ marginTop: 0 }}>
-                    Forgot password?
-                </Link>
-             </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox>Remember me</Checkbox>
+              </Form.Item>
+              <Link
+                to="/forgot"
+                className={styles.authLink}
+                style={{ marginTop: 0 }}
+              >
+                Forgot password?
+              </Link>
+            </div>
           </Form.Item>
           {/* =========================== */}
 
@@ -207,28 +218,22 @@ function LoginForm() {
               Sign In
             </Button>
           </Form.Item>
-          
+
           {/* === PHẦN ĐĂNG NHẬP SOCIAL === */}
           <div className={styles.altLogin}>
             <p className={styles.altLoginTitle}>Or Login With</p>
             <div className={styles.altLoginButtons}>
-                <Button icon={<FaGithub />} className="github-btn">
-                  GitHub
-                </Button>
-                <Button icon={<FaFacebookSquare />} className="facebook-btn">
-                  Facebook
-                </Button>
-                <Button
-                  icon={<FaGoogle />}
-                  className="google-btn"
-                  onClick={hangdleGoogleLogin}
-                >
-                  Google
-                </Button>
+              <Button
+                icon={<FaGoogle />}
+                className="google-btn"
+                onClick={hangdleGoogleLogin}
+              >
+                Google
+              </Button>
             </div>
           </div>
           {/* =========================================== */}
-          
+
           <div className={styles.authSwitchLink}>
             <span>Don't have an account?</span>
             <Link to="/register">Sign up</Link>

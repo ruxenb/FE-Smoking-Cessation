@@ -4,7 +4,6 @@ import { Navbar } from "../../components/home/homePage";
 function BlogPage() {
   return (
     <div>
-      <Navbar />
       <BlogApp />;
     </div>
   );
