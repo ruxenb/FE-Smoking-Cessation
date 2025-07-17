@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "/src/userContext/UserContext";
+import { useUser } from "../../userContext/userContext";
 import { toast } from "react-toastify";
 
 const OAuth2RedirectHandler = () => {
