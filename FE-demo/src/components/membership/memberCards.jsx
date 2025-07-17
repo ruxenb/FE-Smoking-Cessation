@@ -34,7 +34,7 @@ function memberCard({ renderCtaButton }){
         <div className="membership-card advanced-plan promoted-card">
           <span className="ribbon">Most Popular!</span>
           <h2>Advanced</h2>
-          <p className="price">*** VND / month</p>
+          <p className="price">100.000 VND / month</p>
           <div className="card-content-wrapper">
             <p className="description">Upgrade to receive comprehensive support and achieve the best results!</p>
             <ul className="features-list">

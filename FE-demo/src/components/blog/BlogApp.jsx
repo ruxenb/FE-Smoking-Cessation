@@ -77,7 +77,6 @@ export default function BlogApp() {
 
   return (
     <>
-      {!user && <Navbar />}
       <div className="blog-container">
         <div className="header">
           <h1>
