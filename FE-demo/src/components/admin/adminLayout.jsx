@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Layout } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import AdminSidebar from './adminSidebar';
+import AdminSidebar from './layout/adminSidebar';
 import { Outlet } from 'react-router-dom';
 
 const { Header, Content } = Layout;

@@ -10,8 +10,12 @@ import { FaLock } from "react-icons/fa";
 import { BiUnderline } from "react-icons/bi";
 import { UserAddOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
+<<<<<<< HEAD
 import { useUser } from "/src/userContext/UserContext";
 import { login } from "../../../services/authService";
+=======
+import { useUser } from "../../../userContext/userContext";
+>>>>>>> main
 
 function LoginForm() {
   const navigate = useNavigate(); // dùng để chuyển hướng trang

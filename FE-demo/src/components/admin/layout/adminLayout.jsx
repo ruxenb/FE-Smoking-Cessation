@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Layout, ConfigProvider } from 'antd'; 
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import AdminSidebar from './AdminSidebar';
+import AdminSidebar from './adminSidebar';
 import { Outlet, useLocation } from 'react-router-dom';
 import { antdTheme } from '../../../theme/antdTheme'; // <-- Import theme của bạn
 
