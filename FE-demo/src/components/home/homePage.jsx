@@ -1,5 +1,5 @@
 import React from "react";
-import "./HomePage.css";
+import "./homePage.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../userContext/userContext";
 import { Typewriter } from "react-simple-typewriter";

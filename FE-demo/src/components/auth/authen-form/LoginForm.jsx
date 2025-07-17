@@ -12,7 +12,7 @@ import { BiUnderline } from "react-icons/bi";
 import { UserAddOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
-import { useUser } from "/src/userContext/UserContext";
+import { useUser } from "../../../userContext/userContext"; // Import useUser từ userContext
 import { login } from "../../../services/authService";
 
 // import { useUser } from "../../../userContext/userContext";
@@ -166,7 +166,7 @@ function LoginForm() {
           autoComplete="on"
         >
           <Form.Item
-            label="Email"
+            label="Username or Email"
             name="usernameOrEmail"
             rules={[
               {
@@ -175,7 +175,7 @@ function LoginForm() {
               },
             ]}
           >
-            <Input placeholder="Enter your email" />
+            <Input placeholder="Enter your username or email" />
           </Form.Item>
 
           <Form.Item
