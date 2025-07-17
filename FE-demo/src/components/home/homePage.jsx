@@ -1,7 +1,8 @@
 import React from "react";
-import "./homePage.css";
+import "./HomePage.css";
 import { Link } from "react-router-dom";
 import { useUser } from "../../userContext/userContext";
+import { Typewriter } from "react-simple-typewriter";
 
 // component đơn giản cho icon
 const Icon = ({ children }) => (
@@ -65,9 +66,21 @@ const HomePage = () => {
       <header className="hero-section">
         <div className="hero-layout">
           <div className="hero-left-column">
-            <h1>Quit Strong. Live Long.</h1>
+            <h1>
+              <span className="highlight">
+                <Typewriter
+                  words={["Quit Smoking", "Live Longer"]}
+                  loop={0} // 0 = không lặp
+                  cursor
+                  typeSpeed={80}
+                  deleteSpeed={50}
+                  delaySpeed={1000}
+                />
+              </span>
+            </h1>
             <p className="subtitle">
-              Guiding you towards a healthier, happier, smoke-free future.
+              We are here for guiding you towards a healthier happier and better
+              life
             </p>
             <div className="hero-buttons">
               <Link to="/register" className="cta-button primary">
