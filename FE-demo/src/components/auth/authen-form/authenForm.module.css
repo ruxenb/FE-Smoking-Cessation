@@ -1,0 +1,202 @@
+/* AuthForm.module.css */
+
+.logoContainer {
+  text-align: center;
+  margin-bottom: 20px; /* Khoảng cách giữa logo và tiêu đề */
+}
+
+.authLogo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 20px; /* Bo góc logo cho mềm mại */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.authLogo:hover {
+  transform: scale(1.1); /* Hiệu ứng phóng to khi hover */
+}
+
+/* .authContainer không còn được dùng nếu bạn sử dụng AuthenTemplate làm nền, 
+   nhưng tôi vẫn giữ lại phòng trường hợp bạn dùng nó ở nơi khác (ví dụ ForgotPasswordForm) */
+.authContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #e8f5e9;
+}
+
+.authFormCard {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 460px; /* TĂNG KÍCH THƯỚC Ở ĐÂY (ví dụ từ 420px lên 460px) */
+  text-align: left;
+}
+
+.authFormTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Ghi đè Ant Design Styles */
+.authFormCard :global(.ant-form-item-label > label) {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Cập nhật Input Styling để có nền xám nhạt */
+.authFormCard :global(.ant-input),
+.authFormCard :global(.ant-input-password),
+.authFormCard :global(.ant-select-selector),
+.authFormCard :global(.ant-picker),
+.authFormCard :global(.ant-input-affix-wrapper) {
+  border-radius: 8px !important;
+  height: 48px !important;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  
+  /* MÀU NỀN VÀ VIỀN MỚI CHO INPUT */
+  background-color: #f5f7fa !important; 
+  border: 1px solid #e0e0e0 !important; 
+}
+
+/* Đảm bảo input bên trong Input.Password cũng có nền đúng */
+.authFormCard :global(.ant-input-password input) {
+    background-color: #f5f7fa !important;
+    height: auto !important; /* Để input tự điều chỉnh chiều cao bên trong wrapper */
+}
+
+.authFormCard :global(.ant-input-affix-wrapper) {
+    padding: 0 12px !important;
+}
+
+
+/* Nút Submit Chính */
+.authSubmitButton {
+  width: 100%;
+  height: 48px !important;
+  border-radius: 8px !important;
+  background-color: #212121 !important;
+  border: none !important;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.authSubmitButton:hover {
+  background-color: #424242 !important;
+}
+
+/* Các Link Phụ */
+.authLinkContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.authLink {
+  color: #333;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.authLink:hover {
+  color: #000;
+}
+
+.authSwitchLink {
+  text-align: center;
+  margin-top: 25px;
+  color: #555;
+}
+
+.authSwitchLink a {
+  font-weight: 600;
+  color: #1e88e5;
+  margin-left: 5px;
+}
+
+/* --- SOCIAL LOGIN STYLES (Đã cập nhật) --- */
+
+.altLogin {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.altLoginTitle {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 15px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.altLoginTitle::before,
+.altLoginTitle::after {
+  content: '';
+  flex-grow: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.altLoginTitle::before { margin-right: 15px; }
+.altLoginTitle::after { margin-left: 15px; }
+
+.altLoginButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Style chung cho các nút social */
+.altLoginButtons :global(.ant-btn) {
+  height: 48px !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+/* GitHub (Đen) */
+.altLoginButtons :global(.github-btn) {
+  background-color: #333 !important;
+  color: white !important;
+  border: none !important;
+}
+.altLoginButtons :global(.github-btn:hover) {
+  background-color: #555 !important;
+}
+
+/* Facebook (Xanh) */
+.altLoginButtons :global(.facebook-btn) {
+  background-color: #1877F2 !important;
+  color: white !important;
+  border: none !important;
+}
+.altLoginButtons :global(.facebook-btn:hover) {
+  background-color: #3b8bf4 !important;
+}
+
+/* Google (Đỏ) - CẬP NHẬT MỚI */
+.altLoginButtons :global(.google-btn) {
+  background-color: #DB4437 !important; /* Màu đỏ Google */
+  color: white !important;
+  border: none !important;
+}
+.altLoginButtons :global(.google-btn:hover) {
+  background-color: #c33c31 !important; /* Đỏ đậm hơn khi hover */
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
-import "./ForgotPasswordForm.css"; // We'll create this CSS file next
+// import "./ForgotPasswordForm.css"; // We'll create this CSS file next
+import styles from "./authenForm.module.css"; // Thay đổi import
 import { Link } from "react-router-dom";
 import { BsFillPersonFill } from "react-icons/bs"; // Using person icon for email/username
 
@@ -17,17 +18,20 @@ function ForgotPasswordForm() {
   };
 
   return (
-    <div className="forgot-password-container">
-      <div className="forgot-password-header">
-        <Link to="/home">
-          <img
-            src="/public/images/Image2.png"
-            alt="Logo"
-            className="forgot-password-logo"
-          />
-        </Link>
-        <h1>Forgot Password</h1>
-      </div>
+    <div className={styles.authContainer}>
+      <div className={styles.authFormCard}>
+         <div className={styles.logoContainer}>
+          <Link to="/home">
+            <img
+              src="/images/Image2.png"
+              alt="App Logo"
+              className={styles.authLogo}
+            />
+          </Link>
+        </div>
+        {/* ====================================================== */}
+        
+        <h1 className={styles.authFormTitle}>Reset Password</h1>
       {/* Add a div here and apply your new class name */}
       <div className="my-custom-form">
         {" "}
@@ -35,15 +39,12 @@ function ForgotPasswordForm() {
         <Form
           name="forgot_password"
           layout="vertical"
-          labelCol={{ span: 24 }}
-          style={{ maxWidth: 600 }} // This style applies to the Ant Design Form's inline style
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="on"
         >
           <Form.Item
-            /* Style trực tiếp label thay vì dùng classname */
-            label={<span style={{ fontWeight: "bold" }}>Email or Password</span>}
+            label="Email"
             name="emailOrUsername"
             rules={[
               {
@@ -52,28 +53,29 @@ function ForgotPasswordForm() {
               },
             ]}
           >
-            <Input
-              placeholder="Enter your email or username"
-              prefix={<BsFillPersonFill />}
-            />
+            <Input placeholder="Enter your email or username" />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" className="reset-button">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className={styles.authSubmitButton}
+            >
               Send Reset Link
             </Button>
           </Form.Item>
 
-          <div className="back-to-login">
-            <p>Remember your password?</p>
-            <Link to="/login" className="login-link">
-              (Back to Login)
-            </Link>
+          <div className={styles.authSwitchLink}>
+            <span>Remember your password?</span>
+            <Link to="/login">Back to Login</Link>
           </div>
         </Form>
       </div>{" "}
       {/* Close the wrapper div */}
     </div>
+  </div>
+
   );
 }
 

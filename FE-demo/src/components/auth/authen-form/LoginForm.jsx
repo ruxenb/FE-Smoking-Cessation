@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
-import "./LoginForm.css";
+// import "./LoginForm.css";
+import styles from "./authenForm.module.css"; // Thay đổi import
 import { Await, Link, useNavigate, useLocation } from "react-router-dom";
 import FormItem from "antd/es/form/FormItem";
 import { FaFacebookSquare, FaGoogle } from "react-icons/fa";
@@ -10,8 +11,12 @@ import { FaLock } from "react-icons/fa";
 import { BiUnderline } from "react-icons/bi";
 import { UserAddOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
+
+import { useUser } from "/src/userContext/UserContext";
 import { login } from "../../../services/authService";
-import { useUser } from "../../../userContext/userContext";
+
+// import { useUser } from "../../../userContext/userContext";
+
 
 function LoginForm() {
   const navigate = useNavigate(); // dùng để chuyển hướng trang
@@ -38,21 +43,7 @@ function LoginForm() {
       const result = response.data;
       console.log("result:", result);
 
-      // // Kiểm tra xem loại dữ liệu mà server trả về là gì, có chứa Content-Type hay k, có thì kiểm tra xem có phải là JSON hay không
-      // const contentType = response.headers.get("Content-Type");
-      // console.log("contentType:", contentType);
-
-      // // Nếu response có Content-Type là application/json, thì parse kết quả trả về thành JSON
-      // if (contentType && contentType.includes("application/json")) {
-      //   result = await response.json(); // result là một đối tượng JSON, chứa dữ liệu đăng nhập trả về từ server
-      // }
-      // // Nếu không, thì trả về một thông báo lỗi
-      // else {
-      //   // nếu không phải là JSON, có thể là lỗi server hoặc không phải định dạng JSON
-      //   const text = await response.text();
-      //   result = { message: text };
-      // }
-
+  
       //Kiểm tra xem phản hồi HTTP có thành công không (status code từ 200–299) và có token được trả về hay không
       if (response.status === 200 && result.accessToken) {
         // Gộp thông tin user và thông tin gói thành viên vào một object
@@ -154,101 +145,96 @@ function LoginForm() {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  return (
-    <div className="login-form">
-      <div className="login-form-header">
+   return (
+    <div className={styles.authContainer}>
+      <div className={styles.authFormCard}>
+      <div className={styles.logoContainer}>
         <Link to="/home">
-          <img src="/images/Image2.png" alt="App-Logo" className="app-logo" />
+          <img
+            src="/images/Image2.png"
+            alt="App Logo"
+            className={styles.authLogo}
+          />
         </Link>
-        <h1>Login Form</h1>
-      </div>
+      </div>  
+      <h1 className={styles.authFormTitle}>Welcome back!</h1>
+      
       <Form
-        name="basic"
-        layout="vertical" /* các label(nhãn) sẽ nằm phía trên các thẻ input */
-        labelCol={{ span: 24 }} /* độ rộng của label */
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="on"
-      >
-        {/* username */}
-        <Form.Item
-          label={
-            <span style={{ fontWeight: "bold", fontSize: "14px" }}>
-              Username
-            </span>
-          }
-          name="usernameOrEmail" // khi submit form, giá trị của key "username" sẽ được gửi lên server
-          rules={[{ required: true, message: "Please input your username!" }]}
+          name="login"
+          layout="vertical"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="on"
         >
-          <Input
-            placeholder="Enter username or email"
-            prefix={<BsFillPersonFill />}
-            className="username-input"
-          />
-        </Form.Item>
-        {/* password */}
-        <Form.Item
-          label={
-            <span style={{ fontWeight: "bold", fontSize: "14px" }}>
-              Password
-            </span>
-          }
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.Password
-            placeholder="Enter password"
-            prefix={<FaLock />}
-            className="password-input"
-          />
-        </Form.Item>
-        {/* Remember và Forgot Password */}
-        <Form.Item label={null}>
-          <div className="remember-me-row">
-            <Checkbox name="remember" className="remember-me">
-              Remember me
-            </Checkbox>
-            <Link to="/forgot" className="forgot-link">
-              Forgot Password?
-            </Link>
-          </div>
-        </Form.Item>
-        {/* Login Button */}
-        <Form.Item label={null}>
-          <Button type="primary" htmlType="submit" className="login-button">
-            Login
-          </Button>
-        </Form.Item>
-        {/* Github,gg,fb login */}
-        {/* Cài install react-icons trc khi dùng */}
-        <div className="alt-login">
-          <p className="alt-login-title">Or Login With</p>
-          <div className="alt-login-buttons">
-            <Button icon={<FaGithub />} className="github">
-              GitHub
-            </Button>
-            <Button icon={<FaFacebookSquare />} className="facebook">
-              Facebook
-            </Button>
+          <Form.Item
+            label="Email"
+            name="usernameOrEmail"
+            rules={[
+              { required: true, message: "Please input your email or username!" },
+            ]}
+          >
+            <Input placeholder="Enter your email" />
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Please input your password!" }]}
+          >
+            <Input.Password placeholder="Enter your password" />
+          </Form.Item>
+
+          {/* === PHẦN ĐƯỢC THÊM LẠI === */}
+          <Form.Item>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Form.Item name="remember" valuePropName="checked" noStyle>
+                    <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+                <Link to="/forgot" className={styles.authLink} style={{ marginTop: 0 }}>
+                    Forgot password?
+                </Link>
+             </div>
+          </Form.Item>
+          {/* =========================== */}
+
+          <Form.Item>
             <Button
-              icon={<FaGoogle />}
-              className="google"
-              onClick={hangdleGoogleLogin}
+              type="primary"
+              htmlType="submit"
+              className={styles.authSubmitButton}
             >
-              Google
+              Sign In
             </Button>
+          </Form.Item>
+          
+          {/* === PHẦN ĐĂNG NHẬP SOCIAL === */}
+          <div className={styles.altLogin}>
+            <p className={styles.altLoginTitle}>Or Login With</p>
+            <div className={styles.altLoginButtons}>
+                <Button icon={<FaGithub />} className="github-btn">
+                  GitHub
+                </Button>
+                <Button icon={<FaFacebookSquare />} className="facebook-btn">
+                  Facebook
+                </Button>
+                <Button
+                  icon={<FaGoogle />}
+                  className="google-btn"
+                  onClick={hangdleGoogleLogin}
+                >
+                  Google
+                </Button>
+            </div>
           </div>
-        </div>
-        {/* register link */}
-        <div className="register">
-          <UserAddOutlined style={{ fontSize: 18, color: "#2e7d32" }} />
-          <span>Don't have an account?</span>
-          <Link to="/register" className="register-link">
-            Sign up here
-          </Link>
-        </div>
-      </Form>
+          {/* =========================================== */}
+          
+          <div className={styles.authSwitchLink}>
+            <span>Don't have an account?</span>
+            <Link to="/register">Sign up</Link>
+          </div>
+        </Form>
+      </div>
     </div>
   );
 }

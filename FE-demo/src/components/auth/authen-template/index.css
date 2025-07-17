@@ -1,26 +1,27 @@
-/* Dùng cho AuthenTemplate (index.jsx)*/
+/* AuthenTemplate/index.css (Đã cập nhật) */
+
 .authen-template {
+  /* Đây là container chính với nền xanh lá cây nhạt */
   width: 100vw;
   min-height: 100vh;
+  background-color: #e8f5e9;
+  
+  /* Căn giữa thẻ form theo cả hai chiều */
   display: flex;
-  align-items: stretch;
-}
-.authen-template-form {
-  width: 40%;
-  background-color: white;
-  display: flex;
-  justify-content: center; /* căn chỉnh phần tử theo chiều chính */
-  align-items: center; /* căn chỉnh phần tử theo chiều phụ */
-}
-.authen-template-image {
-  display: flex;
-  align-items: center;
   justify-content: center;
-  width: 60%;
-  min-height: 100vh;
-  background-image: url("/images/Image3.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  position: relative;
+  align-items: center;
+
+  /* Thêm padding để an toàn trên màn hình nhỏ */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 
+  Class này vẫn được giữ lại để tương thích với cấu trúc JSX,
+  nhưng không cần thêm style gì đặc biệt nữa.
+  Nó chỉ đóng vai trò là một cái bọc cho form.
+*/
+.authen-template-form {
+  /* Không cần width hay background-color nữa, 
+     vì LoginForm/RegisterForm đã tự quản lý thẻ màu trắng của chúng */
 }

@@ -10,35 +10,38 @@ import { motion, AnimatePresence } from "framer-motion";
 // isLogin là một biến prop(thuộc tính) được truyền vào AuthenTemplate(component)
 function AuthenTemplate({ isLogin }) {
   return (
+    // Div này tạo ra nền xanh lá cây và căn giữa nội dung
     <div className="authen-template">
-      <div className="authen-template-form">
-        {/* Sử dụng framer-motion để render login/register form có hiệu ứng đẹp */}
+        {/* AnimatePresence quản lý hiệu ứng khi component con thay đổi */}
         <AnimatePresence mode="wait">
           {isLogin ? (
             <motion.div
               key="login"
-              initial={{ x: 300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -300, opacity: 0 }}
-              transition={{ duration: 0.5 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
+              {/* LoginForm đã tự chứa layout thẻ màu trắng của nó */}
               <LoginForm />
             </motion.div>
           ) : (
             <motion.div
               key="register"
-              initial={{ x: -300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 300, opacity: 0 }}
-              transition={{ duration: 0.5 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
+              {/* RegisterForm cũng đã tự chứa layout thẻ màu trắng */}
               <RegisterForm />
             </motion.div>
           )}
-        </AnimatePresence>{" "}
+        </AnimatePresence>
       </div>
-      <div className="authen-template-image"></div>
-    </div>
+     
+
+
   );
 }
 AuthenTemplate.propTypes = {
