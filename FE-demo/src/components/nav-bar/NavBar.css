@@ -1,0 +1,78 @@
+.navbar-container {
+  background-color: var(--navbar-bg);
+  padding: 0 20px; /* Horizontal padding for smaller screens */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+  max-width: 1200px; /* Or match your main content max-width */
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+
+.navbar-left,
+.navbar-middle {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Space between items */
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.site-logo {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+}
+
+.site-name {
+  color: #00ee43;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.navbar-middle {
+  display: flex;
+  gap: 1.5rem;
+}
+.navbar-middle a {
+  color: #dde9dd;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.navbar-middle a:hover {
+  color: #ffffff;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-button {
+  background-color: #2e6f3e;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.navbar-button:hover {
+  background-color: #36894d;
+}
+
+.navbar-user {
+  color: #dde9dd;
+  font-weight: 500;
+}

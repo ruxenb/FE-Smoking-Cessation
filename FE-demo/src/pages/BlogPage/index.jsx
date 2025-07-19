@@ -1,11 +1,11 @@
 import React from "react";
 import BlogApp from "../../components/blog/BlogApp";
-import { Navbar } from "../../components/home/homePage";
+import NavBar from "../../components/nav-bar/NavBar";
 function BlogPage() {
   return (
     <div>
-      <Navbar/>
-      <BlogApp />;
+      <NavBar />
+      <BlogApp />
     </div>
   );
 }

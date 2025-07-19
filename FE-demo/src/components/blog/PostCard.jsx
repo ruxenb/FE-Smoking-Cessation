@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { formatDistanceToNow } from 'date-fns';
-import api from '../../configs/axios';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { formatDistanceToNow } from "date-fns";
+import api from "../../configs/api/axios";
 
 export default function PostCard({ post }) {
   const navigate = useNavigate();
@@ -14,7 +14,9 @@ export default function PostCard({ post }) {
         const likeRes = await api.get(`/likes/count?postId=${post.postId}`);
         const commentRes = await api.get(`/comments/post/${post.postId}`);
         setLikes(likeRes.data.data || 0);
-        setCommentsCount((commentRes.data.data && commentRes.data.data.length) || 0);
+        setCommentsCount(
+          (commentRes.data.data && commentRes.data.data.length) || 0
+        );
       } catch (err) {
         setLikes(0);
         setCommentsCount(0);
@@ -36,8 +38,12 @@ export default function PostCard({ post }) {
           <div className="post-info">
             <span>Posted by {post.authorName || `User ${post.userId}`}</span>
             <span>•</span>
-            <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
-            <span className="tag">{post.category || 'Journey'}</span>
+            <span>
+              {formatDistanceToNow(new Date(post.createdAt), {
+                addSuffix: true,
+              })}
+            </span>
+            <span className="tag">{post.category || "Journey"}</span>
           </div>
         </div>
       </div>
@@ -50,7 +56,6 @@ export default function PostCard({ post }) {
           <span>💬</span>
           <span>{commentsCount} comments</span>
         </button>
-        
       </div>
     </div>
   );

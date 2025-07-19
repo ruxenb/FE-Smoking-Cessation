@@ -3,6 +3,8 @@ import { CgLogOut } from "react-icons/cg";
 import { useUser } from "../../userContext/userContext";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
+import { Link } from "react-router-dom";  
+
 
 // No changes needed here, this is already well-structured.
 function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
@@ -12,18 +14,14 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
   // Helper to create navigation links
   // NavLink là một component được định nghĩa bên trong component SideBar
 
-  const NavLink = ({ page, icon, label }) => (
-    <a
-      href="#"
+  const NavLink = ({ page, icon, label, path }) => (
+    <Link
+      to={path}
       className={currentPage === page ? "active" : ""}
-      /*  */
-      onClick={(e) => {
-        e.preventDefault(); // ngăn không cho thẻ <a> reload khi click
-        setCurrentPage(page); // cập nhật lại currentPage trong Sidebar, để biết người dùng đang ở trang nào
-      }}
+      onClick={() => setCurrentPage(page)}
     >
       <span className="icon">{icon}</span> <span>{label}</span>
-    </a>
+    </Link>
   );
 
   /* Hàm xử lý khi nhấn logout từ sidebar */
@@ -67,14 +65,13 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
       </nav> */}
       {/* --- CHANGED: Use the NavLink component for each navigation item --- */}
       <nav className="navigation">
-        <NavLink page="home" icon="🏠" label="Home" />
-        <NavLink page="dashboard" icon="📊" label="Dashboard" />
+        <NavLink page="home" icon="🏠" label="Home" path="/home" />
+        <NavLink page="dashboard" icon="📊" label="Dashboard" path="/dashboard"/>
         <NavLink page="achievements" icon="🏆" label="Achievements" />
-        <NavLink page="community" icon="🤝" label="Community" />
+        <NavLink page="community" icon="🤝" label="Community" path="/community"/>
         <NavLink page="resources" icon="📚" label="Resources" />
         <NavLink page="chat" icon="💬" label="Chat" /> {/* <-- Add this line */}
         <NavLink page="settings" icon="⚙️" label="Settings" />
-
         <div className="sidebar-footer">
           <a href="#" className="logout-button" onClick={handleLogout}>
             <span className="icon">

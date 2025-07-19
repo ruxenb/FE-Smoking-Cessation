@@ -1,11 +1,11 @@
 import React from "react";
 import QuizPage from "../../components/quiz/QuizPage";
-import { Navbar } from "../../components/home/homePage";
+import NavBar from "../../components/nav-bar/NavBar";
 
 function SmokingQuiz() {
   return (
     <div>
-      <Navbar />
+      <NavBarar />
       <QuizPage
         quizId={"FGT_QUIZ001"} 
         quizUrl={`http://localhost:8080/api/users/smokingprofile/quiz-answer`}

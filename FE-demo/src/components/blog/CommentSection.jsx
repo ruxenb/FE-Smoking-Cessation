@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import api from '../../configs/axios';
-import { useUser } from '../../userContext/userContext'; // Lấy user từ Context
-import { message } from 'antd'; // Dùng antd để có thông báo đẹp
-import './BlogApp.css';
+import React, { useEffect, useState } from "react";
+import api from "../../configs/api/axios";
+import { useUser } from "../../userContext/userContext"; // Lấy user từ Context
+import { message } from "antd"; // Dùng antd để có thông báo đẹp
+import "./BlogApp.css";
 
-export default function CommentSection({ postId}) {
+export default function CommentSection({ postId }) {
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
-  const [editContent, setEditContent] = useState('');
+  const [editContent, setEditContent] = useState("");
   const [replyTo, setReplyTo] = useState(null);
-  const [replyContent, setReplyContent] = useState('');
+  const [replyContent, setReplyContent] = useState("");
 
   const { user } = useUser(); // <-- LẤY USER TỪ CONTEXT, KHÔNG QUA PROP
 
@@ -31,12 +31,12 @@ export default function CommentSection({ postId}) {
     e.preventDefault();
     if (!newComment.trim() || !user) return;
     try {
-      await api.post('/comments', {
+      await api.post("/comments", {
         postId,
         userId: user.userId,
-        content: newComment
+        content: newComment,
       });
-      setNewComment('');
+      setNewComment("");
       fetchComments();
     } catch (err) {
       console.error("Failed to post comment", err);
@@ -48,10 +48,10 @@ export default function CommentSection({ postId}) {
     if (!editContent.trim()) return;
     try {
       await api.put(`/comments/${editingComment}`, {
-        content: editContent
+        content: editContent,
       });
       setEditingComment(null);
-      setEditContent('');
+      setEditContent("");
       fetchComments();
     } catch (err) {
       console.error("Failed to edit comment", err);
@@ -59,15 +59,17 @@ export default function CommentSection({ postId}) {
   };
 
   const handleDelete = async (commentId) => {
-    if (window.confirm('Are you sure you want to delete this comment?')) {
+    if (window.confirm("Are you sure you want to delete this comment?")) {
       try {
-const token = `Bearer ${localStorage.getItem("accessToken")}`;
+        const token = `Bearer ${localStorage.getItem("accessToken")}`;
         // Dùng API đã được phân quyền ở backend
-        await api.delete(`/comments/${commentId}`, { headers: { Authorization: token } });
-        message.success('Comment deleted successfully!');
+        await api.delete(`/comments/${commentId}`, {
+          headers: { Authorization: token },
+        });
+        message.success("Comment deleted successfully!");
         fetchComments();
       } catch (err) {
-        message.error('Failed to delete comment.');
+        message.error("Failed to delete comment.");
         console.error("Failed to delete comment", err);
       }
     }
@@ -77,13 +79,13 @@ const token = `Bearer ${localStorage.getItem("accessToken")}`;
     e.preventDefault();
     if (!replyContent.trim() || !user) return;
     try {
-      await api.post('/comments', {
+      await api.post("/comments", {
         postId,
         userId: user.userId,
         content: replyContent,
-        parentCommentId
+        parentCommentId,
       });
-      setReplyContent('');
+      setReplyContent("");
       setReplyTo(null);
       fetchComments();
     } catch (err) {
@@ -94,62 +96,64 @@ const token = `Bearer ${localStorage.getItem("accessToken")}`;
   const nestComments = (comments) => {
     const map = {};
     const roots = [];
-    
-    comments.forEach(comment => {
+
+    comments.forEach((comment) => {
       map[comment.commentId] = { ...comment, replies: [] };
-      
+
       if (comment.parentCommentId && map[comment.parentCommentId]) {
         map[comment.parentCommentId].replies.push(map[comment.commentId]);
       } else {
         roots.push(map[comment.commentId]);
       }
     });
-    
+
     return roots;
   };
 
   const renderComment = (comment, depth = 0) => {
     const isOwner = user && user.userId === comment.userId;
-    const isAdmin = user && user.role === 'ADMIN';
-    return(
-    <div 
-      key={comment.commentId} 
-      className={`comment ${depth > 0 ? 'is-reply' : ''}`}
-      style={{ marginLeft: `${depth * 24}px` }}
-    >
-      <div className="comment-header">
-        <span className="comment-user">User {comment.userId}</span>
-        <span className="comment-date">
-          {new Date(comment.createdAt).toLocaleDateString()}
-        </span>
-      </div>
-      
-      {editingComment === comment.commentId ? (
-        <form onSubmit={handleEditSubmit} className="edit-form">
-          <textarea
-            value={editContent}
-            onChange={(e) => setEditContent(e.target.value)}
-            rows="3"
-            required
-            autoFocus
-          />
-          <div className="comment-actions">
-            <button type="submit" className="save-edit">Save</button>
-            <button 
-              type="button" 
-              className="cancel-edit"
-              onClick={() => setEditingComment(null)}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      ) : (
-        <>
-          <div className="comment-content">{comment.content}</div>
-          
-          <div className="comment-controls">
-           {/* Chỉ chủ sở hữu mới được SỬA */}
+    const isAdmin = user && user.role === "ADMIN";
+    return (
+      <div
+        key={comment.commentId}
+        className={`comment ${depth > 0 ? "is-reply" : ""}`}
+        style={{ marginLeft: `${depth * 24}px` }}
+      >
+        <div className="comment-header">
+          <span className="comment-user">User {comment.userId}</span>
+          <span className="comment-date">
+            {new Date(comment.createdAt).toLocaleDateString()}
+          </span>
+        </div>
+
+        {editingComment === comment.commentId ? (
+          <form onSubmit={handleEditSubmit} className="edit-form">
+            <textarea
+              value={editContent}
+              onChange={(e) => setEditContent(e.target.value)}
+              rows="3"
+              required
+              autoFocus
+            />
+            <div className="comment-actions">
+              <button type="submit" className="save-edit">
+                Save
+              </button>
+              <button
+                type="button"
+                className="cancel-edit"
+                onClick={() => setEditingComment(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        ) : (
+          <>
+            <div className="comment-content">{comment.content}</div>
+
+            <div className="comment-controls">
+              {/* Chỉ chủ sở hữu mới được SỬA */}
               {isOwner && (
                 <button
                   className="edit-btn"
@@ -171,7 +175,7 @@ const token = `Bearer ${localStorage.getItem("accessToken")}`;
                   Delete
                 </button>
               )}
-              
+
               {/* Bất kỳ người dùng nào đăng nhập cũng có thể TRẢ LỜI */}
               {user && (
                 <button
@@ -184,57 +188,57 @@ const token = `Bearer ${localStorage.getItem("accessToken")}`;
             </div>
           </>
         )}
-      
-      {replyTo === comment.commentId && (
-        <form 
-          onSubmit={(e) => handleReplySubmit(e, comment.commentId)}
-          className="reply-form"
-        >
-          <textarea
-            value={replyContent}
-            onChange={(e) => setReplyContent(e.target.value)}
-            placeholder="Write your reply..."
-            rows="2"
-            required
-          />
-          <div className="reply-actions">
-            <button type="submit" className="submit-reply">
-              Post Reply
-            </button>
-            <button 
-              type="button" 
-              className="cancel-reply"
-              onClick={() => setReplyTo(null)}
-            >
-              Cancel
-            </button>
+
+        {replyTo === comment.commentId && (
+          <form
+            onSubmit={(e) => handleReplySubmit(e, comment.commentId)}
+            className="reply-form"
+          >
+            <textarea
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              placeholder="Write your reply..."
+              rows="2"
+              required
+            />
+            <div className="reply-actions">
+              <button type="submit" className="submit-reply">
+                Post Reply
+              </button>
+              <button
+                type="button"
+                className="cancel-reply"
+                onClick={() => setReplyTo(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        )}
+
+        {comment.replies?.length > 0 && (
+          <div className="replies-container">
+            {comment.replies.map((reply) => renderComment(reply, depth + 1))}
           </div>
-        </form>
-      )}
-      
-      {comment.replies?.length > 0 && (
-        <div className="replies-container">
-          {comment.replies.map(reply => renderComment(reply, depth + 1))}
-        </div>
-      )}
-    </div>
-  );
-  }
+        )}
+      </div>
+    );
+  };
 
   const nestedComments = nestComments(comments);
 
   return (
     <div className="comments-section">
       <h3 className="comments-title">💬 Comments ({comments.length})</h3>
-      
+
       {comments.length === 0 ? (
         <p className="no-comments">No comments yet. Be the first to comment!</p>
       ) : (
         <div className="comments-list">
-          {nestedComments.map(comment => renderComment(comment))}
+          {nestedComments.map((comment) => renderComment(comment))}
         </div>
       )}
-      
+
       {user && (
         <form onSubmit={handleCommentSubmit} className="comment-form">
           <textarea
@@ -244,8 +248,8 @@ const token = `Bearer ${localStorage.getItem("accessToken")}`;
             rows="3"
             required
           />
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="submit-comment"
             disabled={!newComment.trim()}
           >

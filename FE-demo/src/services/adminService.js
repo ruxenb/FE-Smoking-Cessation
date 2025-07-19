@@ -1,4 +1,4 @@
-import api from '../configs/axios';
+import api from "../configs/api/axios";
 
 /**
  * [Admin] Lấy tất cả các bài đăng trên hệ thống để quản lý.
@@ -6,10 +6,10 @@ import api from '../configs/axios';
  * @returns {Promise}
  */
 export const adminGetAllPosts = async (token) => {
-    // --- SỬA LẠI ĐỂ GỌI ENDPOINT MỚI ---
-    return await api.get('/admin/posts/all', {
-        headers: { Authorization: token }
-    });
+  // --- SỬA LẠI ĐỂ GỌI ENDPOINT MỚI ---
+  return await api.get("/admin/posts/all", {
+    headers: { Authorization: token },
+  });
 };
 /**
  * [Admin] Xóa một bài đăng theo ID.
@@ -19,9 +19,9 @@ export const adminGetAllPosts = async (token) => {
  * @returns {Promise}
  */
 export const adminDeletePost = async (postId, token) => {
-    return await api.delete(`/posts/${postId}`, {
-        headers: { Authorization: token }
-    });
+  return await api.delete(`/posts/${postId}`, {
+    headers: { Authorization: token },
+  });
 };
 
 /**
@@ -31,10 +31,10 @@ export const adminDeletePost = async (postId, token) => {
  * @returns {Promise}
  */
 export const adminRestorePost = async (postId, token) => {
-    // Gọi đến endpoint mới mà chúng ta đã tạo ở backend
-    return await api.post(`/posts/${postId}/restore`, null, {
-        headers: { Authorization: token }
-    });
+  // Gọi đến endpoint mới mà chúng ta đã tạo ở backend
+  return await api.post(`/posts/${postId}/restore`, null, {
+    headers: { Authorization: token },
+  });
 };
 
 /**
@@ -45,9 +45,9 @@ export const adminRestorePost = async (postId, token) => {
  * @returns {Promise}
  */
 export const adminDeleteComment = async (commentId, token) => {
-    return await api.delete(`/comments/${commentId}`, {
-        headers: { Authorization: token }
-    });
+  return await api.delete(`/comments/${commentId}`, {
+    headers: { Authorization: token },
+  });
 };
 
 /**
@@ -56,10 +56,10 @@ export const adminDeleteComment = async (commentId, token) => {
  * @returns {Promise}
  */
 export const getAdminDashboardStats = async (token) => {
-    // Thay thế bằng endpoint thực tế của bạn
-    return await api.get('/admin/dashboard-stats', { 
-        headers: { Authorization: token }
-    });
+  // Thay thế bằng endpoint thực tế của bạn
+  return await api.get("/admin/dashboard-stats", {
+    headers: { Authorization: token },
+  });
 };
 
 /**
@@ -68,10 +68,10 @@ export const getAdminDashboardStats = async (token) => {
  * @returns {Promise}
  */
 export const adminGetAllUsers = async (token) => {
-    // Gọi đến endpoint GET /api/users đã có sẵn
-    return await api.get('/users', {
-        headers: { Authorization: token }
-    });
+  // Gọi đến endpoint GET /api/users đã có sẵn
+  return await api.get("/users", {
+    headers: { Authorization: token },
+  });
 };
 
 /**
@@ -81,9 +81,9 @@ export const adminGetAllUsers = async (token) => {
  * @returns {Promise}
  */
 export const adminChangeUserStatus = async (userId, token) => {
-    return await api.put(`/admin/users/${userId}/change-status`, null, {
-        headers: { Authorization: token }
-    });
+  return await api.put(`/admin/users/${userId}/change-status`, null, {
+    headers: { Authorization: token },
+  });
 };
 
 /**
@@ -94,7 +94,11 @@ export const adminChangeUserStatus = async (userId, token) => {
  * @returns {Promise}
  */
 export const adminChangeUserRole = async (userId, newRole, token) => {
-    return await api.put(`/admin/users/${userId}/change-role`, { role: newRole }, {
-        headers: { Authorization: token }
-    });
+  return await api.put(
+    `/admin/users/${userId}/change-role`,
+    { role: newRole },
+    {
+      headers: { Authorization: token },
+    }
+  );
 };

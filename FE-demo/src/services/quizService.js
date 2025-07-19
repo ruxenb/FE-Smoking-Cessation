@@ -1,4 +1,4 @@
-import api from "../configs/axios";
+import api from "../configs/api/axios";
 
 /**
  * Lấy quiz theo id, có xét token xác thực.
@@ -20,7 +20,11 @@ export const getQuizById = async (id, token) => {
  * @param {string} token - Token xác thực của người dùng.
  * @returns {Promise}
  */
-export const submitUserQuizAnswer = async (userQuizAnswerRequestDto, token, url) => {
+export const submitUserQuizAnswer = async (
+  userQuizAnswerRequestDto,
+  token,
+  url
+) => {
   return await api.post(url, userQuizAnswerRequestDto, {
     headers: {
       Authorization: token,

@@ -1,5 +1,5 @@
 import axios from "axios";
-import api from "../configs/axios"; // Giả sử bạn có file cấu hình axios chung
+import api from "../configs/api/axios"; // Giả sử bạn có file cấu hình axios chung
 
 /* hàm xử lý đổi mật khẩu và gọi api - truyền vào các giá trị như userId, data đổi mật khẩu và token xác thực quyền */
 export const changePassword = async (userId, data, token) => {
@@ -41,11 +41,14 @@ export const getCurrentUser = async (token) => {
  * @returns {Promise}
  */
 export const getCurrentUserMembership = async (userId, token) => {
-    // Lưu ý: Endpoint này có thể cần được tạo hoặc đã có sẵn trong backend
-    // Dựa trên code của bạn, nó là: /api/user-memberships/user/{userId}/currentmembership
-    return await api.get(`http://localhost:8080/api/user-memberships/user/${userId}/currentmembership`, {
-        headers: {
-            Authorization: token,
-        },
-    });
+  // Lưu ý: Endpoint này có thể cần được tạo hoặc đã có sẵn trong backend
+  // Dựa trên code của bạn, nó là: /api/user-memberships/user/{userId}/currentmembership
+  return await api.get(
+    `http://localhost:8080/api/user-memberships/user/${userId}/currentmembership`,
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
 };

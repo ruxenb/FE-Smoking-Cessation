@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../configs/axios';
-import './BlogApp.css';
-import { Navbar } from '../../components/home/homePage';
-import CommentSection from './CommentSection';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "../../configs/api/axios";
+import "./BlogApp.css";
+import CommentSection from "./CommentSection";
+import NavBar from "../nav-bar/NavBar";
 
 export default function PostDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(true);
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
@@ -22,7 +22,7 @@ export default function PostDetail() {
         const [postRes, commentsRes, likesRes] = await Promise.all([
           api.get(`/posts/${id}`),
           api.get(`/comments/post/${id}`),
-          api.get(`/likes/count?postId=${id}`)
+          api.get(`/likes/count?postId=${id}`),
         ]);
         setPost(postRes.data.data);
         setComments(commentsRes.data.data);
@@ -34,7 +34,9 @@ export default function PostDetail() {
           setUser(parsedUser);
 
           // Check if user liked this post
-          const statusRes = await api.get(`/likes/status?postId=${id}&userId=${parsedUser.userId}`);
+          const statusRes = await api.get(
+            `/likes/status?postId=${id}&userId=${parsedUser.userId}`
+          );
           setIsLiked(statusRes.data.data);
         }
       } catch (err) {
@@ -62,7 +64,7 @@ export default function PostDetail() {
       // Always re-fetch the latest like count and status from backend
       const [likesRes, statusRes] = await Promise.all([
         api.get(`/likes/count?postId=${id}`),
-        api.get(`/likes/status?postId=${id}&userId=${user.userId}`)
+        api.get(`/likes/status?postId=${id}&userId=${user.userId}`),
       ]);
       setLikes(likesRes.data.data);
       setIsLiked(statusRes.data.data);
@@ -80,12 +82,12 @@ export default function PostDetail() {
     }
 
     try {
-      await api.post('/comments', {
+      await api.post("/comments", {
         postId: id,
         userId: user.userId,
-        content: newComment
+        content: newComment,
       });
-      setNewComment('');
+      setNewComment("");
       // Refresh comments
       const res = await api.get(`/comments/post/${id}`);
       setComments(res.data.data);
@@ -99,10 +101,10 @@ export default function PostDetail() {
     try {
       const token = `Bearer ${localStorage.getItem("accessToken")}`;
       await api.delete(`/posts/${id}`, {
-        headers: { Authorization: token }
+        headers: { Authorization: token },
       });
       alert("Post deleted successfully!");
-      navigate('/blog');
+      navigate("/blog");
     } catch (err) {
       alert("Failed to delete post.");
       console.error(err);
@@ -122,7 +124,7 @@ export default function PostDetail() {
 
   return (
     <>
-      {!user && <Navbar />}
+      {!user && <NavBar />}
       <div className="blog-container">
         <div className="header">
           <h1>
@@ -132,10 +134,7 @@ export default function PostDetail() {
         </div>
 
         <div className="content-area">
-          <button
-            onClick={() => navigate(-1)}
-            className="back-button"
-          >
+          <button onClick={() => navigate(-1)} className="back-button">
             ← Back to Blog
           </button>
 
@@ -145,24 +144,24 @@ export default function PostDetail() {
               <div className="post-meta">
                 <div className="post-title">{post.title}</div>
                 <div className="post-info">
-                  <span>Posted by {post.authorName || `User ${post.userId}`}</span>
+                  <span>
+                    Posted by {post.authorName || `User ${post.userId}`}
+                  </span>
                   <span>•</span>
                   <span>{new Date(post.createdAt).toLocaleDateString()}</span>
-                  <span className="tag">{post.category || 'Journey'}</span>
+                  <span className="tag">{post.category || "Journey"}</span>
                 </div>
               </div>
             </div>
 
-            <div className="post-content">
-              {post.content}
-            </div>
+            <div className="post-content">{post.content}</div>
 
             <div className="post-actions">
               <button
-                className={`action-btn ${isLiked ? 'liked' : ''}`}
+                className={`action-btn ${isLiked ? "liked" : ""}`}
                 onClick={handleLike}
               >
-                <span>{isLiked ? '❤️' : '🤍'}</span>
+                <span>{isLiked ? "❤️" : "🤍"}</span>
                 <span className="like-count">{likes} likes</span>
               </button>
               <button className="action-btn">
@@ -189,7 +188,6 @@ export default function PostDetail() {
             </div>
 
             <CommentSection postId={id} user={user} />
-
           </div>
         </div>
       </div>

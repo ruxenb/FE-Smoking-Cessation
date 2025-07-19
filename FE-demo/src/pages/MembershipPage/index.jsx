@@ -1,10 +1,10 @@
 import React from "react";
 import Membership from "../../components/membership/membership";
-import { Navbar } from "../../components/home/homePage";
+import NavBar from "../../components/nav-bar/NavBar";
 function MembershipPage() {
   return (
     <div>
-      <Navbar />
+      <NavBar />
       <Membership />
     </div>
   );

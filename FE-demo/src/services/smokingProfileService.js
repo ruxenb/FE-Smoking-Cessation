@@ -1,4 +1,4 @@
-import api from "../configs/axios"; // Sử dụng instance axios đã cấu hình
+import api from "../configs/api/axios"; // Sử dụng instance axios đã cấu hình
 
 /**
  * Gửi yêu cầu tạo smoking profile mới cho backend.
@@ -7,11 +7,15 @@ import api from "../configs/axios"; // Sử dụng instance axios đã cấu hì
  * @returns {Promise} - Promise từ API call.
  */
 export const createSmokingProfile = async (profileData, token) => {
-  return await api.post("http://localhost:8080/api/users/smokingprofile", profileData, {
-    headers: {
-      Authorization: token,
-    },
-  });
+  return await api.post(
+    "http://localhost:8080/api/users/smokingprofile",
+    profileData,
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
 };
 
 /**
@@ -22,9 +26,9 @@ export const createSmokingProfile = async (profileData, token) => {
  * @returns {Promise} - Promise từ API call.
  */
 export const updateSmokingProfile = async (profileId, profileData, token) => {
-    return await api.put(`/users/smokingprofile/${profileId}`, profileData, {
-        headers: {
-            Authorization: token,
-        },
-    });
+  return await api.put(`/users/smokingprofile/${profileId}`, profileData, {
+    headers: {
+      Authorization: token,
+    },
+  });
 };

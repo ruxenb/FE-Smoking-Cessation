@@ -1,15 +1,15 @@
 import React from "react";
 import QuizPage from "../../components/quiz/QuizPage";
-import { Navbar } from "../../components/home/homePage";
+import NavBar from "../../components/nav-bar/NavBar";
 
 function Feedback() {
   return (
     <div>
-      <Navbar />
+      <NavBar />
       <QuizPage
         quizId={"SFB_QUIZ001"}
-        quizUrl={`http://localhost:8080/api/users/smokingprofile/quiz-answer`} 
-        />
+        quizUrl={`http://localhost:8080/api/users/smokingprofile/quiz-answer`}
+      />
     </div>
   );
 }
