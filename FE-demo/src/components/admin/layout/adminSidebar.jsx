@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../../../userContext/userContext'; // <-- BƯỚC 2: Import useUser
+import { TfiWrite } from "react-icons/tfi";
 
 const { Sider } = Layout;
 
@@ -45,6 +46,11 @@ function AdminSidebar({ collapsed }) {
             key: '/admin/users',
             icon: <UserOutlined />,
             label: 'User Management',
+        },
+        {
+            key: '/admin/showFeedbacks',
+            icon: <TfiWrite />,
+            label: 'User Feedbacks',
         },
         // Thêm một mục đặc biệt cho đường kẻ
         {

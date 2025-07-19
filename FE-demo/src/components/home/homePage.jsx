@@ -26,6 +26,7 @@ export const Navbar = () => {
           <Link to="/about">About us</Link>
           <Link to="/membership">Membership</Link>
           <Link to="/blog">Blog</Link>
+          <Link to="/feedback">Feedback</Link>
           {user ? (
             <>
               {user.role === "MEMBER" && (

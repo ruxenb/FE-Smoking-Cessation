@@ -39,6 +39,7 @@ import PaymentReturnPage from "./components/checkout/paymentReturn/paymentReturn
 import NotFoundPage from "./pages/NotFoundPage"; // Import 404 page
 import ProtectedRoute from "./components/protectedRoute/protectedRoute";
 import OAuth2RedirectHandler from "./components/GoogleAuthen/OAuth2RedirectHandler";
+import AdminFeedback from "./components/admin/AdminFeedback";
 
 function App() {
   // Tạo một router với createBrowserRouter, định nghĩa các route của ứng dụng
@@ -189,6 +190,10 @@ function App() {
         {
           path: "users",
           element: <AdminUserManagementPage />,
+        },
+        {
+          path: "showFeedbacks",
+          element: <AdminFeedback />,
         },
       ],
     },

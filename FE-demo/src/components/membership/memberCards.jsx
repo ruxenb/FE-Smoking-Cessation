@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function memberCard({ renderCtaButton }){
-    return(
-        <>
-
+function memberCard({ renderCtaButton }) {
+  return (
+    <>
       {/* Membership Cards Wrapper */}
       <div className="membership-cards-wrapper">
         {/* Basic Plan Card */}
@@ -12,7 +11,9 @@ function memberCard({ renderCtaButton }){
           <h2>Basic</h2>
           <p className="price">Free</p>
           <div className="card-content-wrapper">
-            <p className="description">Start your smoking cessation journey with basic features.</p>
+            <p className="description">
+              Start your smoking cessation journey with basic features.
+            </p>
             <ul className="features-list">
               <li>Personal profile management</li>
               <li>Record smoking status</li>
@@ -22,12 +23,8 @@ function memberCard({ renderCtaButton }){
               <li>View basic statistical information</li>
             </ul>
           </div>
-          {renderCtaButton('basic')}
+          {renderCtaButton("basic")}
           <br className="br-ig"></br>
-        
-          
-
-          
         </div>
 
         {/* Advanced Plan Card - MODIFIED */}
@@ -36,27 +33,38 @@ function memberCard({ renderCtaButton }){
           <h2>Advanced</h2>
           <p className="price">100.000 VND / month</p>
           <div className="card-content-wrapper">
-            <p className="description">Upgrade to receive comprehensive support and achieve the best results!</p>
+            <p className="description">
+              Upgrade to receive comprehensive support and achieve the best
+              results!
+            </p>
             <ul className="features-list">
-              <li className="highlight-feature">Advanced smoking cessation planning</li>
-              <li className="highlight-feature">Record detailed smoking cessation progress</li>
+              <li className="highlight-feature">
+                Advanced smoking cessation planning
+              </li>
+              <li className="highlight-feature">
+                Record detailed smoking cessation progress
+              </li>
               <li className="highlight-feature">Full statistics</li>
-              <li className="highlight-feature">Receive full achievement badges</li>
-              <li className="highlight-feature">Share badges on social media</li>
+              <li className="highlight-feature">
+                Receive full achievement badges
+              </li>
+              <li className="highlight-feature">
+                Share badges on social media
+              </li>
               <li className="highlight-feature">Live chat with a coach</li>
               <li className="highlight-feature">Assessment and feedback</li>
             </ul>
           </div>
           {/* NEW WRAPPER FOR BUTTON AND CANCELLATION INFO */}
           <div className="card-bottom-cta">
-                {renderCtaButton('advanced')} {/* Call the passed function */}            
-                <p className="cancellation-info">Cancel anytime.</p>
+            {renderCtaButton("advanced")} {/* Call the passed function */}
+            <p className="cancellation-info">Cancel anytime.</p>
           </div>
           {/* END NEW WRAPPER */}
         </div>
       </div>
-      </>
-    )
+    </>
+  );
 }
 
-export default memberCard
+export default memberCard;

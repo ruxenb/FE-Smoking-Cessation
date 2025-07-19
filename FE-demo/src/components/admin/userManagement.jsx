@@ -159,7 +159,6 @@ function AdminUserManagement() {
                 bordered
             />
             {contextHolder}
-
         </div>
     );
 }
