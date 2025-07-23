@@ -1,8 +1,8 @@
 import React from "react";
 // import AuthenTemplate from "../../components/auth/authen-template";
-import Login from "../../components/auth/authen-form/LoginForm";
+import { LoginForm } from "../../components/auth/authen-form/login/LoginForm";
 function LoginPage() {
-  return <Login />;
+  return <LoginForm />;
 }
 
 export default LoginPage;

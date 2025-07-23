@@ -5,11 +5,11 @@ import NavBar from "../../components/nav-bar/NavBar";
 function SmokingQuiz() {
   return (
     <div>
-      <NavBarar />
+      <NavBar />
       <QuizPage
-        quizId={"FGT_QUIZ001"} 
+        quizId={"FGT_QUIZ001"}
         quizUrl={`http://localhost:8080/api/users/smokingprofile/quiz-answer`}
-        />
+      />
     </div>
   );
 }

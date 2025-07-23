@@ -4,9 +4,8 @@ import AchievementCard from "./AchievementCard";
 import CTASection from "./CTASection";
 import QuitProgressCard from "./QuitProgressCard";
 import "./dashboard.css";
-import { Link } from 'react-router-dom';
-import SmokingProfileInfo from './smokeInfo'; // <-- BƯỚC 3.1: Import component mới
-
+import { Link } from "react-router-dom";
+import SmokingProfileInfo from "./smokeInfo"; // <-- BƯỚC 3.1: Import component mới
 
 function MainContent({
   username,
@@ -20,7 +19,8 @@ function MainContent({
   // const cigsAvoided = "1,840";
   const tokenType = localStorage.getItem("tokenType");
   const accessToken = localStorage.getItem("accessToken");
-  const fullToken = tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
+  const fullToken =
+    tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
   const achievements = [
     { name: "First 24 Hours", icon: "🏅", locked: false },
     { name: "Week One Warrior", icon: "🏅", locked: false },
@@ -47,7 +47,6 @@ function MainContent({
       </header>
 
       <SmokingProfileInfo smokingProfile={smokingProfile} />
-
       {/* --- HIỂN THỊ CÓ ĐIỀU KIỆN --- */}
       {/* Nếu CHƯA có profile, hiển thị prompt tạo mới */}
       {!hasProfile ? (
@@ -62,7 +61,7 @@ function MainContent({
       ) : (
         // Nếu ĐÃ có profile, hiển thị prompt cập nhật
         <section className="profile-prompt-section">
-          <p>Your profile is ready. Update it if your habits change.</p>
+          <p>Your smoking profile is ready. Update it if your habits change.</p>
           <Link to="/smoking-quiz" className="profile-prompt-button">
             Update Smoking Profile
           </Link>
@@ -77,6 +76,8 @@ function MainContent({
           />
         )}
       </section>
+
+      <CTASection />
 
       {/* <section className="stats-grid">
         <StatCard
@@ -123,8 +124,6 @@ function MainContent({
           ))}
         </div>
       </section>
-
-      <CTASection />
     </main>
   );
 }

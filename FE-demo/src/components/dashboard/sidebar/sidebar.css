@@ -1,0 +1,32 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Chiều cao toàn bộ trang */
+  background-color: #1f1f1f; /* ví dụ màu nền */
+  color: white;
+  padding: 1rem;
+}
+
+.navigation {
+  flex: 1; /* chiếm toàn bộ không gian còn lại */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sidebar-footer {
+  margin-top: auto; /* đẩy footer xuống dưới cùng */
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  color: red;
+}

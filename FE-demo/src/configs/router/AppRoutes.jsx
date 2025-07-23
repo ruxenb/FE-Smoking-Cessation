@@ -10,7 +10,7 @@ import PostDetail from "../../components/blog/PostDetail";
 import ProtectedRoute from "./ProtectRouter";
 import CreatePost from "../../components/blog/CreatePost";
 import EditPost from "../../components/blog/EditPosts";
-import Dashboard from "../../pages/DashboardPage";
+import Dashboard from "../../pages/MemberDashboardPage";
 import SmokingQuiz from "../../pages/SmokingQuizPage";
 import Feedback from "../../pages/FeedbackPage";
 import QuitPlanPage from "../../components/quitPlan/QuitPlanPage";

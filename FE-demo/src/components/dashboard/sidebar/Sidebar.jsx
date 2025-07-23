@@ -1,9 +1,10 @@
 import React from "react";
 import { CgLogOut } from "react-icons/cg";
-import { useUser } from "../../userContext/userContext";
+import { useUser } from "../../../userContext/userContext";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
-import { Link } from "react-router-dom";  
+import { Link } from "react-router-dom";
+import "./sidebar.css"; 
 
 
 // No changes needed here, this is already well-structured.
@@ -66,21 +67,31 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
       {/* --- CHANGED: Use the NavLink component for each navigation item --- */}
       <nav className="navigation">
         <NavLink page="home" icon="🏠" label="Home" path="/home" />
-        <NavLink page="dashboard" icon="📊" label="Dashboard" path="/dashboard"/>
+        <NavLink
+          page="dashboard"
+          icon="📊"
+          label="Dashboard"
+          path="/dashboard"
+        />
         <NavLink page="achievements" icon="🏆" label="Achievements" />
-        <NavLink page="community" icon="🤝" label="Community" path="/community"/>
+        <NavLink
+          page="community"
+          icon="🤝"
+          label="Community"
+          path="/community"
+        />
         <NavLink page="resources" icon="📚" label="Resources" />
         <NavLink page="chat" icon="💬" label="Chat" /> {/* <-- Add this line */}
         <NavLink page="settings" icon="⚙️" label="Settings" />
-        <div className="sidebar-footer">
-          <a href="#" className="logout-button" onClick={handleLogout}>
-            <span className="icon">
-              <CgLogOut />
-            </span>{" "}
-            <span>Logout</span>
-          </a>
-        </div>
       </nav>
+      <div className="sidebar-footer">
+        <a href="#" className="logout-button" onClick={handleLogout}>
+          <span className="icon">
+            <CgLogOut />
+          </span>{" "}
+          <span>Logout</span>
+        </a>
+      </div>
     </aside>
   );
 }

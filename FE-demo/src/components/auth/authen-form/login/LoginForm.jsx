@@ -1,19 +1,12 @@
 import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
-// import "./LoginForm.css";
-import styles from "./authenForm.module.css"; // Thay đổi import
+import styles from "../authenForm.module.css"; // Thay đổi import
 import { Await, Link, useNavigate, useLocation } from "react-router-dom";
-import FormItem from "antd/es/form/FormItem";
-import { FaFacebookSquare, FaGoogle } from "react-icons/fa";
-import { FaGithub } from "react-icons/fa6";
-import { BsFillPersonFill } from "react-icons/bs";
-import { FaLock } from "react-icons/fa";
-import { BiUnderline } from "react-icons/bi";
-import { UserAddOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
-import { useUser } from "../../../userContext/userContext"; // Import useUser từ userContext
-import { login } from "../../../services/authService";
+import { useUser } from "../../../../userContext/userContext"; // Import useUser từ userContext
+import { login } from "../../../../services/authService";
+import { FaGoogle } from "react-icons/fa";
 
 // import { useUser } from "../../../userContext/userContext";
 
@@ -24,7 +17,6 @@ function LoginForm() {
 
   /* Hàm xử lý khi nhấn nút Google */
   const hangdleGoogleLogin = () => {
-    /* http://localhost:8080/oauth2/authorization/google */
     window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
   /* onFinish được gọi khi người dùng nhấn nút Login */
@@ -219,7 +211,7 @@ function LoginForm() {
             </Button>
           </Form.Item>
 
-          {/* === PHẦN ĐĂNG NHẬP SOCIAL === */}
+          {/* === Đăng nhập google === */}
           <div className={styles.altLogin}>
             <p className={styles.altLoginTitle}>Or Login With</p>
             <div className={styles.altLoginButtons}>
@@ -232,8 +224,7 @@ function LoginForm() {
               </Button>
             </div>
           </div>
-          {/* =========================================== */}
-
+          {/* Signup link */}
           <div className={styles.authSwitchLink}>
             <span>Don't have an account?</span>
             <Link to="/register">Sign up</Link>
@@ -244,4 +235,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export { LoginForm };

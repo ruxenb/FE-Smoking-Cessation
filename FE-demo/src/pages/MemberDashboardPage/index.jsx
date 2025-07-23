@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
-import BlogApp from "../../components/blog/BlogApp";
+import BlogApp from "../../components/blog/BlogApp.jsx";
 import { toast } from "react-toastify";
-import Sidebar from "../../components/dashboard/Sidebar.jsx";
+import Sidebar from "../../components/dashboard/sidebar/Sidebar.jsx";
 import MainContent from "../../components/dashboard/dashboard.jsx";
 import SmokeSetupOverlay from "../../components/dashboard/Overlay/SmokeSetup.jsx";
 import AchievementsPage from "../../components/dashboard/sidebarPages/AchievementsPage.jsx";
 import SettingsPage from "../../components/dashboard/sidebarPages/SettingsPage.jsx";
-import ChatPage from "../../components/chat/ChatPage";
-import { useUser } from "../../userContext/userContext";
-import { createSmokingProfile, updateSmokingProfile } from "../../services/smokingProfileService"; // Import service mới
-import { fetchAndSaveCurrentQuitPlan } from "../../services/quitPlanService"; // <-- Thêm để fetch quit plan mới nhất
-import { useNavigate } from 'react-router-dom';
+import ChatPage from "../../components/chat/ChatPage.jsx";
+import { useUser } from "../../userContext/userContext.jsx";
+import {
+  createSmokingProfile,
+  updateSmokingProfile,
+} from "../../services/smokingProfileService.js"; // Import service mới
+import { fetchAndSaveCurrentQuitPlan } from "../../services/quitPlanService.js"; // <-- Thêm để fetch quit plan mới nhất
+import { useNavigate } from "react-router-dom";
+import IdleLogout from "../../hooks/idleLogout.js";
 
 function Dashboard() {
-  const { user, setUser } = useUser(); // <-- Thêm dòng này
+  const { user, setUser } = useUser();
   const navigate = useNavigate();
   // Kiểm tra xem sidebar đóng hay ko
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -45,18 +49,18 @@ function Dashboard() {
     if (user?.userId) {
       const tokenType = localStorage.getItem("tokenType");
       const accessToken = localStorage.getItem("accessToken");
-      const fullToken = tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
+      const fullToken =
+        tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
 
       if (!fullToken) return;
 
-      fetchAndSaveCurrentQuitPlan(fullToken)
-        .then((quitPlan) => {
-          if (quitPlan && (!user.quitplan || user.quitplan.id !== quitPlan.id)) {
-            const updatedUser = { ...user, quitplan: quitPlan };
-            setUser(updatedUser);
-            localStorage.setItem("user", JSON.stringify(updatedUser));
-          }
-        })
+      fetchAndSaveCurrentQuitPlan(fullToken).then((quitPlan) => {
+        if (quitPlan && (!user.quitplan || user.quitplan.id !== quitPlan.id)) {
+          const updatedUser = { ...user, quitplan: quitPlan };
+          setUser(updatedUser);
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+        }
+      });
     }
   }, [user]); // chạy lại nếu user thay đổi
 
@@ -108,7 +112,8 @@ function Dashboard() {
     try {
       const tokenType = localStorage.getItem("tokenType");
       const accessToken = localStorage.getItem("accessToken");
-      const fullToken = tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
+      const fullToken =
+        tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
 
       if (!fullToken) {
         toast.error("Authentication token not found.");
@@ -127,7 +132,9 @@ function Dashboard() {
       } else {
         // --- LOGIC TẠO MỚI ---
         response = await createSmokingProfile(submitData, fullToken);
-        toast.success("Profile created successfully! Let's start your journey!");
+        toast.success(
+          "Profile created successfully! Let's start your journey!"
+        );
       }
 
       if (response && response.data?.status === "success") {
@@ -139,12 +146,12 @@ function Dashboard() {
         closeProfileOverlay(); // Đóng overlay sau khi thành công
       }
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "An error occurred. Please try again.";
+      const errorMsg =
+        error.response?.data?.message || "An error occurred. Please try again.";
       toast.error(errorMsg);
       console.error("Failed to save profile:", error);
     }
   };
-  
 
   // Render the correct page based on state
   const renderCurrentPage = () => {
@@ -152,7 +159,7 @@ function Dashboard() {
       case "home":
         navigate("/"); // Redirect to home
         return null;
-      case "dashboard": /* truy cập tới dashboard khi đăng nhập thành công, truyền data */
+      case "dashboard" /* truy cập tới dashboard khi đăng nhập thành công, truyền data */:
         return (
           <MainContent
             username={user?.username}
@@ -160,7 +167,7 @@ function Dashboard() {
             onCreateProfileClick={openProfileOverlay}
             onEditProfileClick={openProfileOverlay}
             currentQuitPlan={user?.quitplan}
-            smokingProfile={user?.smokingProfile} 
+            smokingProfile={user?.smokingProfile}
           />
         );
       case "achievements":
@@ -180,17 +187,19 @@ function Dashboard() {
         return (
           <ChatPage
             user={user}
-            jwt={localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")}
-           
+            jwt={
+              localStorage.getItem("tokenType") +
+              " " +
+              localStorage.getItem("accessToken")
+            }
           />
         );
     }
   };
 
-  
-
   return (
     <div className={`app-container ${isCollapsed ? "sidebar-collapsed" : ""}`}>
+      <IdleLogout />;{/* // Hook để xử lý đăng xuất khi user không hoạt động */}
       {/* --- SIMPLIFIED OVERLAY RENDERING --- */}
       {isProfileOverlayVisible && (
         <SmokeSetupOverlay
@@ -200,14 +209,12 @@ function Dashboard() {
           existingProfile={user?.smokingProfile}
         />
       )}
-
       <Sidebar
         isCollapsed={isCollapsed}
         onToggle={handleToggleSidebar}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
-
       {/* Định nghĩa khu vực chính hiển thị nội dung (giao diện chính), render nội dung giao diện dựa trên hàm renderCurrentPage() */}
       <div className="main-content-area">{renderCurrentPage()}</div>
     </div>

@@ -12,7 +12,6 @@ const Icon = ({ children }) => (
 const HomePage = () => {
   return (
     <div className="homepage-container">
-      
       <NavBar />
 
       {/* --- Hero Section --- */}
