@@ -107,7 +107,7 @@ function Dashboard() {
     setIsProfileOverlayVisible(false);
   };
 
-  // --- HÀM XỬ LÝ LƯU HOẶC CẬP NHẬT PROFILE ---
+  // --- HÀM XỬ LÝ LƯU HOẶC CẬP NHẬT Smoking PROFILE ---
   const handleSaveProfile = async (profileData) => {
     try {
       const tokenType = localStorage.getItem("tokenType");
@@ -199,7 +199,8 @@ function Dashboard() {
 
   return (
     <div className={`app-container ${isCollapsed ? "sidebar-collapsed" : ""}`}>
-      <IdleLogout />;{/* // Hook để xử lý đăng xuất khi user không hoạt động */}
+      {/* // Hook để xử lý tự động logout khi user không tương tác với web */}
+      <IdleLogout />
       {/* --- SIMPLIFIED OVERLAY RENDERING --- */}
       {isProfileOverlayVisible && (
         <SmokeSetupOverlay

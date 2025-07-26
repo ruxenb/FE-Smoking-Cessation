@@ -127,5 +127,4 @@ function MainContent({
     </main>
   );
 }
-
 export default MainContent;

@@ -7,7 +7,8 @@ function getIdleLogoutTime(minutes) {
   return minutes * 60 * 1000; // Chuyển đổi phút sang mili giây
 }
 
-const Idle_Logout_Time = getIdleLogoutTime(1); // 10 phút
+const Idle_Logout_Time = 10; // đặt 10 phút sẽ tự động logout user khi không tương tác
+const Idle_Logout = getIdleLogoutTime(Idle_Logout_Time); 
 export default function IdleLogout() {
   const { logout } = useUser();
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function IdleLogout() {
       });
       logout();
       navigate("/login");
-    }, Idle_Logout_Time);
+    }, Idle_Logout);
   };
 
   useEffect(() => {
