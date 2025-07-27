@@ -45,13 +45,45 @@ export default function EditPost() {
     e.preventDefault();
     if (!user || !isOwner) return;
 
+    // Client-side validation
+    if (!post.title.trim()) {
+      toast.error("Title cannot be blank");
+      return;
+    }
+
+    if (post.title.length < 2 || post.title.length > 255) {
+      toast.error("Title must be between 2 and 255 characters");
+      return;
+    }
+
+    if (!post.content.trim()) {
+      toast.error("Content cannot be blank");
+      return;
+    }
+
     try {
       setLoading(true);
       await api.put(`/posts/${id}`, { ...post, userId: user.userId });
       toast.success("Post updated successfully!");
       navigate("/blog");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to update post");
+      // Handle validation errors from backend
+      if (err.response?.status === 400) {
+        const errorMessage = err.response?.data?.message || "Validation failed";
+        
+        // Check for specific validation messages
+        if (errorMessage.includes("Title must be between")) {
+          toast.error("Title must be between 2 and 255 characters");
+        } else if (errorMessage.includes("Title") && errorMessage.includes("blank")) {
+          toast.error("Title cannot be blank");
+        } else if (errorMessage.includes("Content") && errorMessage.includes("blank")) {
+          toast.error("Content cannot be blank");
+        } else {
+          toast.error(errorMessage);
+        }
+      } else {
+        toast.error(err.response?.data?.message || "Failed to update post");
+      }
     } finally {
       setLoading(false);
     }

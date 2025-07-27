@@ -27,6 +27,23 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Client-side validation
+    if (!post.title.trim()) {
+      toast.error("Title cannot be blank");
+      return;
+    }
+
+    if (post.title.length < 2 || post.title.length > 255) {
+      toast.error("Title must be between 2 and 255 characters");
+      return;
+    }
+
+    if (!post.content.trim()) {
+      toast.error("Content cannot be blank");
+      return;
+    }
+
     try {
       setLoading(true);
       await api.post("/posts", { ...post, userId: user.userId });
@@ -43,7 +60,12 @@ export default function CreatePost() {
     <>
       <Toaster position="top-right" />
       <div className="post-form">
-        <h2>Create Post</h2>
+        <div className="post-form-header">
+          <h2>Create Post</h2>
+          <button className="back-button" onClick={() => navigate("/blog")}>
+            ← Cancel
+          </button>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Title</label>
@@ -63,9 +85,11 @@ export default function CreatePost() {
               required
             />
           </div>
-          <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? "Publishing..." : "Publish Post"}
-          </button>
+          <div className="form-actions">
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? "Publishing..." : "Publish Post"}
+            </button>
+          </div>
         </form>
       </div>
     </>
