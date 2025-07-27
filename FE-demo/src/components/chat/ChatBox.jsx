@@ -3,15 +3,17 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import axios from 'axios';
 import './chat.css';
+import SmokingProfileInfo from '../dashboard/smokeInfo';
 
 const WS_URL = 'http://localhost:8080/ws-chat';
 
-export default function ChatBox({ fromUser, toUser, onBack }) {
+export default function ChatBox({ fromUser, toUser, onBack, onlineUserIds = [] }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const [peerTyping, setPeerTyping] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showProfileOverlay, setShowProfileOverlay] = useState(false);
   const messagesEndRef = useRef(null);
   const stompClient = useRef(null);
 
@@ -45,11 +47,16 @@ export default function ChatBox({ fromUser, toUser, onBack }) {
       onConnect: () => {
         client.subscribe(`/topic/chat.${fromUser.userId}`, msg => {
           const body = JSON.parse(msg.body);
+          
           if (body.content !== undefined) {
             setMessages(prev => [...prev, body]);
           } else if (body.typing !== undefined && body.fromUserId === toUser.userId) {
             setPeerTyping(body.typing);
           }
+        });
+        client.subscribe('/topic/online-users', msg => {
+          const body = JSON.parse(msg.body);
+          setOnlineUserIds(body.userIds);
         });
       },
       onStompError: frame => {
@@ -102,6 +109,19 @@ export default function ChatBox({ fromUser, toUser, onBack }) {
     }
   }, [typing, fromUser.userId, toUser.userId]);
 
+  // Fetch smoking profile
+  const fetchSmokingProfile = async () => {
+    try {
+      const res = await axios.get(`/api/users/smokingprofile/${toUser.userId}`, {
+        headers: { Authorization: `Bearer ${jwt}` }
+      });
+      return res.data.data;
+    } catch (err) {
+      console.error('Failed to fetch smoking profile:', err);
+      return null;
+    }
+  };
+
   if (!fromUser?.userId || !toUser?.userId) {
     return <div className="chat-error">Error: User information missing or invalid.</div>;
   }
@@ -112,7 +132,19 @@ export default function ChatBox({ fromUser, toUser, onBack }) {
         <button className="back-button" onClick={onBack}>
           ← Back
         </button>
-        <h2>{toUser.name || `User ${toUser.userId}`}</h2>
+        <h2>
+          {toUser.name || toUser.fullName || toUser.username || `User ${toUser.userId}`}
+          {onlineUserIds?.includes(toUser.userId) && <span className="online-dot" />}
+        </h2>
+        {fromUser.role === 'COACH' && (
+          <button 
+            className="profile-button"
+            onClick={() => setShowProfileOverlay(true)}
+            title="View user's smoking profile"
+          >
+            📊
+          </button>
+        )}
       </div>
       
       <div className="messages-container">
@@ -128,7 +160,7 @@ export default function ChatBox({ fromUser, toUser, onBack }) {
             >
               <div className="message-content">
                 <div className="message-sender">
-                  {msg.fromUserId === fromUser.userId ? 'You' : toUser.name || `User ${toUser.userId}`}
+                  {msg.fromUserId === fromUser.userId ? 'You' : (toUser.name || toUser.fullName || toUser.username || `User ${toUser.userId}`)}
                 </div>
                 <div className="message-text">{msg.content}</div>
                 <div className="message-time">
@@ -167,6 +199,49 @@ export default function ChatBox({ fromUser, toUser, onBack }) {
           Send
         </button>
       </form>
+
+      {showProfileOverlay && (
+        <ProfileOverlay 
+          userId={toUser.userId}
+          onClose={() => setShowProfileOverlay(false)}
+          fetchProfile={fetchSmokingProfile}
+        />
+      )}
     </div>
   );
 }
+
+// Add this component inside ChatBox.jsx or create a separate file
+const ProfileOverlay = ({ userId, onClose, fetchProfile }) => {
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const data = await fetchProfile();
+      setProfileData(data);
+      setLoading(false);
+    };
+    loadProfile();
+  }, [userId]);
+
+  return (
+    <div className="profile-overlay">
+      <div className="profile-overlay-content">
+        <div className="overlay-header">
+          <h3>User Smoking Profile</h3>
+          <button className="close-button" onClick={onClose}>✕</button>
+        </div>
+        <div className="overlay-body">
+          {loading ? (
+            <div className="loading">Loading profile...</div>
+          ) : profileData ? (
+            <SmokingProfileInfo smokingProfile={profileData} />
+          ) : (
+            <div className="no-profile">No smoking profile available for this user.</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};

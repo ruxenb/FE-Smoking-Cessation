@@ -4,6 +4,7 @@ import api from "../../configs/api/axios";
 import "./BlogApp.css";
 import CommentSection from "./CommentSection";
 import NavBar from "../nav-bar/NavBar";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -51,15 +52,17 @@ export default function PostDetail() {
 
   const handleLike = async () => {
     if (!user) {
-      alert("Please login to like posts");
+      toast.error("Please login to like posts");
       return;
     }
 
     try {
       if (isLiked) {
         await api.post(`/likes/unlike?postId=${id}&userId=${user.userId}`);
+        toast.success("Post unliked!");
       } else {
         await api.post(`/likes/like?postId=${id}&userId=${user.userId}`);
+        toast.success("Post liked!");
       }
       // Always re-fetch the latest like count and status from backend
       const [likesRes, statusRes] = await Promise.all([
@@ -69,6 +72,7 @@ export default function PostDetail() {
       setLikes(likesRes.data.data);
       setIsLiked(statusRes.data.data);
     } catch (err) {
+      toast.error("Failed to update like status");
       console.error("Error toggling like:", err);
     }
   };
@@ -77,7 +81,7 @@ export default function PostDetail() {
     e.preventDefault();
     if (!newComment.trim()) return;
     if (!user) {
-      alert("Please login to comment");
+      toast.error("Please login to comment");
       return;
     }
 
@@ -88,10 +92,12 @@ export default function PostDetail() {
         content: newComment,
       });
       setNewComment("");
+      toast.success("Comment posted successfully!");
       // Refresh comments
       const res = await api.get(`/comments/post/${id}`);
       setComments(res.data.data);
     } catch (err) {
+      toast.error("Failed to post comment");
       console.error("Failed to post comment", err);
     }
   };
@@ -103,10 +109,10 @@ export default function PostDetail() {
       await api.delete(`/posts/${id}`, {
         headers: { Authorization: token },
       });
-      alert("Post deleted successfully!");
+      toast.success("Post deleted successfully!");
       navigate("/blog");
     } catch (err) {
-      alert("Failed to delete post.");
+      toast.error("Failed to delete post.");
       console.error(err);
     }
   };
@@ -124,6 +130,7 @@ export default function PostDetail() {
 
   return (
     <>
+      <Toaster position="top-right" />
       {!user && <NavBar />}
       <div className="blog-container">
         <div className="header">
@@ -174,14 +181,14 @@ export default function PostDetail() {
                     className="edit-btn"
                     onClick={() => navigate(`/blog/${id}/edit`)}
                   >
-                    Edit Post
+                    
                   </button>
                   <button
                     className="delete-btn"
                     onClick={handleDelete}
                     style={{ marginLeft: 8 }}
                   >
-                    Delete Post
+                    🗑
                   </button>
                 </>
               )}

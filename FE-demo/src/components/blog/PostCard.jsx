@@ -43,7 +43,7 @@ export default function PostCard({ post }) {
                 addSuffix: true,
               })}
             </span>
-            <span className="tag">{post.category || "Journey"}</span>
+            {/* <span className="tag">{post.category || "Journey"}</span> */}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import api from "../../configs/api/axios";
 import PostCard from "./PostCard";
+import toast, { Toaster } from 'react-hot-toast';
 import "./BlogApp.css";
 
 
@@ -42,6 +43,7 @@ export default function BlogApp() {
 
         setPosts(postsData);
       } catch (err) {
+        toast.error("Failed to load blog data");
         console.error("Failed to fetch data", err);
       } finally {
         setLoading(false);
@@ -80,6 +82,7 @@ export default function BlogApp() {
 
   return (
     <>
+      <Toaster position="top-right" />
       <div className="blog-container">
         <div className="header">
           <h1>
@@ -118,7 +121,7 @@ export default function BlogApp() {
             >
               Recent
             </button>
-            <button
+            {/* <button
               className={`filter-tab ${
                 activeTab === "Popular" ? "active" : ""
               }`}
@@ -128,7 +131,7 @@ export default function BlogApp() {
               }}
             >
               Popular
-            </button>
+            </button> */}
             <button
               className={`filter-tab ${activeTab === "Admin" ? "active" : ""}`}
               onClick={() => {

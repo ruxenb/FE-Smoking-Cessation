@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../configs/axios';
+import toast from 'react-hot-toast';
 
 export default function LikeButtons({ postId, userId }) {
   const [likes, setLikes] = useState(0);
@@ -27,7 +28,7 @@ export default function LikeButtons({ postId, userId }) {
 
   const handleLike = async () => {
     if (!userId) {
-      alert("Please login to like posts");
+      toast.error("Please login to like posts");
       return;
     }
 
@@ -35,12 +36,15 @@ export default function LikeButtons({ postId, userId }) {
       if (isLiked) {
         await api.post(`/likes/unlike?postId=${postId}&userId=${userId}`);
         setLikes(likes - 1);
+        toast.success("Post unliked!");
       } else {
         await api.post(`/likes/like?postId=${postId}&userId=${userId}`);
         setLikes(likes + 1);
+        toast.success("Post liked!");
       }
       setIsLiked(!isLiked);
     } catch (err) {
+      toast.error("Error updating like status");
       console.error("Error toggling like:", err);
     }
   };

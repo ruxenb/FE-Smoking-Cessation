@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CoachSelector from './CoachSelector';
 import ChatBox from './ChatBox';
 import { useUser } from "../../userContext/userContext";
+import api from "../../configs/api/axios";
 import './chat.css'; // Shared chat styles
 
 export default function ChatPage({ jwt }) {
@@ -10,6 +11,7 @@ export default function ChatPage({ jwt }) {
   const [selectedCoach, setSelectedCoach] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [onlineUserIds, setOnlineUserIds] = useState([]);
 
   useEffect(() => {
     const token = jwt || (localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken"));
@@ -40,6 +42,23 @@ export default function ChatPage({ jwt }) {
       .finally(() => setLoading(false));
   }, [jwt]);
 
+  useEffect(() => {
+    const fetchOnlineUsers = async () => {
+      try {
+        const token = jwt || (localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken"));
+        const res = await api.get("/users/online", {
+          headers: { Authorization: token }
+        });
+        setOnlineUserIds(res.data.data.onlineUsers || []);
+      } catch (err) {
+        setOnlineUserIds([]);
+      }
+    };
+    fetchOnlineUsers();
+    const interval = setInterval(fetchOnlineUsers, 10000); // refresh every 10s
+    return () => clearInterval(interval);
+  }, [jwt]);
+
   return (
     <div className="chat-page-container">
       {!selectedCoach ? (
@@ -54,6 +73,7 @@ export default function ChatPage({ jwt }) {
               coaches={coaches}
               onSelect={setSelectedCoach}
               selectedCoach={selectedCoach}
+              onlineUserIds={onlineUserIds}
             />
           )}
         </div>
@@ -63,6 +83,7 @@ export default function ChatPage({ jwt }) {
           toUser={selectedCoach}
           jwt={jwt}
           onBack={() => setSelectedCoach(null)}
+          onlineUserIds={onlineUserIds}
         />
       )}
     </div>

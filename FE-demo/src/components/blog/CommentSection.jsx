@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../configs/api/axios";
-import { useUser } from "../../userContext/userContext"; // Lấy user từ Context
-import { message } from "antd"; // Dùng antd để có thông báo đẹp
+import { useUser } from "../../userContext/userContext";
+import toast from 'react-hot-toast'; // Replace antd message
 import "./BlogApp.css";
 
 export default function CommentSection({ postId }) {
@@ -37,8 +37,10 @@ export default function CommentSection({ postId }) {
         content: newComment,
       });
       setNewComment("");
+      toast.success("Comment posted successfully!");
       fetchComments();
     } catch (err) {
+      toast.error("Failed to post comment");
       console.error("Failed to post comment", err);
     }
   };
@@ -52,26 +54,26 @@ export default function CommentSection({ postId }) {
       });
       setEditingComment(null);
       setEditContent("");
+      toast.success("Comment updated successfully!");
       fetchComments();
     } catch (err) {
+      toast.error("Failed to update comment");
       console.error("Failed to edit comment", err);
     }
   };
 
   const handleDelete = async (commentId) => {
-    if (window.confirm("Are you sure you want to delete this comment?")) {
-      try {
-        const token = `Bearer ${localStorage.getItem("accessToken")}`;
-        // Dùng API đã được phân quyền ở backend
-        await api.delete(`/comments/${commentId}`, {
-          headers: { Authorization: token },
-        });
-        message.success("Comment deleted successfully!");
-        fetchComments();
-      } catch (err) {
-        message.error("Failed to delete comment.");
-        console.error("Failed to delete comment", err);
-      }
+    if (!window.confirm("Are you sure you want to delete this comment?")) return;
+    try {
+      const token = `Bearer ${localStorage.getItem("accessToken")}`;
+      await api.delete(`/comments/${commentId}`, {
+        headers: { Authorization: token },
+      });
+      toast.success("Comment deleted successfully!");
+      fetchComments();
+    } catch (err) {
+      toast.error("Failed to delete comment");
+      console.error("Failed to delete comment", err);
     }
   };
 
@@ -87,8 +89,10 @@ export default function CommentSection({ postId }) {
       });
       setReplyContent("");
       setReplyTo(null);
+      toast.success("Reply posted successfully!");
       fetchComments();
     } catch (err) {
+      toast.error("Failed to post reply");
       console.error("Failed to post reply", err);
     }
   };
@@ -162,7 +166,7 @@ export default function CommentSection({ postId }) {
                     setEditContent(comment.content);
                   }}
                 >
-                  Edit
+                  
                 </button>
               )}
 
@@ -172,7 +176,7 @@ export default function CommentSection({ postId }) {
                   className="delete-btn"
                   onClick={() => handleDelete(comment.commentId)}
                 >
-                  Delete
+                  🗑
                 </button>
               )}
 

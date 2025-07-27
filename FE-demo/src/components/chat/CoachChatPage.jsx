@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import ChatBox from './ChatBox';
 import './chat.css'; // Import the shared chat styles
+import api from '../../configs/api/axios';
 
 export default function CoachChatPage({ coach, jwt }) {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [onlineUserIds, setOnlineUserIds] = useState([]);
 
   useEffect(() => {
     setLoading(true);
@@ -22,6 +24,22 @@ export default function CoachChatPage({ coach, jwt }) {
         setLoading(false);
       });
   }, [jwt, coach.userId]);
+
+  useEffect(() => {
+    const fetchOnlineUsers = async () => {
+      try {
+        const res = await api.get('/users/online', {
+          headers: { Authorization: `Bearer ${jwt}` }
+        });
+        setOnlineUserIds(res.data.data.onlineUsers || []);
+      } catch (err) {
+        setOnlineUserIds([]);
+      }
+    };
+    fetchOnlineUsers();
+    const interval = setInterval(fetchOnlineUsers, 10000); // refresh every 10s
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="chat-page-container">
@@ -44,6 +62,9 @@ export default function CoachChatPage({ coach, jwt }) {
                   <div className="user-info">
                     <div className="user-name">
                       {user.name || user.fullName || user.username || `User ${user.userId}`}
+                      {onlineUserIds.includes(user.userId) && (
+                        <span className="online-dot" />
+                      )}
                     </div>
                     <div className="user-id">ID: {user.userId}</div>
                   </div>
@@ -58,6 +79,7 @@ export default function CoachChatPage({ coach, jwt }) {
           toUser={selectedUser}
           jwt={jwt}
           onBack={() => setSelectedUser(null)}
+          onlineUserIds={onlineUserIds}
         />
       )}
     </div>
