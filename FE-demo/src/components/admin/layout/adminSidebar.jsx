@@ -4,7 +4,8 @@ import {
     DashboardOutlined,
     ReadOutlined,
     UserOutlined,
-    LogoutOutlined 
+    LogoutOutlined,
+    TrophyOutlined // Add this import
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../../../userContext/userContext'; // <-- BƯỚC 2: Import useUser
@@ -46,6 +47,11 @@ function AdminSidebar({ collapsed }) {
             key: '/admin/users',
             icon: <UserOutlined />,
             label: 'User Management',
+        },
+        {
+            key: '/admin/achievements', // Add this new menu item
+            icon: <TrophyOutlined />,
+            label: 'Achievement Management',
         },
         {
             key: '/admin/showFeedbacks',

@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import AdminSidebarCom from '../../components/admin/layout/adminSidebar';
 import AdminDashboardContent from '../../components/admin/adminDashboardContent';
 import AdminBlogManagementContent from '../../components/admin/AdminBlogManagement';
-// import AdminUserManagementContent from '../components/admin/AdminUserManagementContent';
+import AdminAchievementManagementContent from '../../components/admin/AdminAchievementManagement';
+// Import other admin components as needed
 
 // Import CSS chung (nếu có)
 import '../../components/dashboard/dashboard.css'; 
@@ -22,7 +23,7 @@ function AdminDashboardPage() {
     // Nếu không phải admin, đá về trang chủ
     if (user?.role !== 'ADMIN') {
         navigate('/');
-        return null; // return null để tránh render phần còn lại
+        return null;
     }
 
     const handleToggleSidebar = () => {
@@ -37,7 +38,11 @@ function AdminDashboardPage() {
             case 'blog':
                 return <AdminBlogManagementContent />;
             case 'users':
-                return <AdminUserManagementContent />;
+                return <div>User Management - Coming Soon</div>; // Add your user management component
+            case 'achievements':
+                return <AdminAchievementManagementContent />;
+            case 'showFeedbacks':
+                return <div>User Feedbacks - Coming Soon</div>; // Add your feedback component
             default:
                 return <AdminDashboardContent />;
         }

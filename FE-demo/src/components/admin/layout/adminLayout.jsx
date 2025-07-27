@@ -12,12 +12,13 @@ function AdminLayout() {
     const [collapsed, setCollapsed] = useState(false);
     const location = useLocation();
 
-    // Hàm để lấy tiêu đề trang từ URL
+    // Updated function to include achievement management route
     const getPageTitle = (pathname) => {
         const routeTitles = {
             '/admin': 'Dashboard',
             '/admin/blog': 'Blog & Community Management',
             '/admin/users': 'User Management',
+            '/admin/achievements': 'Achievement Management', // Add this line
             '/admin/memberships': 'Membership Package Management',
             '/admin/feedback': 'Feedback Management',
             '/admin/reports': 'Reports & Statistics'

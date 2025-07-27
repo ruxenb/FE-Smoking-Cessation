@@ -23,6 +23,7 @@ import AdminLayout from "../../components/admin/layout/adminLayout";
 import AdminDashboard from "../../components/admin/adminDashboardContent";
 import AdminBlogManagementPage from "../../components/admin/AdminBlogManagement";
 import AdminUserManagementPage from "../../components/admin/userManagement";
+import AdminAchievementManagementPage from "../../components/admin/AdminAchievementManagement";
 import AdminFeedback from "../../components/admin/AdminFeedback";
 import NotFoundPage from "../../pages/ErrorPage/NotFoundPage";
 import BlogPage from "../../pages/BlogPage";
@@ -145,6 +146,7 @@ const adminRoutes = {
     { index: true, element: <AdminDashboard /> },
     { path: "blog", element: <AdminBlogManagementPage /> },
     { path: "users", element: <AdminUserManagementPage /> },
+    { path: "achievements", element: <AdminAchievementManagementPage /> },
     { path: "showFeedbacks", element: <AdminFeedback /> },
   ],
 };
