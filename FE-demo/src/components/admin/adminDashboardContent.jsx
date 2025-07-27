@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Statistic, message, Spin, Table, Tag, Typography} from 'antd';
-import { UserOutlined, TeamOutlined, DollarCircleOutlined, MessageOutlined, ReadOutlined, TrophyOutlined } from '@ant-design/icons';
+import { Row, Col, Card, Statistic, message, Spin, Typography, Tag } from 'antd'; // Add Tag import here
+import { UserOutlined, TeamOutlined, DollarCircleOutlined, MessageOutlined, ReadOutlined } from '@ant-design/icons';
 import { getAdminDashboardStats } from '../../services/adminService';
 
 const { Title } = Typography;
@@ -36,27 +36,6 @@ function AdminDashboard() {
             </div>
         );
     }
-
-    // Prepare achievement data for table
-    const achievementColumns = [
-        { 
-            title: 'Achievement', 
-            dataIndex: 'name', 
-            key: 'name', 
-            render: text => (
-                <span>
-                    <TrophyOutlined style={{ marginRight: 8, color: '#faad14' }} />
-                    {text}
-                </span>
-            )
-        },
-        { 
-            title: 'Unlocked By', 
-            dataIndex: 'count', 
-            key: 'count',
-            render: count => <Tag color="blue">{count} users</Tag>
-        }
-    ];
 
     const getRoleColor = (role) => {
         switch(role) {
@@ -179,20 +158,6 @@ function AdminDashboard() {
                     </Card>
                 </Col>
             </Row>
-
-            {/* Achievement Stats */}
-            <Card style={{ marginTop: 32 }} title="Achievement Statistics" hoverable>
-                <Table
-                    columns={achievementColumns}
-                    dataSource={stats.achievements?.map((item, index) => ({
-                        ...item,
-                        key: item.id || item.name || index
-                    })) || []}
-                    pagination={false}
-                    size="small"
-                    locale={{ emptyText: 'No achievements data available' }}
-                />
-            </Card>
         </div>
     );
 }
