@@ -1,32 +1,215 @@
 .sidebar {
+  position: fixed; /* Fixed positioning */
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width-expanded, 260px); /* Use CSS variable for width */
+  height: 100vh; /* Full viewport height */
+  background-color: var(--sidebar-bg, #0a100a); /* Use CSS variable */
+  color: #f0f0f0;
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Chiều cao toàn bộ trang */
-  background-color: #1f1f1f; /* ví dụ màu nền */
-  color: white;
-  padding: 1rem;
+  z-index: 100; /* Ensure it stays above other content */
+  transition: width 0.3s ease-in-out; /* Smooth width transition */
+  overflow-y: auto; /* Allow scrolling if content is too long */
+  overflow-x: hidden; /* Hide horizontal overflow */
 }
 
+.sidebar.collapsed {
+  width: var(--sidebar-width-collapsed, 80px); /* Collapsed width */
+  align-items: center;
+  padding: 2rem 0.5rem;
+}
+
+/* Logo styles */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.logo svg {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.logo svg:hover {
+  transform: scale(1.05);
+}
+
+.sidebar.collapsed .logo {
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.sidebar.collapsed .logo span {
+  display: none;
+}
+
+/* Navigation styles */
 .navigation {
-  flex: 1; /* chiếm toàn bộ không gian còn lại */
+  flex: 1; /* Take up remaining space */
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  width: 100%;
+  overflow: hidden; /* Prevent overflow issues */
 }
 
+.navigation a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #f0f0f0;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar.collapsed .navigation a {
+  justify-content: center;
+  padding: 1rem 0;
+  gap: 0;
+}
+
+.sidebar.collapsed .navigation a span:not(.icon) {
+  display: none;
+}
+
+.navigation a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navigation a.active {
+  background-color: var(--primary-green, #305030);
+  font-weight: 500;
+}
+
+.navigation .icon {
+  font-size: 1.2rem;
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+/* Footer styles */
 .sidebar-footer {
-  margin-top: auto; /* đẩy footer xuống dưới cùng */
+  margin-top: auto; /* Push to bottom */
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
 }
 
 .logout-button {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: white;
+  gap: 1rem;
+  color: #f0f0f0;
   text-decoration: none;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
   cursor: pointer;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar.collapsed .logout-button {
+  justify-content: center;
+  padding: 1rem 0;
+  gap: 0;
+}
+
+.sidebar.collapsed .logout-button span:not(.icon) {
+  display: none;
 }
 
 .logout-button:hover {
-  color: red;
+  background-color: rgba(255, 82, 82, 0.1);
+  color: #ffc2c2;
+}
+
+.logout-button .icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* Smooth scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Hide scrollbar in collapsed state */
+.sidebar.collapsed::-webkit-scrollbar {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .sidebar {
+    width: var(--sidebar-width-collapsed, 80px);
+    align-items: center;
+    padding: 2rem 0.5rem;
+  }
+  
+  .sidebar .logo span,
+  .sidebar .navigation a span:not(.icon),
+  .sidebar .logout-button span:not(.icon) {
+    display: none;
+  }
+  
+  .sidebar .navigation a,
+  .sidebar .logout-button {
+    justify-content: center;
+    padding: 1rem 0;
+    gap: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%); /* Hide by default on mobile */
+    transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  }
+  
+  .sidebar.mobile-open {
+    transform: translateX(0); /* Show when mobile menu is open */
+  }
+  
+  /* Mobile overlay for sidebar */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    display: none;
+  }
+  
+  .sidebar-overlay.active {
+    display: block;
+  }
 }
