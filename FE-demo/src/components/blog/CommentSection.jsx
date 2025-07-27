@@ -63,18 +63,53 @@ export default function CommentSection({ postId }) {
   };
 
   const handleDelete = async (commentId) => {
-    if (!window.confirm("Are you sure you want to delete this comment?")) return;
-    try {
-      const token = `Bearer ${localStorage.getItem("accessToken")}`;
-      await api.delete(`/comments/${commentId}`, {
-        headers: { Authorization: token },
-      });
-      toast.success("Comment deleted successfully!");
-      fetchComments();
-    } catch (err) {
-      toast.error("Failed to delete comment");
-      console.error("Failed to delete comment", err);
-    }
+    // Custom toast confirmation
+    toast((t) => (
+      <div className="toast-confirm">
+        <div className="toast-confirm-icon">⚠️</div>
+        <div className="toast-confirm-content">
+          <div className="toast-confirm-title">Delete Comment</div>
+          <div className="toast-confirm-message">
+            Are you sure you want to delete this comment? This action cannot be undone.
+          </div>
+        </div>
+        <div className="toast-confirm-actions">
+          <button
+            className="toast-btn toast-btn-cancel"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+          <button
+            className="toast-btn toast-btn-delete"
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                const token = `Bearer ${localStorage.getItem("accessToken")}`;
+                await api.delete(`/comments/${commentId}`, {
+                  headers: { Authorization: token },
+                });
+                toast.success("Comment deleted successfully!");
+                fetchComments();
+              } catch (err) {
+                toast.error("Failed to delete comment");
+                console.error("Failed to delete comment", err);
+              }
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: Infinity,
+      position: 'top-center',
+      style: {
+        background: 'transparent',
+        boxShadow: 'none',
+        padding: 0,
+      }
+    });
   };
 
   const handleReplySubmit = async (e, parentCommentId) => {

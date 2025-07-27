@@ -945,30 +945,108 @@ body {
   font-size: 1rem;
 }
 
+/* Toast Confirmation Styles */
+.toast-confirm {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  animation: toastSlideIn 0.3s ease-out;
+}
 
+.toast-confirm-icon {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 12px;
+}
 
-/* Responsive styles */
+.toast-confirm-content {
+  margin-bottom: 20px;
+}
+
+.toast-confirm-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.toast-confirm-message {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.toast-confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.toast-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-width: 80px;
+}
+
+.toast-btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.toast-btn-cancel:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.toast-btn-delete {
+  background: #ef4444;
+  color: white;
+}
+
+.toast-btn-delete:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.toast-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Responsive design for mobile */
 @media (max-width: 768px) {
-  .post-form {
-    padding: 20px;
-    border-radius: 0;
-    box-shadow: none;
+  .toast-confirm {
+    max-width: 320px;
+    padding: 16px;
   }
   
-  .post-form-header {
+  .toast-confirm-actions {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
   }
   
-  .form-actions {
-    justify-content: center;
-  }
-  
-  .submit-btn {
+  .toast-btn {
     width: 100%;
-    justify-content: center;
   }
-  
-  
 }
