@@ -8,6 +8,59 @@ import NavBar from "../nav-bar/NavBar";
 const Icon = ({ children }) => (
   <div className="icon-placeholder">{children}</div>
 );
+<<<<<<< Updated upstream
+=======
+const logoUrl = "https://i.pravatar.cc/40?img=1"; // ảnh chờ cho logo project
+
+// --- NAVBAR COMPONENT ---
+export const Navbar = () => {
+  const { user } = useUser();
+  return (
+    <div className="navbar-container">
+      <nav className="navbar">
+        <div className="navbar-left">
+          <img src={logoUrl} alt="Site Logo" className="logo-img" />
+          <Link to="/" className="site-name">
+            NicoClear
+          </Link>
+        </div>
+        <div className="navbar-right">
+          <Link to="/about">About us</Link>
+          <Link to="/membership">Membership</Link>
+          <Link to="/blog">Blog</Link>
+          <Link to="/feedback">Feedback</Link>
+          {user ? (
+            <>
+              {user.role === "MEMBER" && (
+                <Link to="/dashboard" className="navbar-button">
+                  Dashboard
+                </Link>
+              )}
+              {user.role === "COACH" && (
+                <Link to="/coach-dashboard" className="navbar-button">
+                  Coach Panel
+                </Link>
+              )}
+              {user.role === "ADMIN" && (
+                <Link to="/admin" className="navbar-button">
+                  Admin
+                </Link>
+              )}
+            </>
+          ) : (
+            <>
+              <Link to="/register" className="navbar-button">
+                Get Started
+              </Link>
+              <Link to="/login">Login</Link>
+            </>
+          )}
+        </div>
+      </nav>
+    </div>
+  );
+};
+>>>>>>> Stashed changes
 
 const HomePage = () => {
   return (

@@ -49,11 +49,14 @@ function AdminSidebar({ collapsed }) {
             label: 'User Management',
         },
         {
+<<<<<<< Updated upstream
             key: '/admin/achievements', // Add this new menu item
             icon: <TrophyOutlined />,
             label: 'Achievement Management',
         },
         {
+=======
+>>>>>>> Stashed changes
             key: '/admin/showFeedbacks',
             icon: <TfiWrite />,
             label: 'User Feedbacks',

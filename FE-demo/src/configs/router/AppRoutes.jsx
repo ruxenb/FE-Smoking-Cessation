@@ -42,7 +42,7 @@ const publicRoutes = [
 ];
 
 const blogRoutes = [
-  { 
+  {
     path: "/blog/new",
     element: (
       <ProtectedRoute>
