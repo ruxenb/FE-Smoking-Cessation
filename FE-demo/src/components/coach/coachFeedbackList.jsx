@@ -1,12 +1,11 @@
-// src/pages/AdminPanel/AdminFeedback.jsx (hoặc ../../components/admin/AdminFeedback.jsx)
 import React, { useEffect, useState } from 'react';
-import { useUser } from '../../userContext/userContext'; // Giả định bạn có user context
-import { Table, Spin, Alert, Rate, Tag } from 'antd';
-import { getAllFeedbacks } from '../../services/feedbackService'; // Import hàm mới
+import { useUser } from '../../userContext/userContext'; 
+import { Table, Spin, Alert, Rate, Tag } from 'antd'; 
+import { getFeedbacksByReceiverId } from '../../services/feedbackService';
 import { toast } from 'react-toastify';
 
-function AdminFeedback() {
-    const { user } = useUser(); // Lấy thông tin user (admin) từ context
+function CoachFeedbackPage() {
+    const { user } = useUser();
     const [feedbacks, setFeedbacks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -16,9 +15,9 @@ function AdminFeedback() {
     const fullToken = tokenType && accessToken ? `${tokenType} ${accessToken}` : null;
 
     useEffect(() => {
-        const fetchAllFeedbacks = async () => {
+        const fetchFeedbacks = async () => {
             if (!user?.userId) {
-                setError("Admin User ID not found. Please log in.");
+                setError("User ID not found. Please log in.");
                 setLoading(false);
                 return;
             }
@@ -33,33 +32,30 @@ function AdminFeedback() {
                 setLoading(true);
                 setError(null);
 
-                // Gọi API để lấy tất cả feedback
-                const response = await getAllFeedbacks(fullToken); 
+                const response = await getFeedbacksByReceiverId(user.userId, fullToken); 
                 
                 if (response.status === 200) {
-                    // response.data.data là mảng chứa các feedback
+                    // Ant Design Table yêu cầu key duy nhất cho mỗi hàng
+                    // Đảm bảo data.map có một key 'id' hoặc tạo ra nó nếu không có
                     const formattedData = response.data.data.map(item => ({
                         ...item,
-                        key: item.id, // Bắt buộc cho Ant Design Table
-                        // Xử lý tên người gửi và người nhận
-                        senderName: item.userName || "N/A", // Tên người gửi feedback
-                        receiverDisplayName: item.receiverId === 0 ? "System" : (item.receiverName || `Coach ID: ${item.receiverId}`) // Tên người nhận hoặc "System"
+                        key: item.id // Sử dụng id của feedback làm key
                     }));
                     setFeedbacks(formattedData);
                 } else {
-                    const errorMessage = response.data?.message || "Failed to fetch all feedbacks.";
+                    const errorMessage = response.data?.message || "Failed to fetch feedbacks.";
                     setError(errorMessage);
                     toast.error(errorMessage, { theme: "dark", position: "top-left" });
                 }
             } catch (err) {
-                console.error("Error fetching all feedbacks:", err);
+                console.error("Error fetching feedbacks:", err);
                 let errorMessage = "An error occurred while fetching feedbacks.";
                 if (err.response) {
                     errorMessage = err.response.data?.message || err.response.statusText;
                     if (err.response.status === 401 || err.response.status === 403) {
-                        errorMessage = "You are not authorized to view this content. Please log in with an Admin account.";
+                        errorMessage = "You are not authorized to view this content. Please log in.";
                     } else if (err.response.status === 404) {
-                        errorMessage = "Feedback data not found or endpoint not available.";
+                        errorMessage = "No feedbacks found or endpoint not available.";
                     }
                 } else if (err.request) {
                     errorMessage = "Network error. Please check your internet connection.";
@@ -73,45 +69,34 @@ function AdminFeedback() {
             }
         };
 
-        // Fetch data khi component mount hoặc user/token thay đổi
-        fetchAllFeedbacks();
+        // Chỉ fetch khi component được mở (currentPage === 'received-feedback')
+        // hoặc khi user.id và fullToken đã có
+        if (open || (user?.id && fullToken)) { // Tùy chỉnh điều kiện fetch
+             fetchFeedbacks();
+        }
        
-    }, [user, fullToken]); 
+    }, [user, fullToken, open]); // Thêm 'open' vào dependency array nếu bạn muốn re-fetch khi modal mở lại
 
     const columns = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
-            sorter: (a, b) => a.id - b.id,
-            width: '8%',
-        },
-        {
             title: 'From User',
-            dataIndex: 'senderName', // Tên người gửi feedback
-            key: 'senderName',
-            width: '15%',
+            dataIndex: 'userName',
+            key: 'userName',
+            width: '25%',
+            render: (text) => text || "N/A" // Hiển thị "N/A" nếu subject không có
         },
         {
-            title: 'Subject', // Subject từ lúc gửi form (tức là modalTitle)
-            dataIndex: 'subject',
-            key: 'subject',
-            width: '20%',
-            sorter: (a, b) => a.subject.localeCompare(b.subject),
-            ellipsis: true,
-        },
-        {
-            title: 'Content',
+            title: 'Feedback',
             dataIndex: 'body',
             key: 'body',
-            width: '25%',
-            ellipsis: true,
+            width: '40%',
+            ellipsis: true, // Thêm ellipsis nếu nội dung quá dài
         },
         {
             title: 'Rating',
             dataIndex: 'rating',
             key: 'rating',
-            width: '10%',
+            width: '15%',
             render: (rating) => <Rate disabled allowHalf defaultValue={rating} />,
             sorter: (a, b) => a.rating - b.rating,
         },
@@ -123,21 +108,12 @@ function AdminFeedback() {
             render: (date) => new Date(date).toLocaleDateString(),
             sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
         },
-        // Bạn có thể thêm cột Actions ở đây cho Admin (ví dụ: Delete feedback)
-        // {
-        //     title: 'Actions',
-        //     key: 'actions',
-        //     render: (text, record) => (
-        //         <Button danger onClick={() => handleDeleteFeedback(record.id)}>Delete</Button>
-        //     ),
-        //     width: '8%',
-        // }
     ];
 
     if (loading) {
         return (
             <div style={{ textAlign: 'center', padding: '50px' }}>
-                <Spin size="large" tip="Loading all feedbacks..." />
+                <Spin size="large" tip="Loading feedbacks..." />
             </div>
         );
     }
@@ -156,8 +132,8 @@ function AdminFeedback() {
     }
 
     return (
-        <div className="admin-feedback-page">
-            <h2>All Feedbacks</h2>
+        <div className="coach-feedback-page">
+            <h2>My Received Feedback</h2>
             <Table 
                 columns={columns} 
                 dataSource={feedbacks} 
@@ -168,4 +144,4 @@ function AdminFeedback() {
     );
 }
 
-export default AdminFeedback;
+export default CoachFeedbackPage;

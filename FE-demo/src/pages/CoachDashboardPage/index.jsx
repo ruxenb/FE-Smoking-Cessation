@@ -8,7 +8,7 @@ import CoachChatPage from "../../components/chat/CoachChatPage"; // <-- Componen
 // import ChatPlaceholder from "../../components/coach/ChatPlaceholder";
 import SettingsPage from "../../components/dashboard/sidebarPages/SettingsPage";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-
+import CoachFeedbackPage from "../../components/coach/coachFeedbackList";
 import '../../components/dashboard/dashboard.css';
 
 function CoachDashboard() {
@@ -40,6 +40,9 @@ function CoachDashboard() {
         return <LeaderboardPage />;
       case "settings":
         return <SettingsPage currentTheme={theme} onThemeChange={setTheme} />;
+      case "received-feedback":
+        return <CoachFeedbackPage />;
+      
       default:
         return <CoachOverview coachName={user?.fullName} />;
     }

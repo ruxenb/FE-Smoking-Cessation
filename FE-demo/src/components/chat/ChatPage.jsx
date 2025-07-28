@@ -46,7 +46,7 @@ export default function ChatPage({ jwt }) {
     const fetchOnlineUsers = async () => {
       try {
         const token = jwt || (localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken"));
-        const res = await api.get("/users/online", {
+        const res = await api.get("/users/status/online", {
           headers: { Authorization: token }
         });
         setOnlineUserIds(res.data.data.onlineUsers || []);
@@ -74,6 +74,7 @@ export default function ChatPage({ jwt }) {
               onSelect={setSelectedCoach}
               selectedCoach={selectedCoach}
               onlineUserIds={onlineUserIds}
+              user= {user}
             />
           )}
         </div>

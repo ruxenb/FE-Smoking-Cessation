@@ -1,3 +1,5 @@
+/* NavBar.css */
+
 .navbar-container {
   background-color: var(--navbar-bg);
   padding: 0 20px; /* Horizontal padding for smaller screens */
@@ -44,13 +46,20 @@
   display: flex;
   gap: 1.5rem;
 }
-.navbar-middle a {
+
+.navbar-middle a,
+/* Thêm class mới vào đây để áp dụng cùng style */
+.navbar-link-feedback { 
   color: #dde9dd;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
+  cursor: pointer; /* Thêm cursor pointer để chỉ ra nó có thể click được */
 }
-.navbar-middle a:hover {
+
+.navbar-middle a:hover,
+/* Thêm hover state cho class mới */
+.navbar-link-feedback:hover { 
   color: #ffffff;
 }
 
@@ -102,7 +111,7 @@
 .navbar_icon_button {
   margin: 0 10px;
   font-size: 1.2rem;
-  color: #444;
+  color: #444; /* Đây có vẻ là màu cũ, bạn có thể muốn đổi nó thành màu sáng hơn như #dde9dd hoặc #ffffff */
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 }

@@ -119,7 +119,7 @@ function LoginForm() {
         error.message === "Failed to fetch"
       ) {
         toast.warning(
-          "Lỗi Server chưa được khởi động, thử lại sau khi đã chạy hệ thống Back-End nhen 😏 ",
+          "Server is not running or unreachable. Please ensure the Backend system is running. ",
           { theme: "dark", position: "top-left" }
         );
       } else {

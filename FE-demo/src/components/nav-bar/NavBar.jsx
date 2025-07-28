@@ -1,16 +1,19 @@
+// NavBar.jsx
 import React from "react";
 import { useUser } from "../../userContext/userContext";
-import "./NavBar.css";
+import "./NavBar.css"; // Đảm bảo import CSS
 import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { IoMenu } from "react-icons/io5";
 import { LuBell, LuMessageCircleMore } from "react-icons/lu";
 import { FaRegUser } from "react-icons/fa";
+import FeedbackForm from "../feedback/FeedbackForm"; // Đảm bảo đường dẫn này đúng
 
 function NavBar() {
   const { user } = useUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef();
+  const [isFeedbackModalVisible, setIsFeedbackModalVisible] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -27,6 +30,14 @@ function NavBar() {
   const Icon = ({ children }) => (
     <div className="icon-placeholder">{children}</div>
   );
+
+  const handleOpenFeedbackModal = () => {
+    setIsFeedbackModalVisible(true);
+  };
+
+  const handleCloseFeedbackModal = () => {
+    setIsFeedbackModalVisible(false);
+  };
 
   return (
     <div className="navbar-container">
@@ -52,7 +63,14 @@ function NavBar() {
           {user?.role === "ADMIN" && <Link to="/admin">Admin</Link>}
           <Link to="/blog">Blog</Link>
           <Link to="/membership">Membership</Link>
-          <Link to="/feedback">Feedback</Link>
+          
+          <div 
+            className="navbar-link-feedback" 
+            onClick={handleOpenFeedbackModal}
+          >
+            Feedback
+          </div>
+          
           <Link to="/about">AboutUs</Link>
         </div>
         {/* Right: Auth */}
@@ -98,6 +116,16 @@ function NavBar() {
           )}
         </div>
       </nav>
+
+      {isFeedbackModalVisible && (
+        <FeedbackForm 
+          userId={user?.userId} 
+          receiverId={0} 
+          open={isFeedbackModalVisible} 
+          onClose={handleCloseFeedbackModal} 
+          receiverName={""}
+        />
+      )}
     </div>
   );
 }
