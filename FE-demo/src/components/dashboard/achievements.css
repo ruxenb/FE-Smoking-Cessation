@@ -1,3 +1,20 @@
+/* Container cho phần nội dung phía trên */
+.card-top-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Căn giữa nội dung */
+  flex-grow: 1; /* Cho phép phần này mở rộng để đẩy phần dưới cùng xuống */
+}
+
+
+/* Achievement States */
+.achievement-earned-bottom { /* Class mới cho phần "Unlocked" */
+  text-align: center;
+  margin-top: auto; /* Đẩy phần này xuống cuối cùng */
+  padding-top: 10px; /* Khoảng cách với nội dung phía trên */
+  border-top: 1px solid rgba(0, 0, 0, 0.05); /* Đường phân cách nhẹ */
+}
+
 /* Achievement Animation and Enhancement Styles */
 /* Achievements Grid */
 .achievements-grid {
@@ -17,6 +34,12 @@
   border: 2px solid transparent;
   border-left-width: 3px; /* Reduced from 4px */
   overflow: hidden;
+
+  /* Thêm Flexbox cho card */
+  display: flex;
+  flex-direction: column; /* Sắp xếp các item theo cột */
+  justify-content: space-between; /* Đẩy các item lên trên và xuống dưới cùng */
+  min-height: 180px; /* Đảm bảo chiều cao tối thiểu để có không gian cho "Unlocked" */
 }
 
 .achievement-card.unlocking {
@@ -223,7 +246,7 @@
   border-radius: 15px; /* Reduced from 20px */
   font-size: 0.75rem; /* Reduced from 0.8rem */
   font-weight: 600;
-  margin-bottom: 6px; /* Reduced from 8px */
+  /* margin-bottom: 6px; Reduced from 8px */
 }
 
 .earned-date {
