@@ -5,11 +5,8 @@ import {
     ReadOutlined,
     UserOutlined,
     LogoutOutlined,
-<<<<<<< Updated upstream
-    TrophyOutlined // Add this import
-=======
+    TrophyOutlined, // Add this import
     ShoppingOutlined, 
->>>>>>> Stashed changes
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../../../userContext/userContext'; // <-- BƯỚC 2: Import useUser
@@ -53,22 +50,19 @@ function AdminSidebar({ collapsed }) {
             label: 'User Management',
         },
         {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
             key: '/admin/achievements', // Add this new menu item
             icon: <TrophyOutlined />,
             label: 'Achievement Management',
         },
         {
-=======
->>>>>>> Stashed changes
-=======
+
             key: '/admin/memberships',
             icon: <ShoppingOutlined  />,
             label: 'Memberships',
         },
         {
->>>>>>> Stashed changes
+
             key: '/admin/showFeedbacks',
             icon: <TfiWrite />,
             label: 'User Feedbacks',

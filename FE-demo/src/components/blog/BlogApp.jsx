@@ -82,10 +82,7 @@ export default function BlogApp() {
 
   return (
     <>
-<<<<<<< Updated upstream
       <Toaster position="top-right" />
-=======
->>>>>>> Stashed changes
       <div className="blog-container">
         <div className="header">
           <h1>

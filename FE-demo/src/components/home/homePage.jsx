@@ -1,4 +1,4 @@
-import React from "react";
+import {useUser} from "react";
 import "./homePage.css";
 import { Link } from "react-router-dom";
 import { Typewriter } from "react-simple-typewriter";
@@ -8,8 +8,6 @@ import NavBar from "../nav-bar/NavBar";
 const Icon = ({ children }) => (
   <div className="icon-placeholder">{children}</div>
 );
-<<<<<<< Updated upstream
-=======
 const logoUrl = "https://i.pravatar.cc/40?img=1"; // ảnh chờ cho logo project
 
 // --- NAVBAR COMPONENT ---
@@ -60,7 +58,6 @@ export const Navbar = () => {
     </div>
   );
 };
->>>>>>> Stashed changes
 
 const HomePage = () => {
   return (
