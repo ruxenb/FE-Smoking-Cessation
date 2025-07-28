@@ -8,13 +8,19 @@ function CoachSidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
   const { logout } = useUser();
   const navigate = useNavigate();
 
-  const NavLink = ({ page, icon, label }) => (
+  const NavLink = ({ page, icon, label, path }) => (
     <a
       href="#"
       className={currentPage === page ? "active" : ""}
       onClick={(e) => {
         e.preventDefault();
-        setCurrentPage(page);
+        if (path) {
+          // Navigate to external route
+          navigate(path);
+        } else {
+          // Set internal coach page
+          setCurrentPage(page);
+        }
       }}
     >
       <span className="icon">{icon}</span> <span>{label}</span>
@@ -37,7 +43,7 @@ function CoachSidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          onClick={onToggle} // Gán sự kiện onToggle cho nút hamburger
+          onClick={onToggle}
           style={{ cursor: "pointer", padding: "8px" }}
         >
           <path
@@ -48,18 +54,15 @@ function CoachSidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
             strokeLinejoin="round"
           />
         </svg>
-        {/* Tên/Logo của khu vực Coach */}
         <span>Coach Panel</span>
       </div>
       <nav className="navigation">
+        <NavLink page="home" icon="🏠" label="Home" path="/home" />
         <NavLink page="overview" icon="📊" label="Overview" />
-        <NavLink page="members" icon="👥" label="My Members" />
         <NavLink page="chat" icon="💬" label="Chat" />
         <NavLink page="leaderboard" icon="🏆" label="Leaderboard" />
-        
         <NavLink page="received-feedback" icon={<IoStarOutline />} label="My Feedback" />
-
-        <NavLink page="settings" icon="⚙️" label="Settings" />
+        <NavLink page="settings" icon="⚙️ " label="Settings" />
 
         <div className="sidebar-footer">
           <a href="#" className="logout-button" onClick={handleLogout}>
