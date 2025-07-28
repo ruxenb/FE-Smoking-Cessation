@@ -80,7 +80,7 @@ function Sidebar({ isCollapsed, onToggle, currentPage, setCurrentPage }) {
           label="Community"
           path="/blog"
         />
-        <NavLink page="resources" icon="📚" label="Resources" />
+        {/* <NavLink page="resources" icon="📚" label="Resources" /> */}
         <NavLink page="chat" icon="💬" label="Chat" />
         <NavLink page="settings" icon="⚙️" label="Settings" />
       </nav>

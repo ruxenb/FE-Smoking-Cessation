@@ -15,7 +15,7 @@ export default function BlogApp() {
   });
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(2);
+  const [pageSize] = useState(5);
   const [activeTab, setActiveTab] = useState("Recent"); // 'Admin' or 'Mine'
 
   const user = JSON.parse(localStorage.getItem("user"));

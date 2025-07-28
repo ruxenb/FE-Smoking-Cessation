@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './achievements.css';
+import { Button, Modal } from 'antd';
+import { ShareAltOutlined } from '@ant-design/icons';
+import { useUser } from '../../userContext/userContext';
+import { createPost } from '../../services/postService';
+import { toast } from 'react-toastify';
 
+import './achievements.css';
 
 function AchievementCard({
   achievementId,
@@ -9,12 +14,16 @@ function AchievementCard({
   description,
   category,
   userProgress,
-  isNewlyUnlocked = false // New prop for animation trigger
+  isNewlyUnlocked = false
 }) {
+  const { user } = useUser();
   const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [isShareModalVisible, setIsShareModalVisible] = useState(false);
+  const [shareContent, setShareContent] = useState('');
+  const [shareTitle, setShareTitle] = useState('');
+  const [isSharing, setIsSharing] = useState(false);
 
-  // Fix: Use 'earned' instead of 'isEarned'
   const isEarned = userProgress?.earned || false;
   const currentProgress = userProgress?.currentProgress || 0;
   const targetProgress = userProgress?.targetProgress || 0;
@@ -23,13 +32,11 @@ function AchievementCard({
 
   const cardClass = `achievement-card ${isEarned ? 'unlocked' : 'locked'} ${category} ${showUnlockAnimation ? 'unlocking' : ''}`;
 
-  // Trigger unlock animation when newly unlocked
   useEffect(() => {
     if (isNewlyUnlocked && !hasAnimated) {
       setShowUnlockAnimation(true);
       setHasAnimated(true);
 
-      // Remove animation class after animation completes
       const timer = setTimeout(() => {
         setShowUnlockAnimation(false);
       }, 2000);
@@ -38,17 +45,57 @@ function AchievementCard({
     }
   }, [isNewlyUnlocked, hasAnimated]);
 
-  // Add debugging
-  console.log(`Achievement ${name}:`, {
-    isEarned,
-    userProgress,
-    isNewlyUnlocked,
-    showUnlockAnimation
-  });
+  // Hàm xử lý khi click nút chia sẻ: Chuẩn bị nội dung và mở modal xác nhận
+  const handleShareClick = () => {
+    const username = user?.fullName || "Người dùng";
+    const generatedTitle = `${username} chia sẻ thành tựu ${name}`; // Sử dụng name từ props
+    const generatedContent = `Chúc mừng ${username} đã nhận được thành tựu "${name}". 🎉 Mong sự nỗ lực của bạn sẽ lan tỏa đến mọi người!`;
+
+    setShareTitle(generatedTitle);
+    setShareContent(generatedContent);
+    setIsShareModalVisible(true); // Mở modal xác nhận
+  };
+
+  // Hàm gửi post chia sẻ: Gửi API ngay lập tức
+  const handleConfirmShare = async () => {
+    if (!user?.userId || !user?.fullName) {
+      toast.error("User information not available for sharing. Please log in.", { theme: "dark" });
+      return;
+    }
+
+    setIsSharing(true);
+    const fullToken = localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken");
+
+    const postData = {
+      content: shareContent, // Sử dụng content đã tạo sẵn
+      title: shareTitle,     // Sử dụng title đã tạo sẵn
+      userId: user.userId,
+    };
+
+    try {
+      const response = await createPost(postData, fullToken);
+      if (response.status === 201 || response.status === 200) {
+        toast.success("Achievement shared successfully!", { theme: "dark" });
+        setIsShareModalVisible(false); // Đóng modal
+        // Không cần reset shareContent/shareTitle vì chúng sẽ được tạo lại khi share lần sau
+      } else {
+        toast.error(response.data?.message || "Failed to share achievement.", { theme: "dark" });
+      }
+    } catch (error) {
+      console.error("Error sharing achievement:", error);
+      toast.error(error.response?.data?.message || "An error occurred while sharing.", { theme: "dark" });
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
+  const handleCancelShare = () => {
+    setIsShareModalVisible(false);
+    // Không cần reset shareContent/shareTitle ở đây vì chúng chỉ dùng để hiển thị trong modal xác nhận và gửi đi
+  };
 
   return (
     <div className={cardClass}>
-      {/* Unlock animation overlay */}
       {showUnlockAnimation && (
         <div className="unlock-animation">
           <div className="unlock-burst">🎉</div>
@@ -62,8 +109,7 @@ function AchievementCard({
         </div>
       )}
 
-      {/* Main content of the card */}
-      <div className="card-top-content"> {/* Thêm container này */}
+      <div className="card-top-content">
         <div className="ach-icon">
           {isEarned ? icon : '🔒'}
         </div>
@@ -88,16 +134,19 @@ function AchievementCard({
             </div>
           )}
         </div>
-      </div> {/* Kết thúc container card-top-content */}
+      </div>
 
       {isEarned && (
-        <div className="achievement-earned-bottom"> {/* Đổi tên class để dễ quản lý */}
+        <div className="achievement-earned-bottom">
           <span className="earned-badge">✅ Unlocked!</span>
-          {/* {userProgress?.createdAt && (
-            <span className="earned-date">
-              Earned: {new Date(userProgress.createdAt).toLocaleDateString()}
-            </span>
-          )} */}
+          <Button 
+            type="primary" 
+            icon={<ShareAltOutlined />} 
+            onClick={handleShareClick}
+            className="share-achievement-button"
+            size="small"
+          >
+          </Button>
         </div>
       )}
 
@@ -106,6 +155,21 @@ function AchievementCard({
           <span>🔒 Locked</span>
         </div>
       )}
+
+      {/* Modal xác nhận chia sẻ */}
+      <Modal
+        title="Confirm Share Achievement"
+        open={isShareModalVisible}
+        onOk={handleConfirmShare}
+        onCancel={handleCancelShare}
+        confirmLoading={isSharing}
+        okText="Confirm & Share"
+        cancelText="Cancel"
+      >
+        <p>Are you sure you want to share your achievement "{name}"?</p>
+        
+        <p>This action cannot be undone.</p>
+      </Modal>
     </div>
   );
 }

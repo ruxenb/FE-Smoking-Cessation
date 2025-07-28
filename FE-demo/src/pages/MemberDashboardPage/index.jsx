@@ -162,6 +162,7 @@ function Dashboard() {
       case "dashboard" /* truy cập tới dashboard khi đăng nhập thành công, truyền data */:
         return (
           <MainContent
+            fullName={user?.fullName}
             username={user?.username}
             hasProfile={hasSmokingProfile}
             onCreateProfileClick={openProfileOverlay}

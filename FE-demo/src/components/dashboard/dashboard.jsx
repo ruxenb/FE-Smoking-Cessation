@@ -13,6 +13,7 @@ import {
 import { useUser } from '../../userContext/userContext';
 
 function MainContent({
+  fullName,
   username,
   hasProfile,
   currentQuitPlan,
@@ -89,7 +90,7 @@ function MainContent({
       <header className="main-header">
         <div className="welcome-message">
           <h1>
-            Welcome back, <span className="username">{username}</span>!
+            Welcome back, <span className="username">{fullName}</span>!
           </h1>
           <p>You're doing great. Keep up the amazing work.</p>
         </div>
