@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Statistic, message, Spin, Typography, Tag } from 'antd'; // Add Tag import here
 import { UserOutlined, TeamOutlined, DollarCircleOutlined, MessageOutlined, ReadOutlined } from '@ant-design/icons';
 import { getAdminDashboardStats } from '../../services/adminService';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+
 
 const { Title } = Typography;
 
 function AdminDashboard() {
     const [stats, setStats] = useState({});
     const [loading, setLoading] = useState(true);
+   
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -47,13 +50,24 @@ function AdminDashboard() {
         }
     };
 
+    const COLORS = ['#cf1322', '#389e0d', '#0958d9', '#FF8042', '#AF19FF'];
+
+    const transformData = (usersByRole) => {
+        return Object.entries(usersByRole).map(([role, count]) => ({
+            name: role,
+            value: count
+        }));
+    };
+
+
+    
     return (
         <div style={{ padding: '24px' }}>
             <Title level={2} style={{ marginBottom: 24 }}>Dashboard Overview</Title>
             
             <Row gutter={[24, 24]}>
                 {/* User Statistics */}
-                <Col xs={24} sm={12} md={8} lg={6}>
+                <Col xs={24} sm={24} md={12} lg={8}>
                     <Card hoverable>
                         <Statistic
                             title="Total Users"
@@ -69,6 +83,29 @@ function AdminDashboard() {
                                 ))}
                             </div>
                         )}
+                        {/* =================================== */}
+                        {stats.usersByRole && (
+                            <div style={{ marginTop: 12 }}>
+                                <PieChart width={400} height={300}>
+                                <Pie
+                                    data={transformData(stats.usersByRole)}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={100}
+                                    label
+                                >
+                                    {transformData(stats.usersByRole).map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                                <Legend />
+                                </PieChart>
+                            </div>
+                            )}
+                        
                     </Card>
                 </Col>
 

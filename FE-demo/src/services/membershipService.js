@@ -36,3 +36,14 @@ export const initiatePurchase = async (purchaseData, token) => {
     }
   );
 };
+
+
+/**
+ * Lấy danh sách tất cả các gói thành viên từ backend.
+ * API này có thể không cần token nếu bạn muốn khách cũng xem được.
+ * @returns {Promise}
+ */
+export const getAllMembershipPackages = async () => {
+    // Giả sử endpoint này không yêu cầu xác thực
+    return await api.get('/membershippackage'); 
+};

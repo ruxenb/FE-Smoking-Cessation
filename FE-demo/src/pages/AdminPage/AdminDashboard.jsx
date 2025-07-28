@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import AdminSidebarCom from '../../components/admin/layout/adminSidebar';
 import AdminDashboardContent from '../../components/admin/adminDashboardContent';
 import AdminBlogManagementContent from '../../components/admin/AdminBlogManagement';
+import AdminMembershipManagementContent from '../../components/admin/AdminMembershipManagement';
 import AdminAchievementManagementContent from '../../components/admin/AdminAchievementManagement';
 // Import other admin components as needed
 
@@ -38,11 +39,7 @@ function AdminDashboardPage() {
             case 'blog':
                 return <AdminBlogManagementContent />;
             case 'users':
-                return <div>User Management - Coming Soon</div>; // Add your user management component
-            case 'achievements':
-                return <AdminAchievementManagementContent />;
-            case 'showFeedbacks':
-                return <div>User Feedbacks - Coming Soon</div>; // Add your feedback component
+                return <AdminUserManagementContent />;
             default:
                 return <AdminDashboardContent />;
         }

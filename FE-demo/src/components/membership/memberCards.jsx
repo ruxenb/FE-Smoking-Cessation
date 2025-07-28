@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function memberCard({ renderCtaButton }) {
+function memberCard({ renderCtaButton, advancedPackageData  }) {
+  // Định dạng lại giá tiền cho đẹp
+  const formattedPrice = advancedPackageData?.price
+    ? `${advancedPackageData.price.toLocaleString('vi-VN')} VND / month`
+    : "Not Available";
   return (
     <>
       {/* Membership Cards Wrapper */}
@@ -28,19 +32,20 @@ function memberCard({ renderCtaButton }) {
         </div>
 
         {/* Advanced Plan Card - MODIFIED */}
+        {advancedPackageData ? (
         <div className="membership-card advanced-plan promoted-card">
           <span className="ribbon">Most Popular!</span>
-          <h2>Advanced</h2>
-          <p className="price">100.000 VND / month</p>
-          <div className="card-content-wrapper">
-            <p className="description">
-              Upgrade to receive comprehensive support and achieve the best
-              results!
-            </p>
-            <ul className="features-list">
-              <li className="highlight-feature">
-                Advanced smoking cessation planning
-              </li>
+          {/* Dữ liệu động từ API */}
+            <h2>{advancedPackageData.packageName}</h2>
+            <p className="price">{formattedPrice}</p>
+            <div className="card-content-wrapper">
+              <p className="description">
+                {advancedPackageData.description}
+              </p>
+              {/* Bạn có thể để danh sách features ở đây là hard-coded
+                  hoặc nếu backend hỗ trợ, bạn có thể render động từ một trường dữ liệu */}
+              <ul className="features-list">
+                <li className="highlight-feature">Advanced smoking cessation planning</li>
               <li className="highlight-feature">
                 Record detailed smoking cessation progress
               </li>
@@ -62,7 +67,18 @@ function memberCard({ renderCtaButton }) {
           </div>
           {/* END NEW WRAPPER */}
         </div>
+        ) : (
+           // Hiển thị một thông báo nếu không có gói trả phí nào đang active
+          <div className="membership-card advanced-plan">
+             <h2>Advanced Plan</h2>
+             <p className="description">
+                The advanced plan is currently not available. Please check back later.
+             </p>
+          </div>
+        )}
       </div>
+      
+
     </>
   );
 }

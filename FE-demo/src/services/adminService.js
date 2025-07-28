@@ -102,3 +102,39 @@ export const adminChangeUserRole = async (userId, newRole, token) => {
     }
   );
 };
+
+/**
+ * [Admin] Lấy danh sách tất cả các gói thành viên.
+ */
+export const adminGetAllPackages = async (token) => {
+    return await api.get('/membershippackage', {
+        headers: { Authorization: token }
+    });
+};
+
+/**
+ * [Admin] Tạo một gói thành viên mới.
+ */
+export const adminCreatePackage = async (packageData, token) => {
+    return await api.post('/membershippackage', packageData, {
+        headers: { Authorization: token }
+    });
+};
+
+/**
+ * [Admin] Cập nhật một gói thành viên.
+ */
+export const adminUpdatePackage = async (packageId, packageData, token) => {
+    return await api.put(`/membershippackage/${packageId}`, packageData, {
+        headers: { Authorization: token }
+    });
+};
+
+/**
+ * [Admin] Vô hiệu hóa một gói thành viên.
+ */
+export const adminDeactivatePackage = async (packageId, token) => {
+    return await api.delete(`/membershippackage/${packageId}`, {
+        headers: { Authorization: token }
+    });
+};

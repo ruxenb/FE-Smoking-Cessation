@@ -1,13 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./membership.css";
 import { Link } from "react-router-dom";
 import MemberCard from "./memberCards";
 import { useUser } from "../../userContext/userContext";
+import { getAllMembershipPackages } from "../../services/membershipService"; // <-- IMPORT SERVICE MỚI
+import { toast } from "react-toastify";
 
-const logoUrl = 'https://i.pravatar.cc/40?img=1'; // ảnh chờ cho logo project
+
+// const logoUrl = 'https://i.pravatar.cc/40?img=1'; // ảnh chờ cho logo project
 
 function Membership() {
   const { user } = useUser(); // Lấy thông tin user từ context
+
+  const [advancedPackage, setAdvancedPackage] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const response = await getAllMembershipPackages();
+        if (response.data.status === 'success') {
+          const allPackages = response.data.data;
+          // Lọc ra gói duy nhất có trạng thái active
+          const activePackage = allPackages.find(pkg => pkg.active === true);
+          setAdvancedPackage(activePackage);
+        } else {
+          throw new Error("Failed to fetch packages");
+        }
+      } catch (error) {
+        console.error("Error fetching membership packages:", error);
+        toast.error("Could not load membership plans. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPackages();
+  }, []); // Mảng rỗng để chỉ chạy 1 lần
+
+
+
+
+
 
   if (user) {
   console.log("Membership data:", user.membership);
@@ -94,6 +128,11 @@ function Membership() {
     }
   };
 
+  if (loading) {
+    return <div>Loading plans...</div>; // Giao diện khi đang tải
+  }
+
+
   return (
     <div className="membership-page">
 
@@ -105,9 +144,12 @@ function Membership() {
       </div>
 
       {/* Truyền hàm renderCtaButton xuống cho MemberCard */}
-      <MemberCard renderCtaButton={renderCtaButton} />
+      <MemberCard 
+        renderCtaButton={renderCtaButton} 
+        advancedPackageData={advancedPackage} 
+      />
 
-      {/* Compare Table Section */}
+      {/* Compare Table Section
       <div className="compare-table-section">
         <h2>Compare Plans</h2>
         <p>See the detailed differences between the Basic and Advanced plans to choose what suits you best.</p>
@@ -137,7 +179,7 @@ function Membership() {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
 
       {/* FAQ Section */}
       <div className="faq-section">

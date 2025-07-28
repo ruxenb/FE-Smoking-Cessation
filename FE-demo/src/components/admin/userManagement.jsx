@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Modal, message, Input, Tag, Select, App } from 'antd';
 // import { format } from 'date-fns';
+import { EyeOutlined } from '@ant-design/icons'; // Import icon con mắt
 import { adminGetAllUsers, adminChangeUserStatus, adminChangeUserRole } from '../../services/adminService';
 import { useUser } from '../../userContext/userContext'; // Import useUser để lấy thông tin admin hiện tại
 import 'antd/dist/reset.css'
@@ -15,7 +16,18 @@ function AdminUserManagement() {
     const [searchText, setSearchText] = useState('');
     const { user: adminUser } = useUser(); // Lấy thông tin admin đang đăng nhập
     const [modal, contextHolder] = Modal.useModal(); // Dùng hook để sửa lỗi warning
+    const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+    const [selectedUserProfile, setSelectedUserProfile] = useState(null);
 
+    const showProfileModal = (user) => {
+        setSelectedUserProfile(user);
+        setIsProfileModalVisible(true);
+    };
+
+    const handleCloseProfileModal = () => {
+        setIsProfileModalVisible(false);
+        setSelectedUserProfile(null);
+    };
 
     const fetchUsers = async () => {
         try {
@@ -106,30 +118,65 @@ function AdminUserManagement() {
             onFilter: (value, record) => record.role.includes(value),
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
-            render: (status) => (
-                <Tag color={status ? 'green' : 'red'}>{status ? 'Active' : 'Inactive'}</Tag>
-            ),
+            title: 'Subscription',
+            dataIndex: 'currentUserMembership',
+            key: 'subscription',
+            width: 130,
+            render: (membership, record) => { // Cần cả record để kiểm tra 'status' của user
+                // Áp dụng logic của bạn: Nếu tài khoản không active -> Inactive
+                if (!record.status) {
+                    return <Tag color="red">INACTIVE</Tag>;
+                }
+
+                // Nếu tài khoản active, kiểm tra membership
+                if (membership && membership.status === 'ACTIVE') {
+                    return <Tag color="gold">ADVANCED</Tag>; // Dùng tên gói cho nhất quán
+                }
+                
+                // Nếu tài khoản active nhưng không có membership active -> Basic
+                return <Tag color="green">BASIC</Tag>;
+            },
             filters: [
-                { text: 'Active', value: true },
-                { text: 'Inactive', value: false },
+                { text: 'Advanced', value: 'ADVANCED' },
+                { text: 'Basic', value: 'BASIC' },
+                { text: 'Inactive', value: 'INACTIVE' },
             ],
-            onFilter: (value, record) => record.status === value,
+            onFilter: (value, record) => {
+                const isAccountActive = record.status;
+                const isAdvanced = record.currentUserMembership?.status === 'ACTIVE';
+
+                if (value === 'INACTIVE') return !isAccountActive;
+                if (value === 'ADVANCED') return isAccountActive && isAdvanced;
+                if (value === 'BASIC') return isAccountActive && !isAdvanced;
+                return true;
+            },
         },
         {
             title: 'Actions',
             key: 'actions',
             render: (_, record) => (
-                // Không hiển thị nút hành động cho chính tài khoản Admin đang đăng nhập
-                record.userId !== adminUser.userId &&
-                <Button
-                    type="link"
-                    danger={record.status}
-                    onClick={() => handleChangeStatus(record.userId, record.status)}
-                >
-                    {record.status ? 'Deactivate' : 'Reactivate'}
-                </Button>
+                <Space>
+                    {/* Nút xem Smoking Profile, chỉ hiện khi user có profile */}
+                    {record.smokingProfile && (
+                        <Button 
+                            icon={<EyeOutlined />} 
+                            onClick={() => showProfileModal(record)}
+                        >
+                            Profile
+                        </Button>
+                    )}
+
+                    {/* Nút Deactivate/Reactivate */}
+                    {record.userId !== adminUser.userId && (
+                        <Button
+                            type="link"
+                            danger={record.status}
+                            onClick={() => handleChangeStatus(record.userId, record.status)}
+                        >
+                            {record.status ? 'Deactivate' : 'Reactivate'}
+                        </Button>
+                    )}
+                </Space>
             ),
         },
     ];
@@ -159,6 +206,29 @@ function AdminUserManagement() {
                 bordered
             />
             {contextHolder}
+            <Modal
+                title={`Smoking Profile for ${selectedUserProfile?.fullName}`}
+                open={isProfileModalVisible}
+                onCancel={handleCloseProfileModal}
+                footer={[
+                    <Button key="close" onClick={handleCloseProfileModal}>
+                        Close
+                    </Button>,
+                ]}
+            >
+                {selectedUserProfile?.smokingProfile ? (
+                    <div>
+                        <p><strong>Cigarettes Per Day:</strong> {selectedUserProfile.smokingProfile.cigarettesPerDay}</p>
+                        <p><strong>Cost Per Pack:</strong> {selectedUserProfile.smokingProfile.costPerPack?.toLocaleString('vi-VN')} VND</p>
+                        <p><strong>Weeks Smoked:</strong> {selectedUserProfile.smokingProfile.weekSmoked}</p>
+                        <p><strong>Nicotine Addiction:</strong> <Tag>{selectedUserProfile.smokingProfile.nicotineAddiction}</Tag></p>
+                        <p><strong>FTND Score:</strong> {selectedUserProfile.smokingProfile.ftndScore}</p>
+                        <p><strong>Note:</strong> {selectedUserProfile.smokingProfile.note || 'N/A'}</p>
+                    </div>
+                ) : (
+                    <p>No smoking profile data available for this user.</p>
+                )}
+            </Modal>
         </div>
     );
 }
