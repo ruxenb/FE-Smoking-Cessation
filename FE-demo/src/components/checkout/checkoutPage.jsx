@@ -3,8 +3,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../userContext/userContext';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs'; // Thư viện để xử lý ngày tháng
-import { getMembershipPackageById, initiatePurchase } from '../../services/membershipService'; 
-import { createVnPayPayment } from '../../services/paymentService'; 
+import { getAllMembershipPackages, initiatePurchase } from '../../services/membershipService'; 
+import { createVnPayPayment } from '../../services/paymentService';
 import './checkoutPage.css'; 
 
 function Checkout() {
@@ -19,131 +19,109 @@ function Checkout() {
  
 
 useEffect(() => {
-
-  // Nếu chưa có thông tin user, không làm gì cả và đợi lần render sau
+    // Nếu chưa có thông tin user, không làm gì cả, chỉ đợi
     if (!user) {
       return;
     }
 
-    // --- LOGIC 1: KIỂM TRA MEMBERSHIP HIỆN TẠI CỦA USER ---
-    // 1. Xác định trạng thái membership của user, giống hệt trang MembershipPage
-    let subscriptionStatus = 'basic'; // Mặc định là basic khi đã có user
+    // --- BƯỚC 2: KIỂM TRA ĐIỀU KIỆN TRUY CẬP TRƯỚC TIÊN ---
+    // Nếu user đã có gói 'advanced', không cho phép vào trang checkout nữa
     if (user.membership && user.membership.status === 'ACTIVE') {
-      subscriptionStatus = 'advanced';
-    }
-
-    // 2. Kiểm tra điều kiện truy cập
-    // Nếu user đã là 'advanced', không cho phép vào trang checkout nữa
-    if (subscriptionStatus === 'advanced') {
       toast.info("You already have the Advanced membership!");
       navigate('/dashboard', { replace: true });
-      return;
+      return; // Dừng useEffect ngay lập tức
     }
 
-    // Hàm để gọi API
-    const fetchPackageDetails = async () => {
-      // Giả định mapping từ planType (URL) sang packageId (database)
-      // Cần điều chỉnh cho phù hợp với ID thực tế trong DB
-      const packageIdMap = {
-        advanced: 2, // 'advanced' tương ứng với PackageID = 1
-      };
-      const packageId = packageIdMap[planType];
-
-      if (!packageId) {
-        toast.error("Invalid membership plan.");
-        navigate('/membership');
-        return;
-      }
-      
+    // --- BƯỚC 3: MỘT HÀM DUY NHẤT ĐỂ LẤY THÔNG TIN GÓI ---
+    const fetchActivePackage = async () => {
       try {
-        const tokenType = localStorage.getItem("tokenType");
-        const accessToken = localStorage.getItem("accessToken");
-        const fullToken = `${tokenType} ${accessToken}`;
+        // 1. Gọi API để lấy TẤT CẢ các gói
+        const response = await getAllMembershipPackages();
+
+        if (response.data?.status === "success") {
+          const allPackages = response.data.data;
+          
+          // 2. Lọc ra gói trả phí (khác 0) và đang active
+          const activePaidPackage = allPackages.find(pkg => pkg.active && pkg.price > 0);
+
+          if (activePaidPackage) {
+            setPackageDetails(activePaidPackage);
+          } else {
+            toast.error("The Advanced plan is currently not available.");
+            navigate('/membership', { replace: true });
+          }
+        } else {
+          throw new Error(response.data?.message || "Could not fetch membership details.");
+        }
         
-        const response = await getMembershipPackageById(packageId, fullToken);
-        setPackageDetails(response.data.data);
       } catch (error) {
-        toast.error("Could not fetch membership details. Please try again.");
+        toast.error(error.message || "Could not fetch membership details. Please try again.");
         console.error("Failed to fetch package details:", error);
-        navigate('/membership');
+        navigate('/membership', { replace: true });
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchPackageDetails();
+    fetchActivePackage();
 
-  }, [user, navigate, planType]);
+  }, [user, navigate, planType]); // Phụ thuộc vào user, navigate, và planType
 
   
-  
-
-  // --- LOGIC 2: TÍNH TOÁN NGÀY VÀ GIÁ ĐỂ HIỂN THỊ ---
+  // --- HÀM TÍNH TOÁN THÔNG TIN (KHÔNG ĐỔI) ---
   const renderPlanInfo = () => {
     if (!packageDetails) return null;
-
     const startDate = dayjs();
     const renewalDate = startDate.add(packageDetails.durationInDays, 'day');
-    // Chuyển đổi số ngày thành số tháng (làm tròn) để hiển thị
     const durationInMonths = Math.round(packageDetails.durationInDays / 30); 
     const formattedPrice = new Intl.NumberFormat('vi-VN').format(packageDetails.price);
 
     return {
       priceText: `${formattedPrice}₫`,
       todayText: `Today: ${durationInMonths} months for ${formattedPrice}₫`,
-      renewalText: `Starting ${renewalDate.format('MMM D, YYYY')}: ${formattedPrice}₫/month`,
+      renewalText: `Starting ${renewalDate.format('MMM D, YYYY')}`,
       packageName: packageDetails.packageName,
     };
   };
-
-  
-
-
   const planInfo = renderPlanInfo();
 
-  console.log("planInfo:", planInfo);
-
+  
+  // --- BƯỚC 4: HÀM XỬ LÝ THANH TOÁN 2 BƯỚC ---
   const handlePurchase = async () => {
     if (!packageDetails || !user) {
       toast.error("User or package information is missing.");
       return;
     }
 
-    // Hiển thị thông báo cho người dùng biết hệ thống đang xử lý
-    setIsProcessing(true); // Bắt đầu xử lý, vô hiệu hóa nút
-    const toastId = toast.loading("Processing your request...");
+    setIsProcessing(true);
+    const toastId = toast.loading("Initiating your purchase...");
 
     try {
       const tokenType = localStorage.getItem("tokenType");
       const accessToken = localStorage.getItem("accessToken");
       const fullToken = `${tokenType} ${accessToken}`;
 
-      // --- BƯỚC 1: KHỞI TẠO GIAO DỊCH, TẠO BẢN GHI "PENDING" ---
-      // Chuẩn bị payload cho API backend theo UserMembershipDto
+      // BƯỚC 4.1: Khởi tạo giao dịch, tạo bản ghi "PENDING"
       const purchasePayload = {
         userId: user.userId,
         membershipPackageId: packageDetails.id,
         paymentMethod: "VNPay",
       };
       const initResponse = await initiatePurchase(purchasePayload, fullToken);
-            
-      // Lấy ID của bản ghi UserMembership vừa tạo
+      
       const pendingMembershipId = initResponse.data.data?.id;
-
       if (!pendingMembershipId) {
-        throw new Error("Failed to get a transaction ID.");
+        throw new Error("Failed to get a transaction ID from the server.");
       }
 
       toast.update(toastId, { render: "Generating payment link..." });
 
-       // --- BƯỚC 2: TẠO URL THANH TOÁN VỚI ID GIAO DỊCH ĐÃ CÓ ---
-      const vnPayPayload = {
-        userMembershipId: pendingMembershipId
-      };
+      // BƯỚC 4.2: Tạo URL thanh toán với ID giao dịch đã có
+      const vnPayPayload = { userMembershipId: pendingMembershipId };
       const paymentResponse = await createVnPayPayment(vnPayPayload, fullToken);
-
-      if (paymentResponse.data?.status === "Success" && paymentResponse.data?.data) {
-        const paymentUrl = paymentResponse.data.data;
+      
+      const paymentUrl = paymentResponse.data.data;
+      if (paymentResponse.data?.status === "Success" && paymentUrl) {
         toast.update(toastId, {
           render: "Redirecting to payment gateway...",
           type: "info",
@@ -151,30 +129,26 @@ useEffect(() => {
           autoClose: 3000,
         });
         window.location.href = paymentUrl; // Chuyển hướng
-        } else {
-          const errorMsg = paymentResponse.data?.message || "Failed to create payment link!";
-          throw new Error(errorMsg);
-        }
-         } catch (error) {
-            const errorMsg = error.response?.data?.message || error.message || "An error occurred.";
-            toast.update(toastId, { render: `Error: ${errorMsg}`, type: "error", isLoading: false, autoClose: 5000 });
-            console.error("Purchase process failed:", error);
-            setIsProcessing(false); // Kích hoạt lại nút nếu có lỗi
-        }
+      } else {
+        throw new Error(paymentResponse.data?.message || "Failed to create payment link!");
+      }
+
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || error.message || "An error occurred.";
+      toast.update(toastId, { render: `Error: ${errorMsg}`, type: "error", isLoading: false, autoClose: 5000 });
+      console.error("Purchase process failed:", error);
+      setIsProcessing(false);
+    }
   };
 
 
-  // --- QUẢN LÝ LUỒNG RENDER ---
-  // 1. Luôn hiển thị loading cho đến khi tất cả logic trong useEffect hoàn tất
+  // --- LUỒNG RENDER (KHÔNG ĐỔI) ---
   if (isLoading) {
     return <div style={{ textAlign: 'center', marginTop: '5rem', fontSize: '1.5rem' }}>Loading Checkout...</div>;
   }
-
-  // 2. Sau khi loading xong, nếu không có packageDetails (do lỗi API), hiển thị thông báo
   if (!packageDetails) {
-    return <div style={{ textAlign: 'center', marginTop: '5rem', fontSize: '1.5rem' }}>Membership plan not found.</div>;
+    return <div style={{ textAlign: 'center', marginTop: '5rem', fontSize: '1.5rem' }}>Membership plan not found. Redirecting...</div>;
   }
-
 
     return (
       <> 
